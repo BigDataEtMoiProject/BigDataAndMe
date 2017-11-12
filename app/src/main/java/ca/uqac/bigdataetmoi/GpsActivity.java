@@ -21,7 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GpsActivity extends AppCompatActivity {
     String userID = "0";
@@ -110,8 +112,13 @@ public class GpsActivity extends AppCompatActivity {
         Log.v("LOCATION", "location changed : " + longitude + " " + latitude);
         Toast.makeText(getBaseContext(), "Location changed : " + latitude + " " + longitude, Toast.LENGTH_LONG).show();
 
-        db.getReference("users").child(userID).child("locations").child("0").child("latitude").setValue(loc.getLatitude());
-        db.getReference("users").child(userID).child("locations").child("0").child("longitude").setValue(loc.getLongitude());
+//        db.getReference("users").child(userID).child("locations").child("0").child("latitude").setValue(loc.getLatitude());
+//        db.getReference("users").child(userID).child("locations").child("0").child("longitude").setValue(loc.getLongitude());
+
+        String key = db.getReference("users").child(userID).child("locations").push().getKey();
+        Map<String, Object> update = new HashMap<>();
+        update.put("/" + userID + "/locations/" + key, loc);
+        db.getReference("users").updateChildren(update);
 
         return true;
     }
