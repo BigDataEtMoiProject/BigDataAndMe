@@ -16,12 +16,21 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 public class GpsActivity extends AppCompatActivity {
+    String userID = "0";
 
     TextView GPSData;
     LocationManager locationManager;
+    FirebaseDatabase db;
+    DatabaseReference dbRef;
+
 
     static final int REQUEST_LOCATIONS = 1111;
     final int MIN_TIMER_INTERVAL_BETWEEN_LOCATIONS = 5000;
@@ -31,6 +40,8 @@ public class GpsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
+        db = FirebaseDatabase.getInstance();
+
 
         GPSData = (TextView) findViewById(R.id.GPSData);
         SensorManager sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
@@ -64,7 +75,11 @@ public class GpsActivity extends AppCompatActivity {
                 if(accessCoarseLocation && accessFineLocation){
                     Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if(lastKnownLocation != null){
+                        Toast.makeText(getBaseContext(), "using last known location", Toast.LENGTH_LONG).show();
                         GPSData.setText("last known location : lat= " + lastKnownLocation.getLatitude() + " long= " + lastKnownLocation.getLongitude());
+//                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIMER_INTERVAL_BETWEEN_LOCATIONS, MIN_DISTANCE_INTERVAL_BETWEEN_LOCATIONS, locationListener);
+
+                        storeLocationData(lastKnownLocation);
                     } else
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIMER_INTERVAL_BETWEEN_LOCATIONS, MIN_DISTANCE_INTERVAL_BETWEEN_LOCATIONS, locationListener);
                 } else {
@@ -94,6 +109,9 @@ public class GpsActivity extends AppCompatActivity {
 
         Log.v("LOCATION", "location changed : " + longitude + " " + latitude);
         Toast.makeText(getBaseContext(), "Location changed : " + latitude + " " + longitude, Toast.LENGTH_LONG).show();
+
+        db.getReference("users").child(userID).child("locations").child("0").child("latitude").setValue(loc.getLatitude());
+        db.getReference("users").child(userID).child("locations").child("0").child("longitude").setValue(loc.getLongitude());
 
         return true;
     }
