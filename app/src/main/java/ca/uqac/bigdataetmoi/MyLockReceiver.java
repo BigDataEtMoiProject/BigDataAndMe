@@ -1,0 +1,35 @@
+package ca.uqac.bigdataetmoi;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
+
+
+/**
+ * Created by Nyemo on 03/11/2017.
+ */
+
+public class MyLockReceiver extends BroadcastReceiver {
+
+   boolean screenON = true;
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      // Toast.makeText(context,  "un intent : " , Toast.LENGTH_LONG).show();
+        if(intent.getAction().equals(Intent.ACTION_SCREEN_ON))
+        {
+            screenON = true;
+        }
+        else if(intent.getAction().equals(Intent.ACTION_SCREEN_OFF))
+        {
+            screenON = false;
+        }
+        Log.i("state",  "" + screenON);
+        //Toast.makeText(context,  "lancer : " + screenON, Toast.LENGTH_LONG).show();
+        Intent alerteService = new Intent(context,UpdateLockInfoService.class);
+        alerteService.putExtra("screenState", screenON);
+        context.startService(alerteService);
+    }
+}

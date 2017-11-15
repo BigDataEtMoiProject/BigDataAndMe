@@ -1,19 +1,19 @@
 package ca.uqac.bigdataetmoi;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+
 
 public class MainActivity extends AppCompatActivity
 {
@@ -24,7 +24,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((MainApplication) this.getApplication()).setUserID("0"); //TEST USER
+       //démarre le service de surveillance du temps d'utilisation
+        //Toast.makeText(this, "demande de creation...", Toast.LENGTH_LONG).show();
+        Intent alerteService = new Intent(MainActivity.this, UpdateLockInfoService.class);
+        alerteService.putExtra("screenState", false);
+        startService(alerteService);
+
 
         // Récupérer les vues du Layout
         mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
@@ -72,14 +77,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
-        startGPSService();
-    }
-
-    private void startGPSService()
-    {
-        Intent intent = new Intent(MainActivity.this, ServiceGPS.class);
-        startService(intent);
     }
 }
 

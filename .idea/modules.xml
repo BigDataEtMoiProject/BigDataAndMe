@@ -4,7 +4,8 @@
     <modules>
       <module fileurl="file://D:\Documents\Scolaire\BigDataEtMoi\code\BigDataEtMoi.iml" filepath="D:\Documents\Scolaire\BigDataEtMoi\code\BigDataEtMoi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/code.iml" filepath="$PROJECT_DIR$/code.iml" />
+      <module fileurl="file://$PROJECT_DIR$/big-data.iml" filepath="$PROJECT_DIR$/big-data.iml" />
+      <module fileurl="file://D:\androidworkspace\big-data\code.iml" filepath="D:\androidworkspace\big-data\code.iml" />
     </modules>
   </component>
 </project>
