@@ -28,12 +28,11 @@ import java.util.Map;
 public class ServiceGPS extends IntentService
 {
     FirebaseDatabase db;
-    DatabaseReference ref;
+    DatabaseReference dbRef;
     String userID;
-    static final int REQUEST_LOCATIONS = 1111;
 
-    final int LOC_UPDATE_MIN_TIME = 5000;
-    final int LOC_UPDATE_MIN_DISTANCE = 0;
+    final int LOC_UPDATE_MIN_TIME = 10000; //in ms
+    final int LOC_UPDATE_MIN_DISTANCE = 0; //in sec
 
 
     public ServiceGPS()
@@ -47,7 +46,7 @@ public class ServiceGPS extends IntentService
 
         db = FirebaseDatabase.getInstance();
         userID = ((MainApplication) this.getApplication()).getUserId();
-        ref = db.getReference("users").child(userID);
+        dbRef = db.getReference("users").child(userID);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class ServiceGPS extends IntentService
         String key = db.getReference("users").child(userID).child("locations").push().getKey();
         Map<String, Object> update = new HashMap<>();
         update.put("/locations/" + key, loc);
-        ref.updateChildren(update);
+        dbRef.updateChildren(update);
 //        Toast.makeText(getBaseContext(), "GPS Service : new location stored", Toast.LENGTH_SHORT).show();
         Log.w("GPSService", "New location stored");
     }

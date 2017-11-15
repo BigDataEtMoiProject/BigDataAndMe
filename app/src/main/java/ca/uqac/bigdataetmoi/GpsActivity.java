@@ -16,6 +16,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,92 +34,46 @@ public class GpsActivity extends AppCompatActivity {
     TextView GPSData;
     LocationManager locationManager;
     FirebaseDatabase db;
-    DatabaseReference dbRef;
-
-
-    static final int REQUEST_LOCATIONS = 1111;
-    final int MIN_TIMER_INTERVAL_BETWEEN_LOCATIONS = 5000;
-    final int MIN_DISTANCE_INTERVAL_BETWEEN_LOCATIONS = 0;
+    DatabaseReference locationsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //basic init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
         db = FirebaseDatabase.getInstance();
+        userID = ((MainApplication) this.getApplication()).getUserId();
+        locationsRef = db.getReference("users/" + userID + "/locations");
 
-
+        //setup layout
         GPSData = (TextView) findViewById(R.id.GPSData);
-        SensorManager sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-//        List<Sensor> allGPSSensor = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
-        Sensor gpsSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-
-        if(gpsSensor == null)
-            Toast.makeText(getApplicationContext(), "No GPS found !", Toast.LENGTH_SHORT).show();
-        else {
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-            if(locationManager == null)
-                Toast.makeText(getBaseContext(), "location manager is null", Toast.LENGTH_SHORT).show();
-            else {
-                LocationListener locationListener = new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        storeLocationData(location);
-                    }
-                    @Override
-                    public void onStatusChanged(String s, int i, Bundle bundle) {}
-                    @Override
-                    public void onProviderEnabled(String s) {}
-                    @Override
-                    public void onProviderDisabled(String s) {}
-                };
-
-                boolean accessCoarseLocation = (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
-                boolean accessFineLocation = (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
-
-                if(accessCoarseLocation && accessFineLocation){
-                    Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if(lastKnownLocation != null){
-                        Toast.makeText(getBaseContext(), "using last known location", Toast.LENGTH_LONG).show();
-                        GPSData.setText("last known location : lat= " + lastKnownLocation.getLatitude() + " long= " + lastKnownLocation.getLongitude());
-//                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIMER_INTERVAL_BETWEEN_LOCATIONS, MIN_DISTANCE_INTERVAL_BETWEEN_LOCATIONS, locationListener);
-
-                        storeLocationData(lastKnownLocation);
-                    } else
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIMER_INTERVAL_BETWEEN_LOCATIONS, MIN_DISTANCE_INTERVAL_BETWEEN_LOCATIONS, locationListener);
-                } else {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATIONS);
-                }
-            }
-        }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_LOCATIONS: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Permissions granted", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Permissions denied", Toast.LENGTH_SHORT).show();
-                }
-                return;
+    public void onResume()
+    {
+        super.onResume();
+
+        //fetch last stored updated location and print it
+        locationsRef.orderByChild("time").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                Map<String, Object> newLoc = (Map<String, Object>) dataSnapshot.getValue();
+                String latitude = newLoc.get("latitude").toString();
+                String longitude = newLoc.get("longitude").toString();
+                String altitude = newLoc.get("altitude").toString();
+
+                GPSData.setText("Latitude : " + latitude + "\nLongitude : " + longitude + "\nAltitude : " + altitude);
             }
-        }
-    }
 
-    private boolean storeLocationData(Location loc){
-        String longitude = "long= " + loc.getLongitude();
-        String latitude = "lat= " + loc.getLatitude();
-
-        Log.v("LOCATION", "location changed : " + longitude + " " + latitude);
-        Toast.makeText(getBaseContext(), "Location changed : " + latitude + " " + longitude, Toast.LENGTH_LONG).show();
-
-        String key = db.getReference("users").child(userID).child("locations").push().getKey();
-        Map<String, Object> update = new HashMap<>();
-        update.put("/" + userID + "/locations/" + key, loc);
-        db.getReference("users").updateChildren(update);
-
-        return true;
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 }
