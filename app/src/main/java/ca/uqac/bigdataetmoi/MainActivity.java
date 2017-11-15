@@ -1,5 +1,6 @@
 package ca.uqac.bigdataetmoi;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((MainApplication) this.getApplication()).setUserID("0"); //TEST USER
 
         // Récupérer les vues du Layout
         mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
@@ -70,6 +72,14 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        startGPSService();
+    }
+
+    private void startGPSService()
+    {
+        Intent intent = new Intent(MainActivity.this, ServiceGPS.class);
+        startService(intent);
     }
 }
 

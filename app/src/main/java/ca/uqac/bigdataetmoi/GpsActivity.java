@@ -112,9 +112,6 @@ public class GpsActivity extends AppCompatActivity {
         Log.v("LOCATION", "location changed : " + longitude + " " + latitude);
         Toast.makeText(getBaseContext(), "Location changed : " + latitude + " " + longitude, Toast.LENGTH_LONG).show();
 
-//        db.getReference("users").child(userID).child("locations").child("0").child("latitude").setValue(loc.getLatitude());
-//        db.getReference("users").child(userID).child("locations").child("0").child("longitude").setValue(loc.getLongitude());
-
         String key = db.getReference("users").child(userID).child("locations").push().getKey();
         Map<String, Object> update = new HashMap<>();
         update.put("/" + userID + "/locations/" + key, loc);
