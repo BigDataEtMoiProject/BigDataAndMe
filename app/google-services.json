@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "679838550095",
+    "firebase_url": "https://big-data-et-moi.firebaseio.com",
+    "project_id": "big-data-et-moi",
+    "storage_bucket": "big-data-et-moi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679838550095:android:6b671af4992680a2",
+        "android_client_info": {
+          "package_name": "ca.uqac.bigdataetmoi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679838550095-s3757jdu7a91m3k1eetlmos8p154b91l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ca.uqac.bigdataetmoi",
+            "certificate_hash": "b66fbddfbb4725cfecf9aee600a73b70df8bf14a"
+          }
+        },
+        {
+          "client_id": "679838550095-n98ueaabghp7s9g5et51p4m60ogtgu76.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUvaYshHIzXXVsiiRPxgajW71daZwzuEo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "679838550095-n98ueaabghp7s9g5et51p4m60ogtgu76.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

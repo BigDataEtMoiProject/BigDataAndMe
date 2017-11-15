@@ -10,6 +10,12 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="GPS - Lieux fréquentés" />
+        android:text="GPS - Dernier emplacement sauvegardé" />
+
+    <TextView
+        android:id="@+id/GPSData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 
 </LinearLayout>
