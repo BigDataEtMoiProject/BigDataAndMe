@@ -1,7 +1,9 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import ca.uqac.bigdataetmoi.R;
 
 public class CompteurDePasActivity extends AppCompatActivity {
 

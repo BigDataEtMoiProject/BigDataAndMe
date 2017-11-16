@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.activity;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.FloatMath;
 import android.widget.TextView;
+
+import ca.uqac.bigdataetmoi.R;
 
 public class SommeilActivity extends AppCompatActivity implements SensorEventListener {
 

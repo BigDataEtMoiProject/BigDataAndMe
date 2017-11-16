@@ -20,15 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SommeilActivity" />
-        <activity android:name=".CompteurDePasActivity" />
-        <activity android:name=".TempsUtilisationActivity" />
-        <activity android:name=".GpsActivity" />
-        <activity android:name=".TelephoneSmsActivity" />
-        <activity android:name=".DonneesUtilisationActivity"></activity>
+        <activity android:name=".activity.SommeilActivity" />
+        <activity android:name=".activity.CompteurDePasActivity" />
+        <activity android:name=".activity.TempsUtilisationActivity" />
+        <activity android:name=".activity.GpsActivity" />
+        <activity android:name=".activity.TelephoneSmsActivity" />
+        <activity android:name=".activity.DonneesUtilisationActivity" />
 
         <service
-            android:name=".ServiceGPS">
+            android:name=".service.BigDataService"
+            android:enabled="true"
+            android:exported="false">
         </service>
 
     </application>

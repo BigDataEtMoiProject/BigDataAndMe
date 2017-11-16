@@ -1,49 +1,31 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.activity;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
 public class GpsActivity extends AppCompatActivity {
     String userID = "0";
 
     TextView GPSData;
-    LocationManager locationManager;
-    FirebaseDatabase db;
-    DatabaseReference locationsRef;
+    DatabaseReference mLocationsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //basic init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
-        db = FirebaseDatabase.getInstance();
-        userID = ((MainApplication) this.getApplication()).getUserId();
-        locationsRef = db.getReference("users/" + userID + "/locations");
+        mLocationsRef = DatabaseManager.getInstance().getLocationRef();
 
         //setup layout
         GPSData = (TextView) findViewById(R.id.GPSData);
@@ -55,7 +37,7 @@ public class GpsActivity extends AppCompatActivity {
         super.onResume();
 
         //fetch last stored updated location and print it
-        locationsRef.orderByChild("time").addChildEventListener(new ChildEventListener() {
+        mLocationsRef.orderByChild("time").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 Map<String, Object> newLoc = (Map<String, Object>) dataSnapshot.getValue();

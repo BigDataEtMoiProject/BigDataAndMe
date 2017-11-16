@@ -1,7 +1,9 @@
 package ca.uqac.bigdataetmoi;
 
-import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,11 +11,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
+import ca.uqac.bigdataetmoi.activity.DonneesUtilisationActivity;
+import ca.uqac.bigdataetmoi.activity.GpsActivity;
+import ca.uqac.bigdataetmoi.activity.SommeilActivity;
+import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
+import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
+import ca.uqac.bigdataetmoi.service.BigDataService;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -24,7 +34,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((MainApplication) this.getApplication()).setUserID("0"); //TEST USER
 
         // Récupérer les vues du Layout
         mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
@@ -73,13 +82,16 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        startGPSService();
-    }
 
-    private void startGPSService()
-    {
-        Intent intent = new Intent(MainActivity.this, ServiceGPS.class);
-        startService(intent);
+        //Il faut demander l'accès au GPS TODO: Améliorer la gestion des permissions
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { ACCESS_FINE_LOCATION }, 0);
+        }
+
+        // Le service de l,application est censé être démarré automatiquement lors du démarrage du système,
+        // mais on le démarre ici quand-même au cas ou il aurait été arrêté.
+        Intent serviceIntent = new Intent(getApplicationContext(), BigDataService.class);
+        getApplicationContext().startService(serviceIntent);
     }
 }
 
