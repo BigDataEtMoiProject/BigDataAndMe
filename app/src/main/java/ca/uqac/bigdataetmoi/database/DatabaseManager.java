@@ -64,6 +64,14 @@ public class DatabaseManager
         Log.w("DatabaseManager", "New accel stored");
     }
 
+    public void storeUsageData(UsageData data) {
+        String key = mDb.getReference("users").child(mUserID).child("usagedata").push().getKey();
+        Map<String, Object> update = new HashMap<>();
+        update.put("/usagedata/" + key, data);
+        mDbRef.updateChildren(update);
+        Log.w("DatabaseManager", "New usage data stored");
+    }
+
     // Lecture dans la bd
 
     public DatabaseReference getLocationRef()
@@ -71,5 +79,9 @@ public class DatabaseManager
         return mDb.getReference("users/" + mUserID + "/locations");
     }
 
+    public DatabaseReference getUsageRef()
+    {
+        return mDb.getReference("users/" + mUserID+ "usagedata");
+    }
 }
 
