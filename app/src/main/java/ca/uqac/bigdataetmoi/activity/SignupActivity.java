@@ -32,7 +32,6 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        Toast.makeText(SignupActivity.this, "SignupActivity launched", Toast.LENGTH_SHORT).show();
 
         auth = FirebaseAuth.getInstance();
 
@@ -67,7 +66,6 @@ public class SignupActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "createUserWithEmail:success", Toast.LENGTH_SHORT).show();
                                 Log.d("BDEM-SIGNUP", "createUserWithEmail:success");
-//                                FirebaseUser user = auth.getCurrentUser();
                                 //redirect to login page
                                 launchLoginActivity(view);
                             } else {
