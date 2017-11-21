@@ -15,11 +15,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,13 +44,18 @@ But : Service qui récupère les infos des différents capteurs et qui envoie le
 public class BigDataService extends IntentService implements SensorEventListener {
     final int LOC_UPDATE_MIN_TIME = 10000; //in ms
     final int LOC_UPDATE_MIN_DISTANCE = 0; //in sec
-    private static final long REFRESH_TIME = 1000 * 60;     //30 secondes
+    private static final long REFRESH_TIME = 1000 * 30;     //30 secondes
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy HH:mm:ss");
+    private static String TAG = "Event";
 
     DatabaseManager dbManager;
+    DatabaseReference usageRef;
+    UsageStatsManager statsManager;
+    UsageData prevUsageData;
 
-    private long mPrevAccelMillis, mPrevMoveMillis, mPrevUsageTime;
+    private long mPrevAccelMillis, mPrevMoveMillis;
     private float mAccel, mAccelCurrent, mAccelLast;
+    private long prevUsageTime;
 
     public BigDataService() {
         super("BigDataService");
@@ -57,9 +66,13 @@ public class BigDataService extends IntentService implements SensorEventListener
 
         mPrevMoveMillis = 0;
         mPrevAccelMillis = 0;
-        mPrevUsageTime = 0;
+        prevUsageTime = 0;
+        prevUsageData = new UsageData();
 
+
+        statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         dbManager = DatabaseManager.getInstance();
+        usageRef = dbManager.getUsageRef();
 
         Log.v("BigDataService", "BigDataService service has been created");
     }
@@ -104,18 +117,7 @@ public class BigDataService extends IntentService implements SensorEventListener
         };
 
         //  Pour les données d'utilisations
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            UsageStatsManager statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-
-            @Override
-            public void run() {
-                //UsageStatsManager statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-                onUsageChanged(statsManager);
-                handler.postDelayed(this, REFRESH_TIME);
-                Log.d("Event", "Updated at: " + dateFormat.format(System.currentTimeMillis()));
-            }
-        }, REFRESH_TIME);
+        readAndUpdateUsageDatabase();
 
 
         boolean accessCoarseLocation = (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
@@ -190,69 +192,103 @@ public class BigDataService extends IntentService implements SensorEventListener
         }
     }
 
-    //Gestion des événements d'utilisation.
+    //Gestion des événements d'utilisation. //TODO READ WHEN PHONE IS CLOSED
+    public final void readAndUpdateUsageDatabase() {
+        usageRef.limitToLast(1).orderByChild("timeAppEnd").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    UsageData usage = new UsageData();
 
-    public final void onUsageChanged(UsageStatsManager statsManager) {
-        long lastTime, currentTime;
+                    //GET LAST REGISTER DATA IN FIREBASE
+                    for (DataSnapshot usageSnapshot : dataSnapshot.getChildren()) {
+                        long timeAppEnded = (long) usageSnapshot.child("timeAppEnd").child("time").getValue();
+                        usage.setTimeAppEnd(new Date(timeAppEnded));
+                    }
+                    //UPDATE DATA SINCE LAST PHONE USAGE REGISTERED
+                    Log.d("EVENT", "Last usage time:\t" + usage.getTimeAppEnd());
+                    long currentTime = System.currentTimeMillis();
+                    long lastTime = usage.getTimeAppEnd().getTime();
+                    UsageEvents events = getTimeRangeEvent(lastTime, currentTime);
+                    updateUsageDatabase(events);
+                } else if (!dataSnapshot.exists()) {
+                    //INSERT FIRST DATA IN USER DATABASE EMPTY
+                    Log.d("ERROR", "NO DATA AVAILABLE, INSERT DATA");
+                    long currentTime = System.currentTimeMillis();
+                    long lastTime = currentTime - REFRESH_TIME;
+                    UsageEvents events = getTimeRangeEvent(lastTime, currentTime);
+                    updateUsageDatabase(events);
+                } else {
+                    Log.e("ERROR", "SOMETHING WENT WRONG");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    //Get the time range of events from last usage and current time
+    public final UsageEvents getTimeRangeEvent(long lastTime, long currentTime) {
+        UsageEvents events;
+        events = statsManager.queryEvents(lastTime, currentTime);
+        return events;
+    }
+
+    //Update database with by getting when an app is in foreground and background
+    public final void updateUsageDatabase(UsageEvents events) {
         long appStarted, appEnded;
         String appInForeground, appInBackground;
-        Date timeAppStart, timeAppEnd;
 
-        //Initialize variables
         appStarted = appEnded = 0;
-        appInForeground = appInBackground = new String();
-        currentTime = System.currentTimeMillis();
+        appInForeground = appInBackground = "";
 
-        if (mPrevUsageTime == 0) {      //TODO: get last data saved, and start monitering from there.
-            lastTime = currentTime - REFRESH_TIME;  //Initiate the monitering app usage
-        } else {
-            lastTime = mPrevUsageTime;              //Get last timestamp saved last iteration to a save data correctly.
-        }
-
-        UsageEvents events = statsManager.queryEvents(lastTime, currentTime);   //get range of event between lastTime and currentTime
-
-        while (events.hasNextEvent()) {
+        while (events.hasNextEvent())
+        {
             UsageEvents.Event event = new UsageEvents.Event();
             events.getNextEvent(event);
 
-            if (event.getEventType() == event.MOVE_TO_FOREGROUND)        //When an app is launched
+            if (event.getEventType() == event.MOVE_TO_FOREGROUND)            //Get detail when an app is open (in foreground)
             {
                 appInForeground = event.getPackageName();
                 appStarted = event.getTimeStamp();
 
-                Log.d("Event", appInForeground + "\t" + "Started at" + dateFormat.format(appStarted));
-                if (!events.hasNextEvent()) {
-                    mPrevUsageTime = appStarted;
+                if (!events.hasNextEvent()) {                               //Assure to get the correct timestamp when no next event.
+                    prevUsageTime = appStarted;                             //Useful when using refreshing and get using the app name condition
                 }
-            } else if (event.getEventType() == event.MOVE_TO_BACKGROUND)  //When an app is closed
+            }
+            else if (event.getEventType() == event.MOVE_TO_BACKGROUND)    //Get detail when an app is closed (in background)
             {
-                appInBackground = event.getPackageName();       //get packagename event when app is closed
-                appEnded = event.getTimeStamp();                //get timestamp event when app is closed
+                appInBackground = event.getPackageName();
+                appEnded = event.getTimeStamp();
 
-                Log.d("Event", appInBackground + "\t" + "Ended at" + dateFormat.format(appEnded));
-                if (!events.hasNextEvent()) {       //Check if there is a next event
-                    mPrevUsageTime = appEnded;     //If not, assign last time stamp to mPrevUsageTime (last value used each time it refresh)
+                if (!events.hasNextEvent()) {
+                    prevUsageTime = appEnded;
                 }
             }
 
-            if (appInForeground.equals(appInBackground)) {      //name the app that starts is the same as the app that ends
-                if(appEnded != 0 && appStarted != 0) {          //make sure there is data
-                    long diff = (appEnded - appStarted);
+            if (appInForeground.equals(appInBackground))                    //Assure data updated correspond to the same app
+            {
+                if (appEnded != 0 && appStarted != 0)                       //Assure data updated is not null
+                {
+                    long diff = appEnded - appStarted;
 
-                    timeAppStart = new Date(appStarted);        //transform long in Date
-                    timeAppEnd = new Date(appEnded);
+                    if (diff >= 1000) {                                     //Filter information to remove process events (and last than 1 seconde)
+                        Log.d(TAG, appInForeground + "\t" + "Started at\t" + dateFormat.format(appStarted));
+                        Log.d(TAG, appInBackground + "\t" + "Ended at\t" + dateFormat.format(appEnded));
+                        Log.d(TAG, appInForeground + ":\t" + diff / 1000 + " secondes");
 
-                    Log.d("Event", appInForeground + "\t" + "\t" + "Time spent " + diff / 1000 + "secondes");
-                    //Send data in firebase database (see DatabaseManager)
-                    UsageData usage = new UsageData();
-                    usage.setPackageName(appInForeground);
-                    usage.setTimeAppBegin(timeAppStart);
-                    usage.setTimeAppEnd(timeAppEnd);
-                    dbManager.storeUsageData(usage);
+                        UsageData usage = new UsageData();
+                        usage.setPackageName(appInForeground);
+                        usage.setTimeAppBegin(new Date(appStarted));
+                        usage.setTimeAppEnd(new Date(appEnded));
+                        dbManager.storeUsageData(usage);
 
-                    //Put variable at 0 to assure data a clean
-                    appStarted = appEnded = 0;
-                    appInForeground = appInBackground = "";
+                        //Put variable at 0 to assure data a clean
+                        appStarted = appEnded = 0;
+                        appInForeground = appInBackground = "";
+                    }
                 }
             }
         }
