@@ -14,9 +14,9 @@ public class UsageData {
     public UsageData() {}
 
     public UsageData(String packageName, Date appBegin, Date appEnd) {
-        //mPackageName = packageName;
-        //mTimeAppBegin = appBegin;
-        //mTimeAppEnd = appEnd;
+        mPackageName = packageName;
+        mTimeAppBegin = appBegin;
+        mTimeAppEnd = appEnd;
     }
 
     public String getPackageName() {
