@@ -196,8 +196,10 @@ public class BigDataService extends IntentService implements SensorEventListener
     public final void readAndUpdateUsageDatabase() {
         usageRef.limitToLast(1).orderByChild("timeAppEnd").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
                     UsageData usage = new UsageData();
 
                     //GET LAST REGISTER DATA IN FIREBASE
@@ -283,7 +285,7 @@ public class BigDataService extends IntentService implements SensorEventListener
                         usage.setPackageName(appInForeground);
                         usage.setTimeAppBegin(new Date(appStarted));
                         usage.setTimeAppEnd(new Date(appEnded));
-                        dbManager.storeUsageData(usage);
+                        //dbManager.storeUsageData(usage);
 
                         //Put variable at 0 to assure data a clean
                         appStarted = appEnded = 0;
@@ -291,6 +293,15 @@ public class BigDataService extends IntentService implements SensorEventListener
                     }
                 }
             }
+        }
+    }
+
+    public final void getLastEvent(UsageData lastUsage, DataSnapshot dataSnapshot)
+    {
+        for (DataSnapshot usageSnapshot : dataSnapshot.getChildren())
+        {
+            long timeAppEnded = (long) usageSnapshot.child("timeAppEnd").child("time").getValue();
+            lastUsage.setTimeAppEnd(new Date(timeAppEnded));
         }
     }
 }
