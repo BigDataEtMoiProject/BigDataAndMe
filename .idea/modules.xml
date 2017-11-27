@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BigDataEtMoi.iml" filepath="$PROJECT_DIR$/BigDataEtMoi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/big-data-v2.iml" filepath="$PROJECT_DIR$/big-data-v2.iml" />
+      <module fileurl="file://C:\Users\pat\Dropbox\Android\BigDataEtMoi\big-data-v2.iml" filepath="C:\Users\pat\Dropbox\Android\BigDataEtMoi\big-data-v2.iml" />
     </modules>
   </component>
 </project>

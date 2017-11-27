@@ -50,7 +50,7 @@ public class DatabaseManager
 
     public void storeSensorData(SensorData data)
     {
-        String key = mDbRef.getReference("users").child(mUserID).child(data.getDataID()).push().getKey();
+        String key = mDbRef.child(data.getDataID()).push().getKey();
         Map<String, Object> update = new HashMap<>();
         update.put("/" + data.getDataID() + "/" + key, data);
         mDbRef.updateChildren(update);
