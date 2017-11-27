@@ -24,6 +24,7 @@ import java.util.Date;
 import ca.uqac.bigdataetmoi.database.AccelSensorData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.LightSensorData;
+import ca.uqac.bigdataetmoi.database.ProximitySensorData;
 
 
 /*
@@ -36,10 +37,11 @@ public class BigDataService extends IntentService implements SensorEventListener
 {
     final int LOC_UPDATE_MIN_TIME = 10000; //in ms
     final int LOC_UPDATE_MIN_DISTANCE = 0; //in sec
+    final int SENSOR_MIN_UPDATE_MILLIS = 300000; //Temps minimum entre deux écriture dans la BD (5 minutes)
 
     DatabaseManager dbManager;
 
-    private long mPrevAccelMillis, mPrevMoveMillis;
+    private long mPrevAccelMillis, mPrevMoveMillis, mPrevProximityMillis;
     private float mAccel, mAccelCurrent, mAccelLast;
 
     public BigDataService()    {
@@ -50,6 +52,7 @@ public class BigDataService extends IntentService implements SensorEventListener
     public void onCreate() {
         mPrevMoveMillis = 0;
         mPrevAccelMillis = 0;
+        mPrevProximityMillis = 0;
         dbManager = DatabaseManager.getInstance();
 
         Log.v("BigDataService", "BigDataService service has been created");
@@ -59,7 +62,6 @@ public class BigDataService extends IntentService implements SensorEventListener
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.w("BigDataService", "BigDataService service has started");
 
-        // TODO: Thread séparé
         SensorManager sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 
         // Pour la lumière
@@ -72,6 +74,10 @@ public class BigDataService extends IntentService implements SensorEventListener
         mAccel = 0.00f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
+
+        // Pour le capteur de proximité
+        Sensor proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Pour le GPS
         LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -123,41 +129,56 @@ public class BigDataService extends IntentService implements SensorEventListener
     @Override
     public final void onSensorChanged(SensorEvent event) {
 
-        if(event.sensor.getType() == Sensor.TYPE_LIGHT)
-        {
-            float lux = event.values[0];
+        if(event.sensor.getType() == Sensor.TYPE_LIGHT) {
+            handleLightSensorChanged(event.values[0]);
+        }
+        else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float[] gravity = event.values.clone();
+            handleAccelSensorChanged(gravity[0], gravity[1], gravity[2]);
+        }
+        else if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+            handleProximitySensorChanged(event.values[0]);
+        }
+    }
 
-            // On met à jour la bd au 5 minutes pour ce capteur
+    // Gestion des changements de valeurs des capteurs
+
+    private void handleLightSensorChanged(float newLux)
+    {
+        long currMillis = System.currentTimeMillis();
+
+        if(currMillis - mPrevAccelMillis > SENSOR_MIN_UPDATE_MILLIS) {
+            dbManager.storeSensorData(new LightSensorData(Calendar.getInstance().getTime(), newLux));
+            mPrevAccelMillis = currMillis;
+        }
+    }
+
+    private void handleAccelSensorChanged(float accelX, float accelY, float accelZ)
+    {
+        // Détection d'un changement d'accélération (cela veut dire que le téléphone bouge)
+        mAccelLast = mAccelCurrent;
+        mAccelCurrent = (float)Math.sqrt(accelX*accelX + accelY*accelY + accelZ*accelZ);
+        float delta = mAccelCurrent - mAccelLast;
+        mAccel = mAccel * 0.9f + delta;
+
+        if(mAccel > 1.0) { // Cela veut dire qu'on bouge
             long currMillis = System.currentTimeMillis();
 
-            if(currMillis - mPrevAccelMillis > 300000) {
-                dbManager.storeLightSensorData(new LightSensorData(Calendar.getInstance().getTime(), lux));
-                mPrevAccelMillis = currMillis;
+            //On met à jour les mouvement si celui-ci a lieu au minimum 5 minutes plus tard
+            if(currMillis - mPrevMoveMillis > SENSOR_MIN_UPDATE_MILLIS){
+                dbManager.storeSensorData(new AccelSensorData(Calendar.getInstance().getTime(), true));
+                mPrevMoveMillis = currMillis;
             }
         }
-        else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-        {
-            // Formule pour déterminer si le téléphone est en mouvement ou non.
-            float[] gravity = event.values.clone();
-            float x = gravity[0];
-            float y = gravity[1];
-            float z = gravity[2];
-            mAccelLast = mAccelCurrent;
-            mAccelCurrent = (float)Math.sqrt(x*x + y*y + z*z);
-            float delta = mAccelCurrent - mAccelLast;
-            mAccel = mAccel * 0.9f + delta;
+    }
 
-            if(mAccel > 1.0) { // Cela veut dire qu'on bouge
-                long currMillis = System.currentTimeMillis();
+    private void handleProximitySensorChanged(float newDistance)
+    {
+        long currMillis = System.currentTimeMillis();
 
-                //On met à jour les mouvement si celui-ci a lieu au minimum 5 minutes plus tard
-                if(currMillis - mPrevMoveMillis > 300000){
-                    dbManager.storeAccelSensorData(new AccelSensorData(Calendar.getInstance().getTime(), true));
-                    mPrevMoveMillis = currMillis;
-                }
-
-            }
-
+        if(currMillis - mPrevProximityMillis > SENSOR_MIN_UPDATE_MILLIS){
+            dbManager.storeSensorData(new ProximitySensorData(Calendar.getInstance().getTime(), newDistance));
+            mPrevProximityMillis = currMillis;
         }
     }
 }
