@@ -6,7 +6,9 @@ import java.util.Date;
  * Created by pat on 2017-11-16.
  */
 
-public class LightSensorData {
+public class LightSensorData implements SensorData {
+    public static final String DATA_ID = "lightsensordata";
+
     Date mDate;
     float mLux;
 
@@ -15,6 +17,9 @@ public class LightSensorData {
         mDate = date;
         mLux = lux;
     }
+
+    @Override
+    public String getDataID() { return DATA_ID; }
 
     static public String interpreterLux(float lux)
     {
