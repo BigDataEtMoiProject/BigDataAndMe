@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.DonneesUtilisationActivity;
-import ca.uqac.bigdataetmoi.activity.GpsActivity;
+import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
                         startActivity(new Intent(MainActivity.this, SommeilActivity.class));
                         break;
                     case 3:
-                        startActivity(new Intent(MainActivity.this, GpsActivity.class));
+                        startActivity(new Intent(MainActivity.this, GPSMapsActivity.class));
                         break;
                     case 4:
                         startActivity(new Intent(MainActivity.this, TelephoneSmsActivity.class));
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-            // Le service de l,application est censé être démarré automatiquement lors du démarrage du système,
+        // Le service de l,application est censé être démarré automatiquement lors du démarrage du système,
         // mais on le démarre ici quand-même au cas ou il aurait été arrêté.
         Intent serviceIntent = new Intent(getApplicationContext(), BigDataService.class);
         getApplicationContext().startService(serviceIntent);

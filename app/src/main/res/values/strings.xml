@@ -17,5 +17,6 @@
     <string name="signin_error_empty_email">Veuillez entrer un email</string>
     <string name="signin_error_empty_password">Veuillez entrer un password</string>
     <string name="signin_error_wrong_email_or_password">Mauvais email ou mot de passe</string>
+    <string name="title_activity_gpsmaps">Map</string>
 
 </resources>
