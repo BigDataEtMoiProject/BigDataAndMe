@@ -45,7 +45,9 @@ public class MainActivity extends AppCompatActivity
                 "Sommeil",
                 "Lieux (GPS)",
                 "Téléphone et sms",
-                "Données d'utilisation"};
+                "Données d'utilisation",
+                "Quizz"
+              };
 
         ArrayList<String> fonctionList = new ArrayList<String>();
         fonctionList.addAll(Arrays.asList(fonctions));
@@ -78,6 +80,9 @@ public class MainActivity extends AppCompatActivity
                     case 5:
                         startActivity(new Intent(MainActivity.this, DonneesUtilisationActivity.class));
                         break;
+                    case 6:
+                        startActivity(new Intent(MainActivity.this, QuizzActivity.class));
+                        break;
                 }
             }
         });
@@ -98,6 +103,3 @@ public class MainActivity extends AppCompatActivity
         getApplicationContext().startService(serviceIntent);
     }
 }
-
-
-

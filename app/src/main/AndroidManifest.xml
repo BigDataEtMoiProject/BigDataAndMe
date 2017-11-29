@@ -31,6 +31,11 @@
         <activity android:name=".activity.GpsActivity" />
         <activity android:name=".activity.TelephoneSmsActivity" />
         <activity android:name=".activity.DonneesUtilisationActivity" />
+        <activity android:name=".activity.QuizzActivity"/>
+        <activity android:name=".activity.QuizzPersonaliteActivity"/>
+        <activity android:name=".activity.QuizzFacileActivity"/>
+        <activity android:name=".activity.QuizzMoyenActivity"/>
+        <activity android:name=".activity.QuizzDifficileActivity"/>
 
         <service
             android:name=".service.BigDataService"
@@ -43,7 +48,7 @@
              Note that the API key is linked to the encryption key used to sign the APK.
              You need a different API key for each encryption key, including the release key that is used to
              sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
