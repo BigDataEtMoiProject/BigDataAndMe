@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +11,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import ca.uqac.bigdataetmoi.R;
 
 
 public class QuizzActivity extends AppCompatActivity  {
@@ -25,7 +27,7 @@ public class QuizzActivity extends AppCompatActivity  {
 
         // On peuple le listView
         String[] fonctions = new String[] {
-                "Quizz de Personalité (Argent/Temps/Securitée",
+                "Quizz de Personnalité (Argent/Temps/Securité)",
                 "Quizz Facile",
                 "Quizz Moyen",
                 "Quizz Difficile",

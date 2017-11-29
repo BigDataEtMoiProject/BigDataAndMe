@@ -1,8 +1,10 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.activity;
 
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import ca.uqac.bigdataetmoi.R;
 
 public class QuizzMoyenActivity extends AppCompatActivity {
 

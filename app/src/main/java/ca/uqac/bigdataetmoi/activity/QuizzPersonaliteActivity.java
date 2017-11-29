@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.activity;
 
 import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.Security;
+
+import ca.uqac.bigdataetmoi.R;
 
 
 public class QuizzPersonaliteActivity extends AppCompatActivity {

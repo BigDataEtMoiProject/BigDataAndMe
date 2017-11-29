@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.activity;
 
 /**
  * Created by Maxime Berthet on 23/11/2017.

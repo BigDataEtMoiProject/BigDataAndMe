@@ -17,6 +17,7 @@ import java.util.Arrays;
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
+import ca.uqac.bigdataetmoi.activity.QuizzActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;

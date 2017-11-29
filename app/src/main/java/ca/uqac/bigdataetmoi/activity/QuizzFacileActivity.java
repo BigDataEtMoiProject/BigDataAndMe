@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.activity;
 
 import java.util.Random;
 
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import ca.uqac.bigdataetmoi.R;
 
 public class QuizzFacileActivity extends AppCompatActivity {
 
