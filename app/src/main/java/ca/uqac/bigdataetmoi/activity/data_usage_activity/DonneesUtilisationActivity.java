@@ -1,21 +1,16 @@
 package ca.uqac.bigdataetmoi.activity.data_usage_activity;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
+import android.app.usage.UsageEvents;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.DatePicker;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,71 +18,38 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.adapter.UsageListAdapter;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.UsageData;
 
 public class DonneesUtilisationActivity extends AppCompatActivity {
 
-    //Variable for the date picker
-    Calendar mCurrentDate;
-    Calendar mSelectDate;
-    int mYear, mMonth, mDay;
+    private static final long INIT_TIME_PERIOD = 1000 * 30;     //30 secondes
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy HH:mm:ss");
+    private static String TAG = "Event";
 
-    //Variable for the layout
-    MenuItem datePicker;
-    MenuItem statPicker;
-    TextView mSelectDay;
-    TextView mNoData;
-    ListView mDialogList;
-    ListView mUsageList;
-    ProgressBar mProgressBar;
+    private long mAppStarted, mAppEnded, mPrevUsageTime;
+    private String mAppInForeground, mAppInBackground;
     String[] choices;
-
-    private static final SimpleDateFormat hourMinFormat = new SimpleDateFormat("HH:mm:ss");
-    private static final SimpleDateFormat dayMonthFormat = new SimpleDateFormat("dd MMMM yyyy");
-    private static final SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-    private int index;
-    private long sumItemTimeDifference;
-    private int mSequence;
-
     Context mContext;
 
     //Variable for database management
     DatabaseManager dbManager;
     DatabaseReference usageRef;
-
-    //Variable for the listview
-    ArrayList<String> dialogList;
-    ListAdapter dialogAdapter;
-
-    ArrayList<UsageData> dispUsageList;
-    UsageListAdapter adapter;
+    UsageStatsManager statsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donnees_utilisation);
-
-        initializeLayoutAndData();
-
-        sumItemTimeDifference = 0;
-        mSequence = 1;
+        setLayoutAndData();
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_data_usage, menu);
-
-        //datePicker = menu.findItem(R.id.date_picker);
-        //statPicker = menu.findItem(R.id.stats_picker);
-
         return true;
     }
 
@@ -96,8 +58,8 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if(id == R.id.date_picker) {
-            getDatePicker();
+        if(id == android.R.id.home) {
+            this.finish();
             return true;
         } else if (id == R.id.stats_picker) {
             getStatPicker();
@@ -109,72 +71,25 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onStart() {
-        super.onStart();
-    }
-
     public void onResume() {
         super.onResume();
-        readAndDisplaySelectedDate(mCurrentDate);
+        readFirebaseDatabase();
     }
 
-    public void initializeLayoutAndData() {
+    public void setLayoutAndData() {
 
         mContext = getApplicationContext();
-        //Initialize database manager
+
+        setTitle("Phone Usage");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mAppStarted = mAppEnded = 0;
+        mAppInForeground = mAppInBackground = "";
+        mPrevUsageTime = 0;
+
+        statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         dbManager = DatabaseManager.getInstance();
         usageRef = dbManager.getUsageRef();
-
-        //Display "No data available" only if there no data
-        mNoData = (TextView) findViewById(R.id.noData);
-        mNoData.setVisibility(View.GONE);
-
-        //Display the load icon before listview appear
-        mProgressBar = (ProgressBar) findViewById(R.id.loadingData);
-        mProgressBar.setVisibility(View.VISIBLE);
-
-        //Display ic_event and initialize OnClick Method
-        //Display selected day
-        mCurrentDate = Calendar.getInstance();
-
-        mSelectDay = (TextView) findViewById(R.id.dateSelected);
-        mSelectDay.setText(dayMonthFormat.format(mCurrentDate.getTimeInMillis()));
-
-
-        //Set list and custom
-        mUsageList = (ListView) findViewById(R.id.usageList);
-        dispUsageList = new ArrayList<>();
-        adapter = new UsageListAdapter(this, R.layout.usage_list_layout, dispUsageList);
-    }
-
-    public void getDatePicker() {
-
-        //mCurrentDate = Calendar.getInstance();
-
-        mDay = mCurrentDate.get(Calendar.DAY_OF_MONTH);
-        mMonth = mCurrentDate.get(Calendar.MONTH);
-        mYear = mCurrentDate.get(Calendar.YEAR);
-
-        DatePickerDialog dpd = new DatePickerDialog(DonneesUtilisationActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                mSelectDate = Calendar.getInstance();
-                mSelectDate.set(year, month, dayOfMonth);
-
-                String daySelected = dayMonthFormat.format(mSelectDate.getTimeInMillis());
-                mSelectDay.setText(daySelected);
-
-                mProgressBar.setVisibility(View.VISIBLE);
-                mUsageList.setVisibility(View.GONE);
-                mNoData.setVisibility(View.GONE);
-                dispUsageList.clear();
-
-                readAndDisplaySelectedDate(mSelectDate);
-
-                Toast.makeText(mContext , dayMonthFormat.format(mSelectDate.getTimeInMillis()), Toast.LENGTH_SHORT).show();
-            }
-        }, mYear, mMonth, mDay);
-        dpd.show();
     }
 
     public void getStatPicker() {
@@ -186,158 +101,143 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
                 .setItems(choices, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        //mDialogList = (ListView) findViewById(R.id.stats_choice);
-                        //dialogList = new ArrayList<>();
-                        //dialogAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, choices);
-                        //mDialogList.setAdapter(dialogAdapter);
+                      switch (which) {
+                          case 0:
+                              startActivity(new Intent(DonneesUtilisationActivity.this, UsageTimelineActivity.class));
+                              break;
+                          case 1:
+                              startActivity(new Intent(DonneesUtilisationActivity.this, UsageAppActivity.class));
+                              break;
+                      }
                     }
                 });
         builder.create();
         builder.show();
     }
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setAdapter()
 
+    public final void readFirebaseDatabase() {
 
-        choices = new String [] {"Timeline", "Details"};
-        mDialogList = (ListView) findViewById(R.id.stats_choice);
-
-        dialogList = new ArrayList<>();
-        dialogAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, choices);
-        mDialogList.setAdapter(dialogAdapter);
-
-       /* Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//NO TITLE :)
-        dialog.setContentView(android.R.layout.simple_list_item_1);
-        dialog.
-        dialog.setCancelable(true);
-        dialog.show();*/
-
-
-    private void readAndDisplaySelectedDate(final Calendar cal) {
-
-        usageRef.orderByChild("timeAppEnd").addListenerForSingleValueEvent(new ValueEventListener()
+        usageRef.limitToLast(1).orderByChild("timeAppEnd").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                index = 0;
-                boolean dataExist = false;
-
-                for (DataSnapshot usageSnapshot : dataSnapshot.getChildren())
+                if (dataSnapshot.exists())
                 {
-                    String daySelected = dayMonthFormat.format(cal.getTimeInMillis());
-                    String dayAppBegin = getDayFromData(usageSnapshot);
-
-                    if (daySelected.equals(dayAppBegin))
-                    {
-                        String packageName = (String) usageSnapshot.child("packageName").getValue();
-                        long timeAppBegin = (long) usageSnapshot.child("timeAppBegin").getValue();
-                        long timeAppEnd = (long) usageSnapshot.child("timeAppEnd").getValue();
-
-                        UsageData usage = new UsageData(packageName, timeAppBegin, timeAppEnd);
-                        createListViewForDay(usage);
-                        mUsageList.setAdapter(adapter);
-                        dataExist = true;
-                    }
+                    UsageData usage  = getLastDataInDatabase(dataSnapshot);
+                    UsageEvents events = getTimeRangeEvent(usage);
+                    updateUsageDatabase(events);
                 }
-                if (!dataExist)
+                else if (!dataSnapshot.exists())
                 {
-                    mNoData.setVisibility(View.VISIBLE);
-                    mProgressBar.setVisibility(View.GONE);
-                    dispUsageList.clear();
+                    UsageData usage  = new UsageData("", 0, 0);
+                    UsageEvents events = getTimeRangeEvent(usage);
+                    updateUsageDatabase(events);
                 }
                 else
-                    {
-                    Collections.reverse(dispUsageList);
-                    mUsageList.setVisibility(View.VISIBLE);
-                    mNoData.setVisibility(View.GONE);
-                    mProgressBar.setVisibility(View.GONE);
+                {
+                    Log.e("ERROR", "SOMETHING WENT WRONG");
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
 
-    private String getDayFromData(DataSnapshot usage) {
-        long timeBegin = (long) usage.child("timeAppBegin").getValue();
-        return dayMonthFormat.format(timeBegin);
+    //Get last time an event was saved in database
+    private UsageData getLastDataInDatabase(DataSnapshot ds) {
+
+        UsageData usage = new UsageData();
+
+        for (DataSnapshot usageSnapshot : ds.getChildren()) {
+            long timeAppEnded = (long) usageSnapshot.child("timeAppEnd").getValue();
+            usage.setTimeAppEnd(timeAppEnded);
+        }
+
+        return usage;
     }
 
-    private void createListViewForDay(UsageData usage) {
-        if (index < dispUsageList.size() + 1)               //Make sure the index is inferior to the list size
-        {
-            if (index == 0) {                                //Insert initial value
-                dispUsageList.add(usage);
-                index++;
-            } else {
-                int prevItem = index - 1;
+    //Get the time range of events from last usage and current time
+    public final UsageEvents getTimeRangeEvent(UsageData usage) {
 
-                String currItemPackageName = usage.getPackageName();
-                String prevItemPackageName = dispUsageList.get(prevItem).getPackageName();
+        long currentTime = System.currentTimeMillis();
+        long lastTime = 0;
 
-                //Assure to group item that occured at very close interval
-                //Remove groupment where an event occur between the last usage and the current one (like a close screen)
-                //long currItemTimeBegin = usage.getTimeAppBegin();
-                //long prevItemTimeEnd = dispUsageList.get(prevItem).getTimeAppEnd();
-                //long diffLastUsage = currItemTimeBegin - prevItemTimeEnd;
-
-                long currItemTimeDifference = usage.getTimeAppEnd() - usage.getTimeAppBegin();
-
-                if (prevItemPackageName.equals(currItemPackageName)) {
-                    if (mSequence == 1) {
-                        long prevItemTimeDiff = dispUsageList.get(prevItem).getTimeAppEnd() - dispUsageList.get(prevItem).getTimeAppBegin();
-                        sumItemTimeDifference = prevItemTimeDiff;
-
-                    }
-                    sumItemTimeDifference = sumItemTimeDifference + currItemTimeDifference;
-
-                    long currItemTimeBegin = usage.getTimeAppBegin();
-                    long prevItemTimeEnd = currItemTimeBegin - sumItemTimeDifference;
-                    //if (prevItemTimeEnd < 5000) {
-                        mSequence++;
-                    //}
-                } else {
-                    if (mSequence == 1) {
-                        dispUsageList.add(usage);
-                        index++;
-                    } else {
-                        addGroupItems(prevItem);
-                        dispUsageList.add(usage);
-                        index++;
-                    }
-                }
-                //UsageData prevUsage = getPrevItem(prevItem);
-                //dispUsageList.add(prevUsage);
-                //mUsageList.setAdapter(adapter);
-            }   //DELETE INDEX 0 ONCE COMPLETE POPULATED
-
+        if (usage.getTimeAppEnd() == 0) {
+            lastTime = currentTime - INIT_TIME_PERIOD;
         } else {
-            Log.e("Index:", ":" + index);
-            Log.e("Size:", ":" + dispUsageList.size());
-            Log.e("Error:", "Index is out of bound");
+            lastTime = usage.getTimeAppEnd();
+        }
+
+        UsageEvents events;
+        events = statsManager.queryEvents(lastTime, currentTime);
+        return events;
+    }
+
+    //Update database with by getting when an app is in foreground and background
+    public final void updateUsageDatabase(UsageEvents events) {
+
+        while (events.hasNextEvent())
+        {
+            checkUsageEvents(events);
+            compareEventsAndInsert();
         }
     }
 
-    public void addGroupItems(int prevIndex) {
-        UsageData groupUsage = new UsageData();
+    //Check if an event is in foreground and background
+    public final void checkUsageEvents(UsageEvents events) {
 
-        long timeAppBegin = dispUsageList.get(prevIndex).getTimeAppBegin();
-        long timeAppEnd = timeAppBegin + sumItemTimeDifference;
+        UsageEvents.Event event = new UsageEvents.Event();
+        events.getNextEvent(event);
 
-        groupUsage.setPackageName(dispUsageList.get(prevIndex).getPackageName());
-        groupUsage.setTimeAppBegin(timeAppBegin);
-        groupUsage.setTimeAppEnd(timeAppEnd);
+        if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND)            //Get detail when an app is open (in foreground)
+        {
+            mAppInForeground = event.getPackageName();
+            mAppStarted = event.getTimeStamp();
 
-        dispUsageList.remove(prevIndex);
-        dispUsageList.add(groupUsage);
+            if (!events.hasNextEvent()) {                               //Assure to get the correct timestamp when no next event.
+                mPrevUsageTime = mAppStarted;                             //Useful when using refreshing and get using the app name condition
+            }
+        }
+        else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND)    //Get detail when an app is closed (in background)
+        {
+            mAppInBackground = event.getPackageName();
+            mAppEnded = event.getTimeStamp();
 
-        mSequence = 1;
-        sumItemTimeDifference = 0;
+            if (!events.hasNextEvent()) {
+                mPrevUsageTime = mAppEnded;
+            }
+        }
+
     }
 
+    //Check if the two last events matches and insert in database if so
+    public final void compareEventsAndInsert() {
+
+        if (mAppInForeground.equals(mAppInBackground))                    //Assure data updated correspond to the same app
+        {
+            if (mAppEnded != 0 && mAppStarted != 0)                       //Assure data updated is not null
+            {
+                long diff = mAppEnded - mAppStarted;
+
+                if (diff >= 1000) {                                     //Filter information to remove process events (and last than 1 seconde)
+                    Log.d(TAG, mAppInForeground + "\t" + "Started at\t" + dateFormat.format(mAppStarted));
+                    Log.d(TAG, mAppInBackground + "\t" + "Ended at\t" + dateFormat.format(mAppEnded));
+                    Log.d(TAG, mAppInForeground + ":\t" + diff / 1000 + " secondes");
+
+                    UsageData usage = new UsageData();
+                    usage.setPackageName(mAppInForeground);
+                    usage.setTimeAppBegin(mAppStarted);
+                    usage.setTimeAppEnd(mAppEnded);
+                    dbManager.storeUsageData(usage);
+
+                    //Put variable at 0 to assure data a clean
+                    mAppStarted = mAppEnded = 0;
+                    mAppInForeground = mAppInBackground = "";
+                }
+            }
+        }
+    }
 }

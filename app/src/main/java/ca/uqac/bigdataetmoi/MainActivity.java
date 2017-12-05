@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
-import ca.uqac.bigdataetmoi.activity.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
 import ca.uqac.bigdataetmoi.activity.QuizzActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
+import ca.uqac.bigdataetmoi.activity.data_usage_activity.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;

@@ -29,20 +29,20 @@
         <activity android:name=".activity.CompteurDePasActivity" />
         <activity android:name=".activity.TempsUtilisationActivity" />
         <activity android:name=".activity.TelephoneSmsActivity" />
-        <activity android:name=".activity.DonneesUtilisationActivity" />
-        <activity android:name=".activity.QuizzActivity"/>
-        <activity android:name=".activity.QuizzPersonaliteActivity"/>
-        <activity android:name=".activity.QuizzFacileActivity"/>
-        <activity android:name=".activity.QuizzMoyenActivity"/>
-        <activity android:name=".activity.QuizzDifficileActivity"/>
+        <activity android:name=".activity.data_usage_activity.DonneesUtilisationActivity" />
+        <activity android:name=".activity.QuizzActivity" />
+        <activity android:name=".activity.QuizzPersonaliteActivity" />
+        <activity android:name=".activity.QuizzFacileActivity" />
+        <activity android:name=".activity.QuizzMoyenActivity" />
+        <activity android:name=".activity.QuizzDifficileActivity" />
         <activity
             android:name=".activity.GPSMapsActivity"
-            android:label="@string/title_activity_gpsmaps"/>
+            android:label="@string/title_activity_gpsmaps" />
 
         <service
             android:name=".service.BigDataService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -55,6 +55,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <activity android:name=".activity.data_usage_activity.UsageTimelineActivity" />
+        <activity android:name=".activity.data_usage_activity.UsageAppActivity"></activity>
     </application>
 
 </manifest>

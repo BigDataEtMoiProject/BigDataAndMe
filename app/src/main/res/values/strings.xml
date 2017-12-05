@@ -18,5 +18,11 @@
     <string name="signin_error_empty_password">Veuillez entrer un password</string>
     <string name="signin_error_wrong_email_or_password">Mauvais email ou mot de passe</string>
     <string name="title_activity_gpsmaps">Map</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

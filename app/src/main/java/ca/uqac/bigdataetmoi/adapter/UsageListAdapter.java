@@ -44,7 +44,7 @@ public class UsageListAdapter extends ArrayAdapter<UsageData> {
         long diff = (timeAppEnd - timeAppBegin)/1000;
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        convertView = inflater.inflate(mResource, parent, false);       //can cause problem if too many item
+        convertView = inflater.inflate(mResource, parent,   false);       //can cause problem if too many item
 
         try {
             mApplicationInfo = mPackageManager.getApplicationInfo(packageName, 0);
