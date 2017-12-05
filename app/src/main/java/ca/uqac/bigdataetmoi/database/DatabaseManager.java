@@ -48,22 +48,13 @@ public class DatabaseManager
         Log.w("DatabaseManager", "New location stored");
     }
 
-    public void storeLightSensorData(LightSensorData data)
+    public void storeSensorData(SensorData data)
     {
-        String key = mDbRef.child("lightsensordata").push().getKey();
+        String key = mDbRef.child(data.getDataID()).push().getKey();
         Map<String, Object> update = new HashMap<>();
-        update.put("/lightsensordata/" + key, data);
+        update.put("/" + data.getDataID() + "/" + key, data);
         mDbRef.updateChildren(update);
-        Log.w("DatabaseManager", "New lux stored");
-    }
-
-    public void storeAccelSensorData(AccelSensorData data)
-    {
-        String key = mDbRef.child("accelsensordata").push().getKey();
-        Map<String, Object> update = new HashMap<>();
-        update.put("/accelsensordata/" + key, data);
-        mDbRef.updateChildren(update);
-        Log.w("DatabaseManager", "New accel stored");
+        Log.w("DatabaseManager", "New " + data.getDataID() + " stored");
     }
 
     public void storeUsageData(UsageData data) {
@@ -75,7 +66,6 @@ public class DatabaseManager
     }
 
     // Lecture dans la bd
-
     public DatabaseReference getLocationRef()
     {
         return mDbRef.child("locations");
