@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="ACCÉLÉRATION" />
+        android:text="ACCÉLÉROMÈTRE (En mouvement)" />
 
     <TextView
         android:id="@+id/accelTextView"
@@ -67,17 +67,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text=" " />
+        android:text="_______________________" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="INTERPRÉTATION" />
+        android:text="PROXIMITÉE (Distance)" />
 
     <TextView
-        android:id="@+id/interAccelTextView"
+        android:id="@+id/proximiTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

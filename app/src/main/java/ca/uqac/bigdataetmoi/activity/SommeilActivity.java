@@ -10,14 +10,24 @@ import android.os.Bundle;
 import android.util.FloatMath;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.Date;
+import java.util.Map;
+
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.database.AccelSensorData;
+import ca.uqac.bigdataetmoi.database.DatabaseManager;
+import ca.uqac.bigdataetmoi.database.LightSensorData;
+import ca.uqac.bigdataetmoi.database.ProximitySensorData;
 
-public class SommeilActivity extends AppCompatActivity implements SensorEventListener {
+public class SommeilActivity extends AppCompatActivity {
 
-    private SensorManager mSensorManager;
-    private Sensor mLight, mAccelerometer;
-    private TextView mLuxTextView, mInterLuxTextView, mAccelTextView, mInterAccelTextView;
-    private float mAccel, mAccelCurrent, mAccelLast;
+    private TextView mLuxTextView, mInterLuxTextView, mAccelTextView, mProximiTextView;
+    DatabaseManager dmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,91 +38,74 @@ public class SommeilActivity extends AppCompatActivity implements SensorEventLis
         mLuxTextView = (TextView) findViewById(R.id.luxTextView);
         mInterLuxTextView = (TextView) findViewById(R.id.interLuxTextView);
         mAccelTextView = (TextView) findViewById(R.id.accelTextView);
-        mInterAccelTextView = (TextView) findViewById(R.id.interAccelTextView);
+        mProximiTextView = (TextView) findViewById(R.id.proximiTextView);
 
-        //Initialisation des senseurs
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
-        mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mAccel = 0.00f;
-        mAccelCurrent = SensorManager.GRAVITY_EARTH;
-        mAccelLast = SensorManager.GRAVITY_EARTH;
+        //Pour lecture de la bd
+        dmManager = DatabaseManager.getInstance();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        //Récupérer les données de la bd (dernier enregistrement
+
+        DatabaseManager.getInstance().getDbRef(AccelSensorData.DATA_ID).
+                orderByChild("mDate").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                AccelSensorData data = (AccelSensorData) dataSnapshot.getValue(AccelSensorData.class);
+                mAccelTextView.setText(data.isMoving() + " le " + data.getDate().toString());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        DatabaseManager.getInstance().getDbRef(LightSensorData.DATA_ID).
+                orderByChild("mDate").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                LightSensorData data = (LightSensorData) dataSnapshot.getValue(LightSensorData.class);
+                mLuxTextView.setText(data.getLux() + " le " + data.getDate().toString());
+                mInterLuxTextView.setText(LightSensorData.interpreterLux(data.getLux()));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        DatabaseManager.getInstance().getDbRef(ProximitySensorData.DATA_ID).
+                orderByChild("mDate").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                ProximitySensorData data = (ProximitySensorData) dataSnapshot.getValue(ProximitySensorData.class);
+                mProximiTextView.setText(data.getDistance() + " le " + data.getDate().toString());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mSensorManager.unregisterListener(this);
-    }
-
-    @Override
-    public final void onAccuracyChanged(Sensor sensor, int accuracy) { }
-
-    @Override
-    public final void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_LIGHT)
-        {
-            float lux = event.values[0];
-            mLuxTextView.setText(String.valueOf(lux));
-            mInterLuxTextView.setText(interpreterLux(lux));
-        }
-        else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-        {
-            float[] gravity = event.values.clone();
-            float x = gravity[0];
-            float y = gravity[1];
-            float z = gravity[2];
-            mAccelLast = mAccelCurrent;
-            mAccelCurrent = (float)Math.sqrt(x*x + y*y + z*z);
-            float delta = mAccelCurrent - mAccelLast;
-            mAccel = mAccel * 0.9f + delta;
-
-            mAccelTextView.setText(String.valueOf(mAccel));
-            mInterAccelTextView.setText(interpreterAccel(mAccel));
-        }
-    }
-
-    String interpreterLux(float lux)
-    {
-        String text;
-
-        if(lux <= 10.0)
-            text = "Noir";
-        else if(lux <= 30.0)
-            text = "Sombre";
-        else if(lux <= 125)
-            text = "Faible éclairage";
-        else if(lux <= 300)
-            text = "Éclairage moyen";
-        else if(lux <= 700)
-            text = "Éclairage normal";
-        else if(lux <= 7500)
-            text = "Clair";
-        else
-            text = "Très clair";
-
-        return text;
-    }
-
-    String interpreterAccel(float accel)
-    {
-        String text;
-
-        if(accel > 1.0)
-            text = "En mouvement";
-        else
-            text = "Aucun mouvement";
-
-        return text;
-    }
 }
 
