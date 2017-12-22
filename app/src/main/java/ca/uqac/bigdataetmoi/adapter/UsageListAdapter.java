@@ -20,7 +20,7 @@ import ca.uqac.bigdataetmoi.database.UsageData;
 
 public class UsageListAdapter extends ArrayAdapter<UsageData> {
 
-    private static final SimpleDateFormat hourMinFormat = new SimpleDateFormat("HH:mm");
+    private static final SimpleDateFormat hourMinFormat = new SimpleDateFormat("HH:mm:ss");
     private Context mContext;
     private int mResource;
     private PackageManager mPackageManager;
@@ -43,22 +43,48 @@ public class UsageListAdapter extends ArrayAdapter<UsageData> {
 
         long diff = (timeAppEnd - timeAppBegin)/1000;
 
+        String convertTime = convertSeconds(diff);
+
+        //Permet l'affichage d'une liste custom
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent,   false);       //can cause problem if too many item
 
         try {
             mApplicationInfo = mPackageManager.getApplicationInfo(packageName, 0);
         } catch (PackageManager.NameNotFoundException e) { }
-        TextView hourMinView = (TextView)convertView.findViewById(R.id.hourMinView);
+
+        TextView hourMinViewEnd = (TextView)convertView.findViewById(R.id.hourMinView);
+        TextView hourMinViewBegin = (TextView)convertView.findViewById(R.id.hourMinView2);
         ImageView appIconView = (ImageView)convertView.findViewById(R.id.appIconView);
         TextView appNameView = (TextView)convertView.findViewById(R.id.appNameView);
         TextView timeAppView = (TextView)convertView.findViewById(R.id.timeAppView);
 
-        hourMinView.setText(hourMinFormat.format(timeAppBegin));
+        hourMinViewEnd.setText(hourMinFormat.format(timeAppEnd));
+        hourMinViewBegin.setText(hourMinFormat.format(timeAppBegin));
         appIconView.setImageDrawable(mApplicationInfo.loadIcon(mPackageManager));
         appNameView.setText(mApplicationInfo.loadLabel(mPackageManager));
-        timeAppView.setText(diff + " secondes");
+        timeAppView.setText(convertTime);
+
 
         return convertView;
+    }
+
+    private static String convertSeconds(long totalSeconds)
+    {
+        long hours = totalSeconds / 3600;
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+        if (hours > 0)
+        {
+            return hours + " hours " + minutes + " minutes " + seconds + " secondes";
+        }
+        else if (minutes > 0)
+        {
+            return minutes + " minutes " + seconds + " secondes";
+        }
+        else
+        {
+            return seconds + " secondes";
+        }
     }
 }

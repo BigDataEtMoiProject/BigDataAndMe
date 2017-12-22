@@ -47,7 +47,9 @@ public class UsageTimelineActivity extends AppCompatActivity {
     private static final SimpleDateFormat dayMonthFormat = new SimpleDateFormat("dd MMMM yyyy");
     private static final SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
     private int index;
+    private int lastIndex;
     private long sumItemTimeDifference;
+    private boolean mIsPhoneClose;
     private int mSequence;
 
     Context mContext;
@@ -56,6 +58,8 @@ public class UsageTimelineActivity extends AppCompatActivity {
     DatabaseManager dbManager;
     DatabaseReference usageRef;
 
+    UsageData mPhoneClose;
+    ArrayList<UsageData> mItemToGroupList;
     ArrayList<UsageData> dispUsageList;
     UsageListAdapter adapter;
 
@@ -129,6 +133,8 @@ public class UsageTimelineActivity extends AppCompatActivity {
         mSelectDay = (TextView) findViewById(R.id.dateSelected);
         mSelectDay.setText(dayMonthFormat.format(mCurrentDate.getTimeInMillis()));
 
+        mIsPhoneClose = false;
+        mItemToGroupList = new ArrayList<>();
 
         //Set list and custom
         mUsageList = (ListView) findViewById(R.id.usageList);
@@ -191,11 +197,12 @@ public class UsageTimelineActivity extends AppCompatActivity {
                         long timeAppEnd = (long) usageSnapshot.child("timeAppEnd").getValue();
 
                         UsageData usage = new UsageData(packageName, timeAppBegin, timeAppEnd);
-                        createListViewForDay(usage);
-                        mUsageList.setAdapter(adapter);
+                        createListViewForSelectDay(usage);      //Create listview under certain condition
+                        mUsageList.setAdapter(adapter);         //Set adapter to display listview
                         dataExist = true;
                     }
                 }
+
                 if (!dataExist)
                 {
                     mNoData.setVisibility(View.VISIBLE);
@@ -223,27 +230,22 @@ public class UsageTimelineActivity extends AppCompatActivity {
         return dayMonthFormat.format(timeBegin);
     }
 
-    private void createListViewForDay(UsageData usage) {
+    private void createListViewForSelectDay(UsageData usage) {
 
         if (index < dispUsageList.size() + 1)               //Make sure the index is inferior to the list size
         {
             if (index == 0)
             {                                //Insert initial value
                 dispUsageList.add(usage);
+                mItemToGroupList.add(usage);
                 index++;
             }
-            else
-            {
+            else {
                 int prevItem = index - 1;
 
                 String currItemPackageName = usage.getPackageName();
                 String prevItemPackageName = dispUsageList.get(prevItem).getPackageName();
-
-                //Assure to group item that occured at very close interval
-                //Remove groupment where an event occur between the last usage and the current one (like a close screen)
-                //long currItemTimeBegin = usage.getTimeAppBegin();
-                //long prevItemTimeEnd = dispUsageList.get(prevItem).getTimeAppEnd();
-                //long diffLastUsage = currItemTimeBegin - prevItemTimeEnd;
+                long prevItemTimeDiff;
 
                 long currItemTimeDifference = usage.getTimeAppEnd() - usage.getTimeAppBegin();
 
@@ -251,34 +253,32 @@ public class UsageTimelineActivity extends AppCompatActivity {
                 {
                     if (mSequence == 1)
                     {
-                        long prevItemTimeDiff = dispUsageList.get(prevItem).getTimeAppEnd() - dispUsageList.get(prevItem).getTimeAppBegin();
+                        prevItemTimeDiff = dispUsageList.get(prevItem).getTimeAppEnd() - dispUsageList.get(prevItem).getTimeAppBegin();
                         sumItemTimeDifference = prevItemTimeDiff;
-
+                        mItemToGroupList.add(usage);
                     }
                     sumItemTimeDifference = sumItemTimeDifference + currItemTimeDifference;
+                    mItemToGroupList.add(usage);
 
-                    long currItemTimeBegin = usage.getTimeAppBegin();
-                    long prevItemTimeEnd = currItemTimeBegin - sumItemTimeDifference;
-                    //if (prevItemTimeEnd < 5000) {
                     mSequence++;
-                    //}
-                }
-                else
-                {
+
+                } else {
+
                     if (mSequence == 1)
                     {
                         dispUsageList.add(usage);
+                        mItemToGroupList.clear();
                         index++;
                     }
                     else
                     {
-                        addGroupItems(prevItem);
+                        groupItemsToOne(prevItem);
                         dispUsageList.add(usage);
+                        mItemToGroupList.clear();
                         index++;
                     }
                 }
             }
-
         }
         else
         {
@@ -288,7 +288,7 @@ public class UsageTimelineActivity extends AppCompatActivity {
         }
     }
 
-    public void addGroupItems(int prevIndex) {
+    public void groupItemsToOne(int prevIndex) {
         UsageData groupUsage = new UsageData();
 
         long timeAppBegin = dispUsageList.get(prevIndex).getTimeAppBegin();
@@ -304,4 +304,5 @@ public class UsageTimelineActivity extends AppCompatActivity {
         mSequence = 1;
         sumItemTimeDifference = 0;
     }
+
 }

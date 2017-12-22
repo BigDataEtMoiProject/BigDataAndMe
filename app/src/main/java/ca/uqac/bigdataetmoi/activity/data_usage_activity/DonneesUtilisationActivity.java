@@ -25,16 +25,17 @@ import ca.uqac.bigdataetmoi.database.UsageData;
 
 public class DonneesUtilisationActivity extends AppCompatActivity {
 
+    private static final String TAG = DonneesUtilisationActivity.class.getSimpleName();
+
     private static final long INIT_TIME_PERIOD = 1000 * 30;     //30 secondes
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy HH:mm:ss");
-    private static String TAG = "Event";
 
     private long mAppStarted, mAppEnded, mPrevUsageTime;
     private String mAppInForeground, mAppInBackground;
     String[] choices;
     Context mContext;
 
-    //Variable for database management
+    //Variable pour le  database management
     DatabaseManager dbManager;
     DatabaseReference usageRef;
     UsageStatsManager statsManager;
@@ -43,6 +44,8 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donnees_utilisation);
+
+        //Initialiser et afficher les layouts, donnnées , etc.
         setLayoutAndData();
     }
 
@@ -55,6 +58,8 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        //Navigation pour l'Actionbar
 
         int id = item.getItemId();
 
@@ -73,27 +78,34 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-        readFirebaseDatabase();
+
+        //Lire la dernière valeur de la base de données
+        readFirebaseDatabaseForLastValue();
     }
 
     public void setLayoutAndData() {
 
         mContext = getApplicationContext();
 
+        //Action bar et titre
         setTitle("Phone Usage");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Variable
         mAppStarted = mAppEnded = 0;
         mAppInForeground = mAppInBackground = "";
         mPrevUsageTime = 0;
 
+        //Stats Manager pour récolter l'information sur les applications utilisé
         statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         dbManager = DatabaseManager.getInstance();
         usageRef = dbManager.getUsageRef();
+
     }
 
     public void getStatPicker() {
 
+        //Afficher un fenêtre et les choix suivants lorsque l'icone est sur l'action bar est sélectionné
         choices = new String [] {"Timeline", "Details"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -103,10 +115,11 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
 
                       switch (which) {
                           case 0:
+                              //Démarrer activité Timeline
                               startActivity(new Intent(DonneesUtilisationActivity.this, UsageTimelineActivity.class));
                               break;
                           case 1:
-                              startActivity(new Intent(DonneesUtilisationActivity.this, UsageAppActivity.class));
+                              //TODO: Commencer une nouvelle activité pour l'usage total des applications
                               break;
                       }
                     }
@@ -115,7 +128,7 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
         builder.show();
     }
 
-    public final void readFirebaseDatabase() {
+    public final void readFirebaseDatabaseForLastValue() {
 
         usageRef.limitToLast(1).orderByChild("timeAppEnd").addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -146,9 +159,9 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
         });
     }
 
-    //Get last time an event was saved in database
     private UsageData getLastDataInDatabase(DataSnapshot ds) {
 
+        //Obtenir la dernière la dernière données enregistré
         UsageData usage = new UsageData();
 
         for (DataSnapshot usageSnapshot : ds.getChildren()) {
@@ -159,13 +172,18 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
         return usage;
     }
 
-    //Get the time range of events from last usage and current time
     public final UsageEvents getTimeRangeEvent(UsageData usage) {
+
+        /*
+        Obtenir la marge de temps entre le dernier événement
+        sauvegardé dans la BD et l'événement courant
+        */
 
         long currentTime = System.currentTimeMillis();
         long lastTime = 0;
 
         if (usage.getTimeAppEnd() == 0) {
+            //Si première utilisation de l'application prendre les événements des 30 dernière secondes
             lastTime = currentTime - INIT_TIME_PERIOD;
         } else {
             lastTime = usage.getTimeAppEnd();
@@ -176,8 +194,11 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
         return events;
     }
 
-    //Update database with by getting when an app is in foreground and background
     public final void updateUsageDatabase(UsageEvents events) {
+
+        /* Mise à jour la base de données en insérant les évènements
+         * survenus entre la dernière données enregistré le moment présent
+         */
 
         while (events.hasNextEvent())
         {
@@ -186,22 +207,31 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
         }
     }
 
-    //Check if an event is in foreground and background
     public final void checkUsageEvents(UsageEvents events) {
+
+        /* Déterminer si un événement est en avant plan ou arrière plan
+        *  et le temps où l'évènement est survenu.
+        */
 
         UsageEvents.Event event = new UsageEvents.Event();
         events.getNextEvent(event);
 
-        if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND)            //Get detail when an app is open (in foreground)
+        //Obtenir les détails quand une application est en avant-plan
+        if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND)
         {
+            //Nom de l'application et time-Stamps
             mAppInForeground = event.getPackageName();
             mAppStarted = event.getTimeStamp();
 
-            if (!events.hasNextEvent()) {                               //Assure to get the correct timestamp when no next event.
-                mPrevUsageTime = mAppStarted;                             //Useful when using refreshing and get using the app name condition
+            // Quand il n'y a plus d'évènement à insérer dans la base données
+            // garder en mémoire le time stamp de la dernière application insérer
+            // Permet d'assurer une cohérence de données
+            if (!events.hasNextEvent()) {
+                mPrevUsageTime = mAppStarted;
             }
         }
-        else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND)    //Get detail when an app is closed (in background)
+        //Obtenir les détails quand une applicatioon est en arrière-plan
+        else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND)
         {
             mAppInBackground = event.getPackageName();
             mAppEnded = event.getTimeStamp();
@@ -213,16 +243,24 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
 
     }
 
-    //Check if the two last events matches and insert in database if so
     public final void compareEventsAndInsert() {
 
-        if (mAppInForeground.equals(mAppInBackground))                    //Assure data updated correspond to the same app
+        /* Comparer les événements en avant-plan et arrière-plan
+         * pour insérer dans la BD le moment où l'applicaton à débuté
+         * et terminer.
+         * Insérer la données dans la BD firebase
+         */
+
+        //Événements en avant-plan et arrière-plan doivent avoir le même nom
+        if (mAppInForeground.equals(mAppInBackground))
         {
-            if (mAppEnded != 0 && mAppStarted != 0)                       //Assure data updated is not null
+            if (mAppEnded != 0 && mAppStarted != 0)
             {
                 long diff = mAppEnded - mAppStarted;
 
-                if (diff >= 1000) {                                     //Filter information to remove process events (and last than 1 seconde)
+                //Filtrer les événements ayants un temps d'utilisation inférieur à 1 secondes (peu être changé)
+                if (diff >= 1000)
+                {
                     Log.d(TAG, mAppInForeground + "\t" + "Started at\t" + dateFormat.format(mAppStarted));
                     Log.d(TAG, mAppInBackground + "\t" + "Ended at\t" + dateFormat.format(mAppEnded));
                     Log.d(TAG, mAppInForeground + ":\t" + diff / 1000 + " secondes");
@@ -240,4 +278,5 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
             }
         }
     }
+
 }
