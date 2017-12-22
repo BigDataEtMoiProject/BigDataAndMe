@@ -12,6 +12,8 @@ public class ProximitySensorData implements SensorData{
     Date mDate;
     float mDistance;
 
+    public ProximitySensorData() {}
+
     public ProximitySensorData(Date date, float distance)    {
         mDate = date;
         mDistance = distance;
@@ -19,4 +21,7 @@ public class ProximitySensorData implements SensorData{
 
     @Override
     public String getDataID() { return DATA_ID; }
+
+    public Date getDate() { return mDate; }
+    public float getDistance() { return mDistance; }
 }

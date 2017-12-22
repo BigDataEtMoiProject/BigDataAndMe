@@ -12,6 +12,8 @@ public class LightSensorData implements SensorData {
     Date mDate;
     float mLux;
 
+    public LightSensorData() {}
+
     public LightSensorData(Date date, float lux)
     {
         mDate = date;
@@ -20,6 +22,9 @@ public class LightSensorData implements SensorData {
 
     @Override
     public String getDataID() { return DATA_ID; }
+
+    public Date getDate() { return mDate; }
+    public float getLux() { return mLux; }
 
     static public String interpreterLux(float lux)
     {

@@ -75,5 +75,7 @@ public class DatabaseManager
     {
         return mDbRef.child("usagedata");
     }
+
+    public DatabaseReference getDbRef(String dataId) { return mDbRef.child(dataId); }
 }
 

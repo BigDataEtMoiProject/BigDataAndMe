@@ -12,6 +12,8 @@ public class AccelSensorData implements SensorData {
     Date mDate;
     boolean mMoving;
 
+    public AccelSensorData() { }
+
     public AccelSensorData(Date date, boolean moving)
     {
         mDate = date;
@@ -20,4 +22,7 @@ public class AccelSensorData implements SensorData {
 
     @Override
     public String getDataID() { return DATA_ID; }
+
+    public Date getDate() { return mDate; }
+    public boolean isMoving() { return mMoving; }
 }

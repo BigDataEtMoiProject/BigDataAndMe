@@ -5,10 +5,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,14 +14,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-
-import java.util.Calendar;
-
-import ca.uqac.bigdataetmoi.database.AccelSensorData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.LightSensorData;
-import ca.uqac.bigdataetmoi.database.ProximitySensorData;
+
 
 
 /*
@@ -34,16 +24,13 @@ But : Service qui récupère les infos des différents capteurs et qui envoie le
  */
 
 
-public class BigDataService extends IntentService implements SensorEventListener {
+public class BigDataService extends IntentService {
     final int LOC_UPDATE_MIN_TIME = 10000; //in ms
     final int LOC_UPDATE_MIN_DISTANCE = 0; //in sec
-    final int SENSOR_MIN_UPDATE_MILLIS = 300000; //Temps minimum entre deux écriture dans la BD (5 minutes)
+
+    Thread mBasicSensorThread;
 
     DatabaseManager dbManager;
-    DatabaseReference usageRef;
-
-    private long mPrevAccelMillis, mPrevMoveMillis, mPrevProximityMillis;
-    private float mAccel, mAccelCurrent, mAccelLast;
 
     public BigDataService() {
         super("BigDataService");
@@ -52,13 +39,7 @@ public class BigDataService extends IntentService implements SensorEventListener
     @Override
     public void onCreate() {
 
-        mPrevMoveMillis = 0;
-        mPrevAccelMillis = 0;
-        mPrevProximityMillis = 0;
-
         dbManager = DatabaseManager.getInstance();
-        usageRef = dbManager.getUsageRef();
-
         Log.v("BigDataService", "BigDataService service has been created");
     }
 
@@ -66,22 +47,9 @@ public class BigDataService extends IntentService implements SensorEventListener
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.w("BigDataService", "BigDataService service has started");
 
-        SensorManager sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-
-        // Pour la lumière
-        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-        // Pour l'accéléromètre
-        Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mAccel = 0.00f;
-        mAccelCurrent = SensorManager.GRAVITY_EARTH;
-        mAccelLast = SensorManager.GRAVITY_EARTH;
-
-        // Pour le capteur de proximité
-        Sensor proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+        // Démarrage du Thread pour les senseurs de base
+        mBasicSensorThread = new Thread(new BasicSensorThread(this));
+        mBasicSensorThread.start();
 
         // Pour le GPS
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -129,68 +97,5 @@ public class BigDataService extends IntentService implements SensorEventListener
 
     protected void onHandleIntent(Intent intent) {
         Log.i("BigDataService", "Service onHandleIntent");
-    }
-
-
-    // Gestion des événements des senseurs
-
-    @Override
-    public final void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
-
-    @Override
-    public final void onSensorChanged(SensorEvent event) {
-
-        if(event.sensor.getType() == Sensor.TYPE_LIGHT) {
-            handleLightSensorChanged(event.values[0]);
-        }
-        else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float[] gravity = event.values.clone();
-            handleAccelSensorChanged(gravity[0], gravity[1], gravity[2]);
-        }
-        else if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-            handleProximitySensorChanged(event.values[0]);
-        }
-    }
-
-    // Gestion des changements de valeurs des capteurs
-
-    private void handleLightSensorChanged(float newLux)
-    {
-        long currMillis = System.currentTimeMillis();
-
-        if(currMillis - mPrevAccelMillis > SENSOR_MIN_UPDATE_MILLIS) {
-            dbManager.storeSensorData(new LightSensorData(Calendar.getInstance().getTime(), newLux));
-            mPrevAccelMillis = currMillis;
-        }
-    }
-
-    private void handleAccelSensorChanged(float accelX, float accelY, float accelZ)
-    {
-        // Détection d'un changement d'accélération (cela veut dire que le téléphone bouge)
-        mAccelLast = mAccelCurrent;
-        mAccelCurrent = (float)Math.sqrt(accelX*accelX + accelY*accelY + accelZ*accelZ);
-        float delta = mAccelCurrent - mAccelLast;
-        mAccel = mAccel * 0.9f + delta;
-
-        if(mAccel > 1.0) { // Cela veut dire qu'on bouge
-            long currMillis = System.currentTimeMillis();
-
-            //On met à jour les mouvement si celui-ci a lieu au minimum 5 minutes plus tard
-            if(currMillis - mPrevMoveMillis > SENSOR_MIN_UPDATE_MILLIS){
-                dbManager.storeSensorData(new AccelSensorData(Calendar.getInstance().getTime(), true));
-                mPrevMoveMillis = currMillis;
-            }
-        }
-    }
-
-    private void handleProximitySensorChanged(float newDistance)
-    {
-        long currMillis = System.currentTimeMillis();
-
-        if(currMillis - mPrevProximityMillis > SENSOR_MIN_UPDATE_MILLIS){
-            dbManager.storeSensorData(new ProximitySensorData(Calendar.getInstance().getTime(), newDistance));
-            mPrevProximityMillis = currMillis;
-        }
     }
 }
