@@ -29,6 +29,7 @@ public class BigDataService extends IntentService {
     final int LOC_UPDATE_MIN_DISTANCE = 0; //in sec
 
     Thread mBasicSensorThread;
+    Thread MicThread;
 
     DatabaseManager dbManager;
 
@@ -46,6 +47,10 @@ public class BigDataService extends IntentService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.w("BigDataService", "BigDataService service has started");
+
+        // Démarrage du Thread pour le Micro
+        MicThread = new Thread(new MicroThread(this));
+        MicThread.start();
 
         // Démarrage du Thread pour les senseurs de base
         mBasicSensorThread = new Thread(new BasicSensorThread(this));

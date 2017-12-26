@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BigDataEtMoi.iml" filepath="$PROJECT_DIR$/BigDataEtMoi.iml" />
+      <module fileurl="file://C:\Users\Job\Desktop\Project Android Big Data\big-data\BigDataEtMoi.iml" filepath="C:\Users\Job\Desktop\Project Android Big Data\big-data\BigDataEtMoi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Job\Desktop\Project Android Big Data\big-data\app\app.iml" filepath="C:\Users\Job\Desktop\Project Android Big Data\big-data\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/big-data.iml" filepath="$PROJECT_DIR$/big-data.iml" />
     </modules>
   </component>
 </project>
