@@ -128,6 +128,8 @@ public class BigDataService extends IntentService implements SensorEventListener
         }
 
         return Service.START_STICKY;
+
+
     }
 
     @Override
@@ -153,6 +155,7 @@ public class BigDataService extends IntentService implements SensorEventListener
     }
 
     @Override
+
     public final void onSensorChanged(SensorEvent event) {
 
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
@@ -162,7 +165,7 @@ public class BigDataService extends IntentService implements SensorEventListener
             long currMillis = System.currentTimeMillis();
 
             if (currMillis - mPrevAccelMillis > 300000) {
-                dbManager.storeLightSensorData(new LightSensorData(Calendar.getInstance().getTime(), lux));
+                 dbManager.storeLightSensorData(new LightSensorData(Calendar.getInstance().getTime(), lux));
                 mPrevAccelMillis = currMillis;
             }
         } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {

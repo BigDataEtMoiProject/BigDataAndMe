@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import ca.uqac.bigdataetmoi.MainApplication;
  * Cette classe à pour but de gérer la base de données, c'est à dire son initialisation et la communication.
  */
 
-public class DatabaseManager
+public class DatabaseManager implements Serializable
 {
     FirebaseDatabase mDb;
     DatabaseReference mDbRef;
@@ -50,10 +51,11 @@ public class DatabaseManager
 
     public void storeLightSensorData(LightSensorData data)
     {
+
         String key = mDbRef.child("lightsensordata").push().getKey();
         Map<String, Object> update = new HashMap<>();
         update.put("/lightsensordata/" + key, data);
-        mDbRef.updateChildren(update);
+        //mDbRef.updateChildren(update);
         Log.w("DatabaseManager", "New lux stored");
     }
 
@@ -61,9 +63,18 @@ public class DatabaseManager
     {
         String key = mDbRef.child("accelsensordata").push().getKey();
         Map<String, Object> update = new HashMap<>();
-        update.put("/accelsensordata/" + key, data);
+        //update.put("/accelsensordata/" + key, data);
         mDbRef.updateChildren(update);
         Log.w("DatabaseManager", "New accel stored");
+    }
+
+    public void storePodoSensorData(PodoSensorData data)
+    {
+        String key = mDbRef.child("podosensordata").push().getKey();
+        Map<String, Object> update = new HashMap<>();
+        update.put("/podosensordata/" + key, data);
+        mDbRef.updateChildren(update);
+
     }
 
     public void storeUsageData(UsageData data) {
@@ -85,5 +96,10 @@ public class DatabaseManager
     {
         return mDb.getReference("users/" + MainApplication.user.getUid() + "usagedata");
     }
+/*
+    public DatabaseReference getPodoRef() {
+        return mDb.getReference("users/"+MainApplication.user.getUid()+"podosensordata");
+    }
+    */
 }
 

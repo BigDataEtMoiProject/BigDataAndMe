@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.uqac.bigdataetmoi">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -17,11 +17,12 @@
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SignupActivity"/>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".activity.SignupActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".activity.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
         <activity android:name=".activity.TempsUtilisationActivity" />
@@ -32,9 +33,11 @@
         <service
             android:name=".service.BigDataService"
             android:enabled="true"
-            android:exported="false">
-        </service>
-
+            android:exported="false"></service>
+        <service
+            android:name=".service.MyService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
