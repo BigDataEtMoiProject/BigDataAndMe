@@ -49,8 +49,9 @@ public class DatabaseManager implements Serializable
         Log.w("DatabaseManager", "New location stored");
     }
 
-    public void storeLightSensorData(LightSensorData data)
+    public void storeSensorData(SensorData data)
     {
+<<<<<<< HEAD
 
         String key = mDbRef.child("lightsensordata").push().getKey();
         Map<String, Object> update = new HashMap<>();
@@ -66,6 +67,13 @@ public class DatabaseManager implements Serializable
         //update.put("/accelsensordata/" + key, data);
         mDbRef.updateChildren(update);
         Log.w("DatabaseManager", "New accel stored");
+=======
+        String key = mDbRef.child(data.getDataID()).push().getKey();
+        Map<String, Object> update = new HashMap<>();
+        update.put("/" + data.getDataID() + "/" + key, data);
+        mDbRef.updateChildren(update);
+        Log.w("DatabaseManager", "New " + data.getDataID() + " stored");
+>>>>>>> 3c667fbe63533c166b34dd65009d67c693cac72d
     }
 
     public void storePodoSensorData(PodoSensorData data)
@@ -86,20 +94,24 @@ public class DatabaseManager implements Serializable
     }
 
     // Lecture dans la bd
-
     public DatabaseReference getLocationRef()
     {
-        return mDb.getReference("users/" + MainApplication.user.getUid() + "/locations");
+        return mDbRef.child("locations");
     }
 
     public DatabaseReference getUsageRef()
     {
-        return mDb.getReference("users/" + MainApplication.user.getUid() + "usagedata");
+        return mDbRef.child("usagedata");
     }
+<<<<<<< HEAD
 /*
     public DatabaseReference getPodoRef() {
         return mDb.getReference("users/"+MainApplication.user.getUid()+"podosensordata");
     }
     */
+=======
+
+    public DatabaseReference getDbRef(String dataId) { return mDbRef.child(dataId); }
+>>>>>>> 3c667fbe63533c166b34dd65009d67c693cac72d
 }
 

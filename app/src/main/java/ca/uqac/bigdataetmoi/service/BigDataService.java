@@ -2,33 +2,20 @@ package ca.uqac.bigdataetmoi.service;
 
 import android.app.IntentService;
 import android.app.Service;
-import android.app.usage.UsageEvents;
-import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import ca.uqac.bigdataetmoi.database.AccelSensorData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.LightSensorData;
-import ca.uqac.bigdataetmoi.database.UsageData;
+
 
 
 /*
@@ -37,16 +24,14 @@ But : Service qui récupère les infos des différents capteurs et qui envoie le
  */
 
 
-public class BigDataService extends IntentService implements SensorEventListener {
+public class BigDataService extends IntentService {
     final int LOC_UPDATE_MIN_TIME = 10000; //in ms
     final int LOC_UPDATE_MIN_DISTANCE = 0; //in sec
-    private static final long REFRESH_TIME = 1000 * 60;     //30 secondes
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy HH:mm:ss");
+
+    Thread mBasicSensorThread;
+    Thread MicThread;
 
     DatabaseManager dbManager;
-
-    private long mPrevAccelMillis, mPrevMoveMillis, mPrevUsageTime;
-    private float mAccel, mAccelCurrent, mAccelLast;
 
     public BigDataService() {
         super("BigDataService");
@@ -55,12 +40,7 @@ public class BigDataService extends IntentService implements SensorEventListener
     @Override
     public void onCreate() {
 
-        mPrevMoveMillis = 0;
-        mPrevAccelMillis = 0;
-        mPrevUsageTime = 0;
-
         dbManager = DatabaseManager.getInstance();
-
         Log.v("BigDataService", "BigDataService service has been created");
     }
 
@@ -68,19 +48,13 @@ public class BigDataService extends IntentService implements SensorEventListener
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.w("BigDataService", "BigDataService service has started");
 
-        // TODO: Thread séparé
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        // Démarrage du Thread pour le Micro
+        MicThread = new Thread(new MicroThread(this));
+        MicThread.start();
 
-        // Pour la lumière
-        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-        // Pour l'accéléromètre
-        Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mAccel = 0.00f;
-        mAccelCurrent = SensorManager.GRAVITY_EARTH;
-        mAccelLast = SensorManager.GRAVITY_EARTH;
+        // Démarrage du Thread pour les senseurs de base
+        mBasicSensorThread = new Thread(new BasicSensorThread(this));
+        mBasicSensorThread.start();
 
         // Pour le GPS
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -102,21 +76,6 @@ public class BigDataService extends IntentService implements SensorEventListener
             public void onProviderDisabled(String s) {
             }
         };
-
-        //  Pour les données d'utilisations
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            UsageStatsManager statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-
-            @Override
-            public void run() {
-                //UsageStatsManager statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-                onUsageChanged(statsManager);
-                handler.postDelayed(this, REFRESH_TIME);
-                Log.d("Event", "Updated at: " + dateFormat.format(System.currentTimeMillis()));
-            }
-        }, REFRESH_TIME);
-
 
         boolean accessCoarseLocation = (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
         boolean accessFineLocation = (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
@@ -146,6 +105,7 @@ public class BigDataService extends IntentService implements SensorEventListener
     protected void onHandleIntent(Intent intent) {
         Log.i("BigDataService", "Service onHandleIntent");
     }
+<<<<<<< HEAD
 
 
     // Gestion des événements des senseurs
@@ -260,4 +220,6 @@ public class BigDataService extends IntentService implements SensorEventListener
             }
         }
     }
+=======
+>>>>>>> 3c667fbe63533c166b34dd65009d67c693cac72d
 }

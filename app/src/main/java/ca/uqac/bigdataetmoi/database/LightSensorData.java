@@ -6,15 +6,25 @@ import java.util.Date;
  * Created by pat on 2017-11-16.
  */
 
-public class LightSensorData {
+public class LightSensorData implements SensorData {
+    public static final String DATA_ID = "lightsensordata";
+
     Date mDate;
     float mLux;
+
+    public LightSensorData() {}
 
     public LightSensorData(Date date, float lux)
     {
         mDate = date;
         mLux = lux;
     }
+
+    @Override
+    public String getDataID() { return DATA_ID; }
+
+    public Date getDate() { return mDate; }
+    public float getLux() { return mLux; }
 
     static public String interpreterLux(float lux)
     {
