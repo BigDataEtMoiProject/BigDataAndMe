@@ -28,7 +28,8 @@ import ca.uqac.bigdataetmoi.MainApplication;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.PodoSensorData;
-import ca.uqac.bigdataetmoi.service.MyService;
+
+
 
 public class CompteurDePasActivity extends AppCompatActivity {
 
@@ -59,10 +60,7 @@ public class CompteurDePasActivity extends AppCompatActivity {
         mChart.setScaleEnabled(false);
         yValues = new ArrayList<>();
 
-        Intent serviceIntent = new Intent(CompteurDePasActivity.this
-                , MyService.class);
 
-        CompteurDePasActivity.this.startService(serviceIntent);
 
         //Ajouté
         db=FirebaseDatabase.getInstance();
@@ -99,34 +97,46 @@ public class CompteurDePasActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int compteur = 0;
                 float somme = 0;
+                int i;
+
+                for(i = 0; i < 7; i++)
+                {
+                    yValues.add(new Entry(i,0));
+                }
 
 
                 //graphique
-               // yValues.add(new Entry(0,60f));
-               // yValues.add(new Entry(1,50f));
-               // yValues.add(new Entry(2,40f));
-               // yValues.add(new Entry(3,30f));
-               // yValues.add(new Entry(4,10f));
-               // yValues.add(new Entry(5,50f));
-               // yValues.add(new Entry(6,60f));
+                // yValues.add(new Entry(0,60f));
+                // yValues.add(new Entry(1,50f));
+                // yValues.add(new Entry(2,40f));
+                // yValues.add(new Entry(3,30f));
+                // yValues.add(new Entry(4,10f));
+                // yValues.add(new Entry(5,50f));
+                // yValues.add(new Entry(6,60f));
 
 
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                   // nb_pas_veille.append(Float.toString(dataSnapshot1.getValue(PodoSensorData.class).getpMove()) + "\n");
+                    // nb_pas_veille.append(Float.toString(dataSnapshot1.getValue(PodoSensorData.class).getpMove()) + "\n");
                     if (compteur == 0)
                     {
                         nb_pas_veille.setText(Float.toString(dataSnapshot1.getValue(PodoSensorData.class).getpMove()) + "\n");
 
                     }
-
+                    /*
                     if (compteur < 7)
                     {
                         yValues.add(new Entry(compteur,dataSnapshot1.getValue(PodoSensorData.class).getpMove()));
 
                     }
+                    */
 
+                    yValues.set(6,new Entry(6,dataSnapshot1.getValue(PodoSensorData.class).getpMove()));
 
+                    for(i=0;i<6;i++)
+                    {
+                        yValues.set(i,new Entry(i,yValues.get(i+1).getY()));
 
+                    }
                     compteur ++;
 
                     somme = somme + dataSnapshot1.getValue(PodoSensorData.class).getpMove();
@@ -166,7 +176,13 @@ public class CompteurDePasActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
+ /*
+                if(nb == 0)
+                {
 
+                    RecupererValeur();
+                }
+*/
                 textView.setText("Nb de pas aujourd'hui" + Float.toString(nb) + "pas");
 
                 handler.postDelayed(this, 1000);
@@ -179,6 +195,15 @@ public class CompteurDePasActivity extends AppCompatActivity {
 
 
 }
+
+
+
+
+
+
+
+
+
 
 
 

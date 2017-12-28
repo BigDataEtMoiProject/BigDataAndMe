@@ -50,7 +50,7 @@ public class SommeilActivity extends AppCompatActivity {
 
         //Récupérer les données de la bd (dernier enregistrement
 
-        DatabaseManager.getInstance().getDbRef(AccelSensorData.DATA_ID).
+        ChildEventListener mDate = DatabaseManager.getInstance().getDbRef(AccelSensorData.DATA_ID).
                 orderByChild("mDate").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -59,13 +59,20 @@ public class SommeilActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
 
         DatabaseManager.getInstance().getDbRef(LightSensorData.DATA_ID).

@@ -77,8 +77,8 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
             Log.w("MICService", "MIC service has started");
             startRecording();
         }
-        else
-            Toast.makeText(mContext, "Permission to use MIC or STORAGE WRITING : denied", Toast.LENGTH_SHORT).show();
+      //  else
+         //   Toast.makeText(mContext, "Permission to use MIC or STORAGE WRITING : denied", Toast.LENGTH_SHORT).show();
 
     }
 
