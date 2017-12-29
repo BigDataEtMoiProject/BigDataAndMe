@@ -145,10 +145,10 @@ public class CompteurDePasActivity extends AppCompatActivity {
                 }
                 int moyenne =(int) somme/compteur;
 
-                affichage_nbpas_moyenne.setText(Integer.toString(moyenne));
+                affichage_nbpas_moyenne.setText("      Nb pas en moyenne : "+Integer.toString(moyenne));
 
                 //Graphique
-                LineDataSet Set1 = new LineDataSet(yValues, "Data Set 1");
+                LineDataSet Set1 = new LineDataSet(yValues, "7 derniers jours (ordre chronologique)");
                 Set1.setFillAlpha(110);
 
 
@@ -183,7 +183,7 @@ public class CompteurDePasActivity extends AppCompatActivity {
                     RecupererValeur();
                 }
 */
-                textView.setText("Nb de pas aujourd'hui" + Float.toString(nb) + "pas");
+                textView.setText("      COMPTEUR DE PAS\n\n      Nb de pas aujourd'hui : " + Float.toString(nb) + "pas");
 
                 handler.postDelayed(this, 1000);
 

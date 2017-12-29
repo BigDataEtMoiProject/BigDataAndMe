@@ -8,28 +8,9 @@
     tools:context="ca.uqac.bigdataetmoi.activity.CompteurDePasActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="247dp"
-        android:layout_height="25dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:background="@color/colorPrimary"
-        android:text="COMPTEUR DE PAS"
-
-
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
         android:id="@+id/txt"
-        android:layout_width="246dp"
-        android:layout_height="21dp"
+        android:layout_width="405dp"
+        android:layout_height="54dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -45,30 +26,33 @@
 
     <TextView
         android:id="@+id/nb_pas_veille"
-        android:layout_width="133dp"
+        android:layout_width="388dp"
         android:layout_height="36dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+
         android:ems="10"
         android:inputType="textPersonName"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.864" />
+        app:layout_constraintVertical_bias="0.795" />
 
     <TextView
         android:id="@+id/moyenne_pas"
-        android:layout_width="136dp"
-        android:layout_height="54dp"
+        android:layout_width="386dp"
+        android:layout_height="61dp"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
+        android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nb_pas_veille"
-        app:layout_constraintVertical_bias="0.277" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <RelativeLayout
         android:layout_width="285dp"

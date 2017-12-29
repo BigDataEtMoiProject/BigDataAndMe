@@ -67,7 +67,7 @@ public class PodoSensorThread extends Thread implements Runnable,SensorEventList
         long currMillis = System.currentTimeMillis();
 
         //On met à jour les mouvement si celui-ci a lieu au minimum 24 heures plus tard
-        if (currMillis - mPrevPodoMillis > 60000) {
+        if (currMillis - mPrevPodoMillis > 86400000) {
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             dbManager.storePodoSensorData(new PodoSensorData(timeStamp, CompteurDePasActivity.nb));
             mPrevPodoMillis = currMillis;
