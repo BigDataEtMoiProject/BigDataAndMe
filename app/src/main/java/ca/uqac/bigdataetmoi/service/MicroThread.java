@@ -18,10 +18,13 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import ca.uqac.bigdataetmoi.database.AudioData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
+import ca.uqac.bigdataetmoi.database.LightSensorData;
 
 /**
  * This class is a thread of the Mic
@@ -102,9 +105,9 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mRecorder.setAudioEncodingBitRate(64000);
         mRecorder.setAudioSamplingRate(16000);
-        mOutputFile = getOutputFile();
-        mOutputFile.getParentFile().mkdirs();
-        mRecorder.setOutputFile(mOutputFile.getAbsolutePath());
+        //mOutputFile = getOutputFile();
+        //mOutputFile.getParentFile().mkdirs();
+        mRecorder.setOutputFile("/dev/null"); // if we want to save the audio file we should put the mOutpuFile
         continueRecording=true;
 
         try {
@@ -116,22 +119,45 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
             int startAmplitude = mRecorder.getMaxAmplitude();
             Log.d("MICService", "starting amplitude: " + startAmplitude);
             mStartTime = SystemClock.elapsedRealtime();
-            /*do
+            double[] ampTable = new double[6];
+            double averageAmp=0;
+            int index=0;
+            while(true)
             {
-                Log.d("MICService", "waiting while recording...");
+                try {
+                    Thread.sleep(5000);         // 5 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                int finishAmplitude = mRecorder.getMaxAmplitude();
+                ampTable[index]=mRecorder.getMaxAmplitude();
+                index++;
 
-                int ampDifference = finishAmplitude - startAmplitude;
-                if (ampDifference >= amplitudeThreshold)
+
+                // Which means every 30 sec we calculate the average Amp
+                if(index == ampTable.length)
                 {
-                    Log.d("MICService", "heard sound !");
+                    index = 0;
+
+                    averageAmp=0;
+
+                    for(int i=0 ; i<ampTable.length ; i++)
+                    {
+
+                        averageAmp += ampTable[i];
+                    }
+
+                    averageAmp /= ampTable.length;
+
+
+
+                    Log.d("MICService", "Table_Amp : "+ampTable[0]+","+ampTable[1]+","+ampTable[2]+","+ampTable[3]+","+ampTable[4]+","+ampTable[5]);
+                    Log.d("MICService", "Average_Amp : "+averageAmp);
+
+                    dbManager.storeAudioData(new AudioData(Calendar.getInstance().getTime(), averageAmp));
 
                 }
-                Log.d("MICService", "finishing amplitude: " + finishAmplitude + " diff: "
-                        + ampDifference);
-
-            } while (mOutputFile.length()<Audio_MAX_FILE_SIZE-20);*/
+            }
 
 
 
@@ -145,11 +171,11 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
         //check whether file size has reached to 1MB to stop recording
         if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED) {
             Log.w("MICService", "New audio stored");
-            SaveAudio(true);
+            //SaveAudio(true);
         }
     }
 
-
+    // We use this function if we want to store the audio in the phone
     protected void SaveAudio(boolean saveFile) {
         if(mRecorder!=null) {
             mRecorder.stop();
@@ -167,26 +193,6 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
 
     }
 
-
-    /*public void upload() {
-
-
-        //progress.setMessage("Uploading Audio ...");
-        //progress.show();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.US);
-        StorageReference filePath = mStorage.child("users").child(userID).child("Audio").child("RECORDING_"
-                + dateFormat.format(new Date())
-                + ".3gpp");
-
-        Uri uri = Uri.fromFile(mOutputFile);
-
-        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.v("AUDIO_UPLOAD", "Successful");
-            }
-        });
-    }*/
 
 
 }

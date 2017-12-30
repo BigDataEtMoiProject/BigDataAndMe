@@ -65,6 +65,15 @@ public class DatabaseManager
         Log.w("DatabaseManager", "New usage data stored");
     }
 
+    public void storeAudioData(AudioData data)
+    {
+        String key = mDbRef.child(data.getDataID()).push().getKey();
+        Map<String, Object> update = new HashMap<>();
+        update.put("/" + data.getDataID() + "/" + key, data);
+        mDbRef.updateChildren(update);
+        Log.w("DatabaseManager", "New " + data.getDataID() + " stored");
+    }
+
     // Lecture dans la bd
     public DatabaseReference getLocationRef()
     {
