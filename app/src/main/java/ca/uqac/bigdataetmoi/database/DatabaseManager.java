@@ -115,6 +115,7 @@ public class DatabaseManager
     }
 
 
+    //Cette méthode permet de stocker les nb de pas dans la base de données
     public void storePodoSensorData(PodoSensorData data)
     {
         String key = mDbRef.child("podosensordata").push().getKey();

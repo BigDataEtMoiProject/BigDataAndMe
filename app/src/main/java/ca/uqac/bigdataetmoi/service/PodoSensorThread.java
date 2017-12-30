@@ -19,6 +19,8 @@ import static android.content.Context.SENSOR_SERVICE;
  * Created by fs77 on 27/12/2017.
  */
 
+//Cette classe est un thread qui permet de stocker les données récupérées dans le  podomètre dans la base de données
+
 public class PodoSensorThread extends Thread implements Runnable,SensorEventListener {
 
     private Sensor mySensor;
