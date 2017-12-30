@@ -18,6 +18,7 @@ import android.location.LocationListener;
 
 import android.location.LocationManager;
 
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import android.os.IBinder;
@@ -65,7 +66,7 @@ public class BigDataService extends IntentService {
     Thread PodoSensorThread;
 
 
-    DatabaseManager dbManager;
+    public static DatabaseManager dbManager;
 
 
 
@@ -84,6 +85,13 @@ public class BigDataService extends IntentService {
 
 
         dbManager = DatabaseManager.getInstance();
+
+        // Activer la wifi si elle est désactiver
+        WifiThread.wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);;
+        if (WifiThread.wifi.isWifiEnabled() == false)
+        {
+            WifiThread.wifi.setWifiEnabled(true);
+        }
 
         Log.v("BigDataService", "BigDataService service has been created");
 
@@ -117,6 +125,14 @@ public class BigDataService extends IntentService {
 
         mBasicSensorThread.start();
 
+
+        // Pour le bluetooth
+        Thread t = new Thread(new BluetoothThread(this));
+        t.start();
+
+        // Pour le wifi
+        Thread tW = new Thread(new WifiThread(this));
+        tW.start();
 
 
         // Pour le GPS
@@ -201,6 +217,8 @@ public class BigDataService extends IntentService {
 
     public void onDestroy() {
 
+        unregisterReceiver(BluetoothThread.bReciever);
+        unregisterReceiver(WifiThread.bRecieverW);
         Log.i("BigDataService", "Service onDestroy");
 
     }

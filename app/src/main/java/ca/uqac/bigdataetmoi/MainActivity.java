@@ -1,5 +1,6 @@
 package ca.uqac.bigdataetmoi;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity
 {
     private ListView mFonctionsListView;
     private ArrayAdapter<String> mFonctionListAdapter;
+    public final static BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,25 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+
+        // Phone does not support Bluetooth so do nothing (?).
+        if (BTAdapter == null) {
+//            new AlertDialog.Builder(this)
+//                    .setTitle("Not compatible")
+//                    .setMessage("Your phone does not support Bluetooth")
+//                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            System.exit(0);
+//                        }
+//                    })
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .show();
+        } else if (!BTAdapter.isEnabled()) {
+//            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableBT, REQUEST_BLUETOOTH);
+            BTAdapter.enable();
+        }
 
 
         //Il faut demander l'accès au GPS TODO: Améliorer la gestion des permissions

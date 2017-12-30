@@ -150,6 +150,21 @@ public class DatabaseManager
         Log.w("DatabaseManager", "New " + data.getDataID() + " stored");
     }
 
+    public void storeBluetoothData(BluetoothData data) {
+        String key = mDbRef.child("bluetoothdata").push().getKey();
+        Map<String, Object> update = new HashMap<>();
+        update.put("/bluetoothdata/" + key, data);
+        mDbRef.updateChildren(update);
+        Log.w("DatabaseManager", "New bluetooth data stored");
+    }
+
+    public void storeWifiData(WifiData data) {
+        String key = mDbRef.child("wifidata").push().getKey();
+        Map<String, Object> update = new HashMap<>();
+        update.put("/wifidata/" + key, data);
+        mDbRef.updateChildren(update);
+        Log.w("DatabaseManager", "New wifi data stored");
+    }
 
     // Lecture dans la bd
 

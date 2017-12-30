@@ -1,7 +1,9 @@
 package ca.uqac.bigdataetmoi.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -71,6 +73,13 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);;
+        if (wifi.isWifiEnabled() == false)
+        {
+            Toast.makeText(getApplicationContext(), "Activation de la wifi", Toast.LENGTH_LONG).show();
+            wifi.setWifiEnabled(true);
+        }
     }
 
     public void launchMainActivity(){
