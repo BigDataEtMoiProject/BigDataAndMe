@@ -1,10 +1,13 @@
-package ca.uqac.bigdataetmoi.database;
+package ca.uqac.bigdataetmoi.database.data_models;
 
 /**
  * Created by jul_samson on 17-11-17.
  */
 
-public class UsageData {
+public class UsageData implements SensorData
+{
+    public static final String DATA_ID = "usagedata";
+
     private String mPackageName;
     private long mTimeAppBegin;
     private long mTimeAppEnd;
@@ -16,6 +19,9 @@ public class UsageData {
         mTimeAppBegin = appBegin;
         mTimeAppEnd = appEnd;
     }
+
+    @Override
+    public String getDataID() { return DATA_ID; }
 
     public String getPackageName() {
         return mPackageName;

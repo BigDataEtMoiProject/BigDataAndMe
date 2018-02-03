@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.service;
+package ca.uqac.bigdataetmoi.service.threads;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -8,10 +8,10 @@ import android.hardware.SensorManager;
 
 import java.util.Calendar;
 
-import ca.uqac.bigdataetmoi.database.AccelSensorData;
+import ca.uqac.bigdataetmoi.database.data_models.AccelSensorData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.LightSensorData;
-import ca.uqac.bigdataetmoi.database.ProximitySensorData;
+import ca.uqac.bigdataetmoi.database.data_models.LightSensorData;
+import ca.uqac.bigdataetmoi.database.data_models.ProximitySensorData;
 
 /**
  * Created by patrick on 2017-12-19.

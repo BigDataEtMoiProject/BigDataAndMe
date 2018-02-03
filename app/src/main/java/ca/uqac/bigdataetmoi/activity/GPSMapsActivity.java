@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
+import ca.uqac.bigdataetmoi.database.data_models.LocationData;
 
 public class GPSMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -28,7 +29,7 @@ public class GPSMapsActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLocationsRef = DatabaseManager.getInstance().getLocationRef();
+        mLocationsRef = DatabaseManager.getInstance().getDbRef(LocationData.DATA_ID);
 
         setContentView(R.layout.activity_gpsmaps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

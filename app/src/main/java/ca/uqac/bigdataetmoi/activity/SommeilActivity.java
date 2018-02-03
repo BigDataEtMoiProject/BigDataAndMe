@@ -1,28 +1,18 @@
 package ca.uqac.bigdataetmoi.activity;
 
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.FloatMath;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-
-import java.util.Date;
-import java.util.Map;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.AccelSensorData;
+import ca.uqac.bigdataetmoi.database.data_models.AccelSensorData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.LightSensorData;
-import ca.uqac.bigdataetmoi.database.ProximitySensorData;
+import ca.uqac.bigdataetmoi.database.data_models.LightSensorData;
+import ca.uqac.bigdataetmoi.database.data_models.ProximitySensorData;
 
 public class SommeilActivity extends AppCompatActivity {
 

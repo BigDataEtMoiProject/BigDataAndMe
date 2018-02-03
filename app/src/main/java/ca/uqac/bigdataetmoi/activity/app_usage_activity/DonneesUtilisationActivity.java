@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.data_usage_activity;
+package ca.uqac.bigdataetmoi.activity.app_usage_activity;
 
 import android.app.AlertDialog;
 import android.app.usage.UsageEvents;
@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.UsageData;
+import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
 public class DonneesUtilisationActivity extends AppCompatActivity {
 
@@ -99,7 +99,7 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
         //Stats Manager pour récolter l'information sur les applications utilisé
         statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         dbManager = DatabaseManager.getInstance();
-        usageRef = dbManager.getUsageRef();
+        usageRef = dbManager.getDbRef(UsageData.DATA_ID);
 
     }
 
@@ -269,7 +269,7 @@ public class DonneesUtilisationActivity extends AppCompatActivity {
                     usage.setPackageName(mAppInForeground);
                     usage.setTimeAppBegin(mAppStarted);
                     usage.setTimeAppEnd(mAppEnded);
-                    dbManager.storeUsageData(usage);
+                    dbManager.storeSensorData(usage);
 
                     //Put variable at 0 to assure data a clean
                     mAppStarted = mAppEnded = 0;

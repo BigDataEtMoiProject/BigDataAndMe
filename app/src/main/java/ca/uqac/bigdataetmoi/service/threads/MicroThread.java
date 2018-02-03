@@ -1,19 +1,12 @@
-package ca.uqac.bigdataetmoi.service;
+package ca.uqac.bigdataetmoi.service.threads;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,53 +15,40 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import ca.uqac.bigdataetmoi.database.AudioData;
+import ca.uqac.bigdataetmoi.database.data_models.AudioData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.LightSensorData;
 
 /**
  * This class is a thread of the Mic
  */
 
-public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnInfoListener {
-
+public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnInfoListener
+{
     DatabaseManager dbManager;
-
     Context mContext;
-
     private MediaRecorder mRecorder;
-
     private File mOutputFile;
-
     boolean continueRecording;
-
     private long mStartTime;
-
     private int[] amplitudes = new int[100];
 
     // Requires a little of noise by the user to trigger, background noise may trigger it
     public static final int AMPLITUDE_DIFF_LOW = 10000;
-
     public static final int AMPLITUDE_DIFF_MED = 18000;
 
     // Requires a lot of noise by the user to trigger. background noise isn't likely to be this loud
     public static final int AMPLITUDE_DIFF_HIGH = 25000;
-
     private static final int DEFAULT_AMPLITUDE_DIFF = AMPLITUDE_DIFF_MED;
 
     // Setting maximum file size to be recorded
     private long Audio_MAX_FILE_SIZE = 500000;//500ko
 
-
     public MicroThread(Context context)
     {
         mContext = context;
-
         dbManager = DatabaseManager.getInstance();
-
         Log.v("MICThread", "MIC thread has been created");
     }
-
 
     @Override
     public void run()
@@ -82,7 +62,6 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
         }
       //  else
          //   Toast.makeText(mContext, "Permission to use MIC or STORAGE WRITING : denied", Toast.LENGTH_SHORT).show();
-
     }
 
 
@@ -133,34 +112,25 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
                 ampTable[index]=mRecorder.getMaxAmplitude();
                 index++;
 
-
                 // Which means every 30 sec we calculate the average Amp
                 if(index == ampTable.length)
                 {
                     index = 0;
-
                     averageAmp=0;
 
                     for(int i=0 ; i<ampTable.length ; i++)
                     {
-
                         averageAmp += ampTable[i];
                     }
 
                     averageAmp /= ampTable.length;
 
-
-
                     Log.d("MICService", "Table_Amp : "+ampTable[0]+","+ampTable[1]+","+ampTable[2]+","+ampTable[3]+","+ampTable[4]+","+ampTable[5]);
                     Log.d("MICService", "Average_Amp : "+averageAmp);
 
-                    dbManager.storeAudioData(new AudioData(Calendar.getInstance().getTime(), averageAmp));
-
+                    dbManager.storeSensorData(new AudioData(Calendar.getInstance().getTime(), averageAmp));
                 }
             }
-
-
-
         } catch (IOException e) {
         }
     }
@@ -189,10 +159,5 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
         if (!saveFile && mOutputFile != null) {
             mOutputFile.delete();
         }
-
-
     }
-
-
-
 }

@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.data_usage_activity;
+package ca.uqac.bigdataetmoi.activity.app_usage_activity;
 
 import android.app.ActionBar;
 import android.app.DatePickerDialog;
@@ -26,9 +26,8 @@ import java.util.Calendar;
 import java.util.Collections;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.adapter.UsageListAdapter;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.UsageData;
+import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
 public class UsageTimelineActivity extends AppCompatActivity {
 
@@ -114,7 +113,7 @@ public class UsageTimelineActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         //Initialize database manager
         dbManager = DatabaseManager.getInstance();
-        usageRef = dbManager.getUsageRef();
+        usageRef = dbManager.getDbRef(UsageData.DATA_ID);
 
         ActionBar actionBar = getActionBar();
 

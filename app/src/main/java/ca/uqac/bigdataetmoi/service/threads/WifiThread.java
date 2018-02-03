@@ -1,6 +1,5 @@
-package ca.uqac.bigdataetmoi.service;
+package ca.uqac.bigdataetmoi.service.threads;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,20 +12,16 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import ca.uqac.bigdataetmoi.database.WifiData;
-import ca.uqac.bigdataetmoi.service.BigDataService;
-
-import static ca.uqac.bigdataetmoi.MainActivity.BTAdapter;
+import ca.uqac.bigdataetmoi.database.data_models.WifiData;
 
 /**
  * Created by Raph on 21/11/2017.
  */
 
-public class WifiThread extends Thread implements Runnable {
-
+public class WifiThread extends Thread implements Runnable
+{
     private Context context;
     boolean scan = false;
-
 
     // Données et broadcastReceiver pour la wifi
     public static WifiManager wifi;
@@ -49,8 +44,8 @@ public class WifiThread extends Thread implements Runnable {
                     HashMap<String, String> item = new HashMap<String, String>();
                     item.put("key", resultsWifiScan.get(size).SSID + "  " + resultsWifiScan.get(size).capabilities);
 
-                    ca.uqac.bigdataetmoi.database.WifiData wifiEntry = new ca.uqac.bigdataetmoi.database.WifiData(Calendar.getInstance().getTime(), resultsWifiScan.get(size).SSID);
-                    ca.uqac.bigdataetmoi.service.BigDataService.dbManager.storeWifiData(wifiEntry);
+                    WifiData wifiEntry = new WifiData(Calendar.getInstance().getTime(), resultsWifiScan.get(size).SSID);
+                    ca.uqac.bigdataetmoi.service.BigDataService.dbManager.storeSensorData(wifiEntry);
 
                     System.out.println("!!!!!!!!!!!!!POINT WIFI : " + resultsWifiScan.get(size).SSID) ;
                     arraylist.add(item);
@@ -62,17 +57,13 @@ public class WifiThread extends Thread implements Runnable {
         }
     };
 
-
     public WifiThread(Context context)
     {
         this.context = context;
     }
 
-
     @Override
     public void run() {
-
-
         do {
             System.out.println("JE SUIS VIVANT (WIFI) ! ");
 

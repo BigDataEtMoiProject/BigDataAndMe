@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.activity.quizz_activity;
 
 import java.util.Random;
 

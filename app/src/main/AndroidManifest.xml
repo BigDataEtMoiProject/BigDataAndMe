@@ -72,17 +72,17 @@
 
         <activity android:name=".activity.TelephoneSmsActivity" />
 
-        <activity android:name=".activity.data_usage_activity.DonneesUtilisationActivity" />
+        <activity android:name=".activity.app_usage_activity.DonneesUtilisationActivity" />
 
-        <activity android:name=".activity.QuizzActivity" />
+        <activity android:name=".activity.quizz_activity.QuizzActivity" />
 
-        <activity android:name=".activity.QuizzPersonaliteActivity" />
+        <activity android:name=".activity.quizz_activity.QuizzPersonaliteActivity" />
 
-        <activity android:name=".activity.QuizzFacileActivity" />
+        <activity android:name=".activity.quizz_activity.QuizzFacileActivity" />
 
-        <activity android:name=".activity.QuizzMoyenActivity" />
+        <activity android:name=".activity.quizz_activity.QuizzMoyenActivity" />
 
-        <activity android:name=".activity.QuizzDifficileActivity" />
+        <activity android:name=".activity.quizz_activity.QuizzDifficileActivity" />
 
         <activity
 
@@ -126,9 +126,9 @@
 
 
 
-        <activity android:name=".activity.data_usage_activity.UsageTimelineActivity" />
+        <activity android:name=".activity.app_usage_activity.UsageTimelineActivity" />
 
-        <activity android:name=".activity.data_usage_activity.UsageAppActivity"></activity>
+        <activity android:name=".activity.app_usage_activity.UsageAppActivity"></activity>
 
     </application>
 

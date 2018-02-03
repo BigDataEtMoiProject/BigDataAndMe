@@ -20,11 +20,11 @@ import java.util.Arrays;
 
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
-import ca.uqac.bigdataetmoi.activity.QuizzActivity;
+import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
-import ca.uqac.bigdataetmoi.activity.data_usage_activity.DonneesUtilisationActivity;
+import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -93,25 +93,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-        // Phone does not support Bluetooth so do nothing (?).
-        if (BTAdapter == null) {
-//            new AlertDialog.Builder(this)
-//                    .setTitle("Not compatible")
-//                    .setMessage("Your phone does not support Bluetooth")
-//                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            System.exit(0);
-//                        }
-//                    })
-//                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .show();
-        } else if (!BTAdapter.isEnabled()) {
-//            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//            startActivityForResult(enableBT, REQUEST_BLUETOOTH);
+        // Activation du Bluetooth
+        if (BTAdapter != null && !BTAdapter.isEnabled()) {
             BTAdapter.enable();
         }
-
 
         //Il faut demander l'accès au GPS TODO: Améliorer la gestion des permissions
         if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.database;
+package ca.uqac.bigdataetmoi.database.data_models;
 
 /**
  * Created by pat on 2017-11-27.

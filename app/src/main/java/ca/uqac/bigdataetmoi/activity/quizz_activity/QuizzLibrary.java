@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.activity.quizz_activity;
 
 /**
  * Created by Maxime Berthet on 23/11/2017.

@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.service;
+package ca.uqac.bigdataetmoi.service.threads;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -11,9 +11,7 @@ import java.util.Date;
 
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.PodoSensorData;
-
-import static android.content.Context.SENSOR_SERVICE;
+import ca.uqac.bigdataetmoi.database.data_models.PodoSensorData;
 
 /**
  * Created by fs77 on 27/12/2017.
@@ -21,16 +19,14 @@ import static android.content.Context.SENSOR_SERVICE;
 
 //Cette classe est un thread qui permet de stocker les données récupérées dans le  podomètre dans la base de données
 
-public class PodoSensorThread extends Thread implements Runnable,SensorEventListener {
-
+public class PodoSensorThread extends Thread implements Runnable,SensorEventListener
+{
     private Sensor mySensor;
     private SensorManager SM;
     private float mStepOffset;
     DatabaseManager dbManager;
     private long mPrevPodoMillis;
     Context mContext;
-
-
 
     public PodoSensorThread(Context context) {
         mContext = context;
@@ -42,21 +38,12 @@ public class PodoSensorThread extends Thread implements Runnable,SensorEventList
         SM.registerListener((SensorEventListener) this, mySensor , SensorManager.SENSOR_DELAY_NORMAL);
         CompteurDePasActivity mainActivity = new CompteurDePasActivity();
         mainActivity.nb = 0;
-
     }
-
 
     @Override
     public void run() {
-
-        while(true) {
-        }
+        while(true) { }
     }
-
-
-
-
-
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -64,21 +51,17 @@ public class PodoSensorThread extends Thread implements Runnable,SensorEventList
             mStepOffset = sensorEvent.values[0];
 
         CompteurDePasActivity.nb = sensorEvent.values[0] - mStepOffset;
-
-
         long currMillis = System.currentTimeMillis();
 
         //On met à jour les mouvement si celui-ci a lieu au minimum 24 heures plus tard
         if (currMillis - mPrevPodoMillis > 86400000) {
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            dbManager.storePodoSensorData(new PodoSensorData(timeStamp, CompteurDePasActivity.nb));
+            dbManager.storeSensorData(new PodoSensorData(timeStamp, CompteurDePasActivity.nb));
             mPrevPodoMillis = currMillis;
             mStepOffset = 0;
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
+    public void onAccuracyChanged(Sensor sensor, int i) { }
 }

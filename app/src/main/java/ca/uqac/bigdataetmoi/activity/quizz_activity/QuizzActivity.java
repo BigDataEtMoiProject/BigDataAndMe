@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.activity.quizz_activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

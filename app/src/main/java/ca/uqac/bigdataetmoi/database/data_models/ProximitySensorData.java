@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.database;
+package ca.uqac.bigdataetmoi.database.data_models;
 
 import java.util.Date;
 
@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by pat on 2017-11-27.
  */
 
-public class ProximitySensorData implements SensorData{
+public class ProximitySensorData implements SensorData {
     public static final String DATA_ID = "proximitysensordata";
 
     Date mDate;

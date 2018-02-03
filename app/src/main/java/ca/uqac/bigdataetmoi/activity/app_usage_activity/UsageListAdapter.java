@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.adapter;
+package ca.uqac.bigdataetmoi.activity.app_usage_activity;
 
 import android.content.Context;
 import android.content.pm.PackageItemInfo;
@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.UsageData;
+import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
 public class UsageListAdapter extends ArrayAdapter<UsageData> {
 
