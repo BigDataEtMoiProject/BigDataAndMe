@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BigDataEtMoi.iml" filepath="$PROJECT_DIR$/BigDataEtMoi.iml" />
+      <module fileurl="file://D:\Diego\Documents\android-workspace\BigDataEtMoi\BigDataEtMoi.iml" filepath="D:\Diego\Documents\android-workspace\BigDataEtMoi\BigDataEtMoi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\Diego\Documents\android-workspace\BigDataEtMoi\app\app.iml" filepath="D:\Diego\Documents\android-workspace\BigDataEtMoi\app\app.iml" />
       <module fileurl="file://C:\Users\pat\Dropbox\Android\BigDataEtMoi\big-data.iml" filepath="C:\Users\pat\Dropbox\Android\BigDataEtMoi\big-data.iml" />
     </modules>
   </component>
