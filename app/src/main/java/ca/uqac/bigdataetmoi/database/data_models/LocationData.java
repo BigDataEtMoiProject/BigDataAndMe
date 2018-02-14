@@ -6,7 +6,7 @@ import android.location.Location;
  * Created by pat on 2018-02-03.
  */
 
-public class LocationData extends Location implements SensorData
+public class LocationData extends Location implements Data
 {
     public static final String DATA_ID = "locations";
 

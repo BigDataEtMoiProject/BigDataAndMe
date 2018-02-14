@@ -4,7 +4,7 @@ package ca.uqac.bigdataetmoi.database.data_models;
  * Created by jul_samson on 17-11-17.
  */
 
-public class UsageData implements SensorData
+public class UsageData implements Data
 {
     public static final String DATA_ID = "usagedata";
 

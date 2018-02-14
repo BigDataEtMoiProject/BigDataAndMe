@@ -1,6 +1,5 @@
 package ca.uqac.bigdataetmoi.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -14,7 +13,7 @@ import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.data_models.LightSensorData;
 import ca.uqac.bigdataetmoi.database.data_models.ProximitySensorData;
 
-public class SommeilActivity extends AppCompatActivity {
+public class SommeilActivity extends BaseActivity {
 
     private TextView mLuxTextView, mInterLuxTextView, mAccelTextView, mProximiTextView;
     DatabaseManager dmManager;

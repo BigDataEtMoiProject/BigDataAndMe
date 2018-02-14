@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.provider.ContactsContract;
 import android.provider.Telephony;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -85,7 +83,7 @@ class SMSModel{
     }
 }
 
-public class TelephoneSmsActivity extends AppCompatActivity {
+public class TelephoneSmsActivity extends BaseActivity {
 
     private SmsManager smsMan;
     private ListView listView;

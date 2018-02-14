@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by Job on 29/12/2017.
  */
 
-public class AudioData implements SensorData {
+public class AudioData implements Data {
     public static final String DATA_ID = "SoundData";
 
     Date mDate;

@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by pat on 2017-11-27.
  */
 
-public class ProximitySensorData implements SensorData {
+public class ProximitySensorData implements Data {
     public static final String DATA_ID = "proximitysensordata";
 
     Date mDate;

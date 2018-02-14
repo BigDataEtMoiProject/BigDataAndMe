@@ -1,12 +1,10 @@
 package ca.uqac.bigdataetmoi.activity.quizz_activity;
 
-
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.activity.BaseActivity;
 
-public class QuizzMoyenActivity extends AppCompatActivity {
+public class QuizzMoyenActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

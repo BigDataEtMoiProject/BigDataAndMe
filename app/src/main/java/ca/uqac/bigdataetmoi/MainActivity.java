@@ -18,6 +18,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
 import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
@@ -30,7 +31,7 @@ import ca.uqac.bigdataetmoi.service.BigDataService;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
 {
     private ListView mFonctionsListView;
     private ArrayAdapter<String> mFonctionListAdapter;

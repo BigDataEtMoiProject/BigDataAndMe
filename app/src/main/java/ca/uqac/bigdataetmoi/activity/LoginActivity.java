@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +23,7 @@ import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.MainApplication;
 import ca.uqac.bigdataetmoi.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private EditText field_Email, field_Password;
     private Button btn_Login;

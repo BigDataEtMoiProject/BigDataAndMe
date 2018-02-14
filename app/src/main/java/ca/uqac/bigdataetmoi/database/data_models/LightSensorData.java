@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by pat on 2017-11-16.
  */
 
-public class LightSensorData implements SensorData {
+public class LightSensorData implements Data {
     public static final String DATA_ID = "lightsensordata";
 
     Date mDate;

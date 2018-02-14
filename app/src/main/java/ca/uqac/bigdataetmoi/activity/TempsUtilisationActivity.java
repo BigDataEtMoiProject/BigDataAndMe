@@ -1,11 +1,10 @@
 package ca.uqac.bigdataetmoi.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import ca.uqac.bigdataetmoi.R;
 
-public class TempsUtilisationActivity extends AppCompatActivity {
+public class TempsUtilisationActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,5 @@
 package ca.uqac.bigdataetmoi.activity;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -21,7 +20,7 @@ import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.data_models.LocationData;
 
-public class GPSMapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class GPSMapsActivity extends BaseActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private DatabaseReference mLocationsRef;

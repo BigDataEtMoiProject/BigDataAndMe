@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,10 +25,11 @@ import java.util.Calendar;
 import java.util.Collections;
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
-public class UsageTimelineActivity extends AppCompatActivity {
+public class UsageTimelineActivity extends BaseActivity {
 
     //Variable for the date picker
     Calendar mCurrentDate;
