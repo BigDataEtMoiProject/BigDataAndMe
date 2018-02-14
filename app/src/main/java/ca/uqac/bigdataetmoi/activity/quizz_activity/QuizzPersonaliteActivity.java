@@ -1,16 +1,16 @@
 package ca.uqac.bigdataetmoi.activity.quizz_activity;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.activity.BaseActivity;
 
 
-public class QuizzPersonaliteActivity extends AppCompatActivity {
+public class QuizzPersonaliteActivity extends BaseActivity {
     private QuizzLibrary QuestionLibrary = new QuizzLibrary();
 
     private TextView mScoreView;

@@ -2,7 +2,6 @@ package ca.uqac.bigdataetmoi.activity.quizz_activity;
 
 import java.util.Random;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.activity.BaseActivity;
 
-public class QuizzFacileActivity extends AppCompatActivity {
+public class QuizzFacileActivity extends BaseActivity {
 
     private QuizzLibrary QuestionLibrary = new QuizzLibrary();
 

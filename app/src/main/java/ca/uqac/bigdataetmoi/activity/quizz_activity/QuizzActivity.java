@@ -1,7 +1,6 @@
 package ca.uqac.bigdataetmoi.activity.quizz_activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,9 +12,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.activity.BaseActivity;
 
 
-public class QuizzActivity extends AppCompatActivity  {
+public class QuizzActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

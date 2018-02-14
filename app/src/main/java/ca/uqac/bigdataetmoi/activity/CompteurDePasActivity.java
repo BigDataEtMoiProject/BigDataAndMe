@@ -25,7 +25,7 @@ import ca.uqac.bigdataetmoi.database.data_models.PodoSensorData;
 //Dans cette classe on affiche le nombre de pas en temps réel , la moyenne du nombre de pas ainsi que le nombre de pas durant les 7 derniers jours
 //Appuyer sur no chart data available pour afficher le graphique au debut
 
-public class CompteurDePasActivity extends AppCompatActivity {
+public class CompteurDePasActivity extends BaseActivity {
 
 
     TextView textView;
@@ -36,8 +36,6 @@ public class CompteurDePasActivity extends AppCompatActivity {
     //graphique
     private LineChart mChart;
     ArrayList <Entry> yValues;
-
-
 
     FirebaseDatabase db;
 
@@ -54,40 +52,25 @@ public class CompteurDePasActivity extends AppCompatActivity {
         mChart.setScaleEnabled(false);
         yValues = new ArrayList<>();
 
-
-
         //Ajouté
         db=FirebaseDatabase.getInstance();
 
         affichage_nbpas_moyenne = (TextView) findViewById(R.id.moyenne_pas);
-
         nb_pas_veille = (TextView) findViewById(R.id.nb_pas_veille);
-
         nb_pas_veille.setText("");
         affichage_nbpas_moyenne.setText("");
         RecupererValeur();
 
-
-
-
         runTimer();
-
-
     }
 
-
-
     private void RecupererValeur() {
-
         nb_pas_veille.setText("");
 
-
         DatabaseReference dB = db.getReference("users").child(MainApplication.user.getUid()).child("podosensordata");
-
         dB.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
-
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int compteur = 0;
                 float somme = 0;
@@ -98,7 +81,6 @@ public class CompteurDePasActivity extends AppCompatActivity {
                     yValues.add(new Entry(i,0));
                 }
 
-
                 //graphique
                 // yValues.add(new Entry(0,60f));
                 // yValues.add(new Entry(1,50f));
@@ -108,14 +90,10 @@ public class CompteurDePasActivity extends AppCompatActivity {
                 // yValues.add(new Entry(5,50f));
                 // yValues.add(new Entry(6,60f));
 
-
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     // nb_pas_veille.append(Float.toString(dataSnapshot1.getValue(PodoSensorData.class).getpMove()) + "\n");
                     if (compteur == 0)
-                    {
                         nb_pas_veille.setText(Float.toString(dataSnapshot1.getValue(PodoSensorData.class).getpMove()) + "\n");
-
-                    }
                     /*
                     if (compteur < 7)
                     {
@@ -127,17 +105,16 @@ public class CompteurDePasActivity extends AppCompatActivity {
                     yValues.set(6,new Entry(6,dataSnapshot1.getValue(PodoSensorData.class).getpMove()));
 
                     for(i=0;i<6;i++)
-                    {
                         yValues.set(i,new Entry(i,yValues.get(i+1).getY()));
-
-                    }
                     compteur ++;
 
                     somme = somme + dataSnapshot1.getValue(PodoSensorData.class).getpMove();
-
-
                 }
-                int moyenne =(int) somme/compteur;
+
+                int moyenne = 0;
+
+                if(compteur > 0)
+                    moyenne =(int) somme/compteur;
 
                 affichage_nbpas_moyenne.setText("      Nb pas en moyenne : "+Integer.toString(moyenne));
 
@@ -145,66 +122,27 @@ public class CompteurDePasActivity extends AppCompatActivity {
                 LineDataSet Set1 = new LineDataSet(yValues, "7 derniers jours (ordre chronologique)");
                 Set1.setFillAlpha(110);
 
-
-
                 ArrayList <ILineDataSet> DataSets = new ArrayList<>();
                 DataSets.add(Set1);
 
                 LineData data = new LineData(DataSets);
                 mChart.setData(data);
-
-
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {            }
         });
     }
 
     private void runTimer() {
-
         //java text view associated with the xml one
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
- /*
-                if(nb == 0)
-                {
-
-                    RecupererValeur();
-                }
-*/
                 textView.setText("      COMPTEUR DE PAS\n\n      Nb de pas aujourd'hui : " + Float.toString(nb) + "pas");
-
                 handler.postDelayed(this, 1000);
-
             }
         });
-
-
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

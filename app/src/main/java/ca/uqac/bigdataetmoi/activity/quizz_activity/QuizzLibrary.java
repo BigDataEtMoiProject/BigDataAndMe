@@ -6,18 +6,12 @@ package ca.uqac.bigdataetmoi.activity.quizz_activity;
 
 public class QuizzLibrary {
 
-
-
     public String PersoQuestions [] = {
             "Si tu dois créer une adresse mail il vaut mieux :",
             "Avant d'installer une application il vaut mieux :",
             "Si j'ai déjà une application mobile est déjà installée sur mon téléphone et que je doute des données qu'elle peut prendre sur moi :",
             "Quand je marche dans la rue avec mon téléphone dans la poche :"
-
-
     };
-
-
 
     private String PersoChoices [][] = {
             {"Creer une adresse Yahoo ou Hotmail c'est toujours mieux que Google.",
@@ -34,8 +28,6 @@ public class QuizzLibrary {
                     "Je laisse le gps de mon téléphone c'est plus rapide si je veux utiliser google map"}
     };
 
-
-
     private String MoneyAnswers[] = {"Creer une adresse Yahoo ou Hotmail c'est toujours mieux que Google.",
             "Vérifier que l'application soit gratuite même si elle a des Règles de confidentialités moins sécurisés.",
             "Si des informations ont été prisent ce n'est pas grave, c'est ce qui rend l'application gratuite",
@@ -51,14 +43,12 @@ public class QuizzLibrary {
             "Je vais voir l'application dans les paramètres et vérifie les autorisations",
             "Je coupe mon gps pour qu'on ne puisse pas tracer mon parcours"};
 
-
     private static String[] facileQuestions  = {
             "FQ1 :", "FQ2 :","FQ3 :", "FQ4 :", "FQ5 :", "FQ6 :","FQ7 :", "FQ8 :", "FQ9 :", "FQ10 :",
             "FQ11 :", "FQ12 :","FQ13 :", "FQ14 :", "FQ15 :", "FQ16 :","FQ17 :", "FQ18 :", "FQ19 :", "FQ20 :",
             "FQ21 :", "FQ22 :","FQ23 :", "FQ24 :", "FQ25 :", "FQ26 :","FQ27 :", "FQ28 :", "FQ29 :", "FQ30 :",
             "FQ31 :", "FQ32 :","FQ33 :", "FQ34 :", "FQ35 :", "FQ36 :","FQ37 :", "FQ38 :", "FQ39 :", "FQ40 :",
             "FQ41 :", "FQ42 :","FQ43 :", "FQ44 :", "FQ45 :", "FQ46 :","FQ47 :", "FQ48 :", "FQ49 :", "FQ50 :"
-
     };
 
     private static String[][] facileChoices  = {
@@ -67,34 +57,25 @@ public class QuizzLibrary {
             {"FQ21F1 :", "FQ21F2 :","FQ21C :"},{"FQ22F1 :", "FQ22C :","FQ22F2 :"},{"FQ23F1 :", "FQ23F2 :","FQ23C :"},{"FQ24F1 :", "FQ24F2 :","FQ24C :"},{"FQ25C :", "FQ25F2 :","FQ25F1 :"},{"FQ26F1 :", "FQ26F2 :","FQ26C :"},{"FQ27F2 :", "FQ27F1 :","FQ27C :"},{"FQ28C :", "FQ28F1 :","FQ28F2 :"},{"FQ9F2 :", "FQ29F1 :","FQ29C :"},{"FQ30F2 :", "FQ30F1 :","FQ30C :"},
             {"FQ31F1 :", "FQ31F2 :","FQ31C :"},{"FQ32F1 :", "FQ32C :","FQ32F2 :"},{"FQ33F1 :", "FQ33F2 :","FQ33C :"},{"FQ34F1 :", "FQ34F2 :","FQ34C :"},{"FQ35C :", "FQ35F2 :","FQ35F1 :"},{"FQ36F1 :", "FQ36F2 :","FQ36C :"},{"FQ37F2 :", "FQ37F1 :","FQ37C :"},{"FQ38C :", "FQ38F1 :","FQ38F2 :"},{"FQ9F2 :", "FQ39F1 :","FQ39C :"},{"FQ40F2 :", "FQ40F1 :","FQ40C :"},
             {"FQ41F1 :", "FQ41F2 :","FQ41C :"},{"FQ42F1 :", "FQ42C :","FQ42F2 :"},{"FQ43F1 :", "FQ43F2 :","FQ43C :"},{"FQ44F1 :", "FQ44F2 :","FQ44C :"},{"FQ45C :", "FQ45F2 :","FQ45F1 :"},{"FQ46F1 :", "FQ46F2 :","FQ46C :"},{"FQ47F2 :", "FQ47F1 :","FQ47C :"},{"FQ48C :", "FQ48F1 :","FQ48F2 :"},{"FQ9F2 :", "FQ49F1 :","FQ49C :"},{"FQ50F2 :", "FQ50F1 :","FQ50C :"}
-
     };
 
-
-
-
     private static String[] facileCorrectAnswers = {
-
             "FQ1C :", "FQ2C :","FQ3C :", "FQ4C :", "FQ5C :", "FQ6C :","FQ7C :", "FQ8C :", "FQ9C :", "FQ10C :",
             "FQ11C :", "FQ12C :","FQ13C :", "FQ14C :", "FQ15C :", "FQ16C :","FQ17C :", "FQ18C :", "FQ19C :", "FQ20C :",
             "FQ21C :", "FQ22C :","FQ23C :", "FQ24C :", "FQ25C :", "FQ26C :","FQ27C :", "FQ28C :", "FQ29C :", "FQ30C :",
             "FQ31C :", "FQ32C :","FQ33C :", "FQ34C :", "FQ35C :", "FQ36C :","FQ37C :", "FQ38C :", "FQ39C :", "FQ40C :",
             "FQ41C :", "FQ42C :","FQ43C :", "FQ44C :", "FQ45C :", "FQ46C :","FQ47C :", "FQ48C :", "FQ49C :", "FQ50C :"
-
     };
-
 
     public String getPersoQuestion(int a) {
         String question = PersoQuestions[a];
         return question;
     }
 
-
     public String getPersoChoice1(int a) {
         String choice0 = PersoChoices[a][0];
         return choice0;
     }
-
 
     public String getPersoChoice2(int a) {
         String choice1 = PersoChoices[a][1];
@@ -126,12 +107,10 @@ public class QuizzLibrary {
         return question;
     }
 
-
     public static String getFacileChoice1(int a) {
         String choice0 = facileChoices[a][0];
         return choice0;
     }
-
 
     public static String getFacileChoice2(int a) {
         String choice1 = facileChoices[a][1];

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.uqac.bigdataetmoi.MainApplication;
-import ca.uqac.bigdataetmoi.database.data_models.SensorData;
+import ca.uqac.bigdataetmoi.database.data_models.Data;
 
 /**
  * Created by Patrick Lapointe on 2017-11-16.
@@ -18,10 +18,9 @@ import ca.uqac.bigdataetmoi.database.data_models.SensorData;
 
 public class DatabaseManager
 {
+    private static DatabaseManager mInstance = null;
     FirebaseDatabase mDb;
     DatabaseReference mDbRef;
-    private static final String mUserID = "0";
-    private static DatabaseManager mInstance = null;
 
     public static synchronized DatabaseManager getInstance()
     {
@@ -34,10 +33,11 @@ public class DatabaseManager
     {
         mDb = FirebaseDatabase.getInstance();
         mDbRef = mDb.getReference("users").child(MainApplication.user.getUid());
+        // Pour supprimer les données de la bd : mDb.getReference("users").removeValue();
     }
 
     // Écriture des données de sensur dans la BD
-    public void storeSensorData(SensorData data)
+    public void storeSensorData(Data data)
     {
         String key = mDbRef.child(data.getDataID()).push().getKey();
         Map<String, Object> update = new HashMap<>();

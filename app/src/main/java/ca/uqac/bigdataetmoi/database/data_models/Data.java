@@ -5,6 +5,6 @@ package ca.uqac.bigdataetmoi.database.data_models;
  * Va serivr pour la généralisation de l'écriture dans la bd
  */
 
-public interface SensorData {
+public interface Data {
     public String getDataID();
 }

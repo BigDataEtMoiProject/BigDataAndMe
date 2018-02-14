@@ -4,7 +4,7 @@ package ca.uqac.bigdataetmoi.database.data_models;
  * Created by fs77 on 20/11/2017.
  */
 
-public class PodoSensorData implements SensorData
+public class PodoSensorData implements Data
 {
     public static final String DATA_ID = "podosensordata";
 
