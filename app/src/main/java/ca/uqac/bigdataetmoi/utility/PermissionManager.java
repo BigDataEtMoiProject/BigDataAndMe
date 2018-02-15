@@ -1,6 +1,5 @@
 package ca.uqac.bigdataetmoi.utility;
 
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -139,6 +138,10 @@ public class PermissionManager
     // Met à jour la permission dans la bd selon si oui ou non on veut qu'elle soit activée.
     public void setPermissionGranted(String permission, boolean granted)
     {
+        // On demande la permission dans le cas où elle n'est pas déjà donnée
+        if(granted)
+            requestPermission(permission);
+
         // TODO : écrire dans la bd selon la valeur voulue.
     }
 
@@ -158,5 +161,4 @@ public class PermissionManager
             }
         }
     }
-
 }
