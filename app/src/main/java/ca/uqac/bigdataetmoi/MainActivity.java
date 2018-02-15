@@ -3,6 +3,7 @@ package ca.uqac.bigdataetmoi;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 
 import android.widget.ListView;
 
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +43,12 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       //démarre le service de surveillance du temps d'utilisation
+        //Toast.makeText(this, "demande de creation...", Toast.LENGTH_LONG).show();
+        Intent alerteService = new Intent(MainActivity.this, UpdateLockInfoService.class);
+        alerteService.putExtra("screenState", false);
+        startService(alerteService);
+
 
         // Récupérer les vues du Layout
         mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
