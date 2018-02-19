@@ -3,19 +3,15 @@ package ca.uqac.bigdataetmoi;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import android.widget.ListView;
-
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +25,7 @@ import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
+import ca.uqac.bigdataetmoi.service.UpdateLockInfoService;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
