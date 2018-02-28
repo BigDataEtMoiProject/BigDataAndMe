@@ -19,8 +19,8 @@ import ca.uqac.bigdataetmoi.database.data_models.Data;
 public class DatabaseManager
 {
     private static DatabaseManager mInstance = null;
-    FirebaseDatabase mDb;
-    DatabaseReference mDbRef;
+    private String mUserId;
+    private DatabaseReference mDb;
 
     public static synchronized DatabaseManager getInstance()
     {
@@ -29,24 +29,37 @@ public class DatabaseManager
         return mInstance;
     }
 
-    private DatabaseManager()
-    {
-        mDb = FirebaseDatabase.getInstance();
-        mDbRef = mDb.getReference("users").child(MainApplication.user.getUid());
-        // Pour supprimer les données de la bd : mDb.getReference("users").removeValue();
+    private DatabaseManager() {
+        mUserId = MainApplication.user.getUid();
+        mDb = FirebaseDatabase.getInstance().getReference();
     }
 
-    // Écriture des données de sensur dans la BD
-    public void storeSensorData(Data data)
-    {
-        String key = mDbRef.child(data.getDataID()).push().getKey();
+    // Rétrocompatibilité avec ancienne version de la bd
+    public DatabaseReference getDbRef(String dataId) { return mDb.child("users").child(MainApplication.user.getUid()).child(dataId); }
+
+    // Écriture des données de sensur dans la BD (ancienne version)
+    public void storeSensorData(Data data)  {
+        String key = getDbRef(data.getDataID()).push().getKey();
         Map<String, Object> update = new HashMap<>();
         update.put("/" + data.getDataID() + "/" + key, data);
-        mDbRef.updateChildren(update);
+        mDb.child("users").child(mUserId).updateChildren(update);
         Log.w("DatabaseManager", "New " + data.getDataID() + " stored");
     }
 
-    // Lecture dans la bd
-    public DatabaseReference getDbRef(String dataId) { return mDbRef.child(dataId); }
+    // Pour la version 2 de la base de données
+    public DatabaseReference getDbRef() {
+        return mDb;
+    }
+    public DatabaseReference getSensorDataDbRef() {
+        return mDb.child("sensordata").child(mUserId);
+    }
+    public DatabaseReference getPermissionDbRef() {
+        return mDb.child("permission");
+    }
+
+    public void storeSensorDataCollection(SensorDataCollection collection) {
+        String timestamp = Long.toString(System.currentTimeMillis());
+        getSensorDataDbRef().child(timestamp).setValue(collection);
+    }
 }
 

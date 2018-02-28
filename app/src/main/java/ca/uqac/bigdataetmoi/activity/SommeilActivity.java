@@ -1,22 +1,25 @@
 package ca.uqac.bigdataetmoi.activity;
 
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.data_models.AccelSensorData;
+import ca.uqac.bigdataetmoi.database.SensorDataCollection;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.data_models.LightSensorData;
-import ca.uqac.bigdataetmoi.database.data_models.ProximitySensorData;
 
 public class SommeilActivity extends BaseActivity {
 
     private TextView mLuxTextView, mInterLuxTextView, mAccelTextView, mProximiTextView;
-    DatabaseManager dmManager;
+    DatabaseManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class SommeilActivity extends BaseActivity {
         mProximiTextView = (TextView) findViewById(R.id.proximiTextView);
 
         //Pour lecture de la bd
-        dmManager = DatabaseManager.getInstance();
+        dbManager = DatabaseManager.getInstance();
     }
 
     @Override
@@ -39,68 +42,54 @@ public class SommeilActivity extends BaseActivity {
 
         //Récupérer les données de la bd (dernier enregistrement
 
-        ChildEventListener mDate = DatabaseManager.getInstance().getDbRef(AccelSensorData.DATA_ID).
-                orderByChild("mDate").addChildEventListener(new ChildEventListener() {
+        Query query = dbManager.getSensorDataDbRef().orderByKey().limitToLast(1);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                AccelSensorData data = (AccelSensorData) dataSnapshot.getValue(AccelSensorData.class);
-                mAccelTextView.setText(data.isMoving() + " le " + data.getDate().toString());
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // On retrouve la donnée
+                if(dataSnapshot.hasChildren()) {
+                    DataSnapshot child = dataSnapshot.getChildren().iterator().next();
+                    long timestamp = Long.parseLong(child.getKey());
+                    SensorDataCollection data = child.getValue(SensorDataCollection.class);
+
+                    // Conversion du timestamp en date
+                    Calendar cal = Calendar.getInstance(Locale.CANADA_FRENCH);
+                    cal.setTimeInMillis(timestamp);
+                    String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
+
+                    // On rempli les champs de l'écran
+                    mAccelTextView.setText(data.isMoving + " le " + date);
+                    mLuxTextView.setText(data.luxLevel + " le " + date);
+                    mInterLuxTextView.setText(interpreterLux(data.luxLevel));
+                    mProximiTextView.setText(data.proximityDistance + " le " + date);
+                }
             }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        DatabaseManager.getInstance().getDbRef(LightSensorData.DATA_ID).
-                orderByChild("mDate").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                LightSensorData data = (LightSensorData) dataSnapshot.getValue(LightSensorData.class);
-                mLuxTextView.setText(data.getLux() + " le " + data.getDate().toString());
-                mInterLuxTextView.setText(LightSensorData.interpreterLux(data.getLux()));
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
 
-        DatabaseManager.getInstance().getDbRef(ProximitySensorData.DATA_ID).
-                orderByChild("mDate").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                ProximitySensorData data = (ProximitySensorData) dataSnapshot.getValue(ProximitySensorData.class);
-                mProximiTextView.setText(data.getDistance() + " le " + data.getDate().toString());
-            }
+    static private String interpreterLux(float lux)
+    {
+        String text;
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+        if(lux <= 10.0)
+            text = "Noir";
+        else if(lux <= 30.0)
+            text = "Sombre";
+        else if(lux <= 125)
+            text = "Faible éclairage";
+        else if(lux <= 300)
+            text = "Éclairage moyen";
+        else if(lux <= 700)
+            text = "Éclairage normal";
+        else if(lux <= 7500)
+            text = "Clair";
+        else
+            text = "Très clair";
 
+        return text;
     }
 
 }

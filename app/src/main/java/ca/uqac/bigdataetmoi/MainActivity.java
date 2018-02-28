@@ -26,6 +26,7 @@ import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 import ca.uqac.bigdataetmoi.service.UpdateLockInfoService;
+import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
@@ -45,7 +46,6 @@ public class MainActivity extends BaseActivity
         Intent alerteService = new Intent(MainActivity.this, UpdateLockInfoService.class);
         alerteService.putExtra("screenState", false);
         startService(alerteService);
-
 
         // Récupérer les vues du Layout
         mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
@@ -98,6 +98,9 @@ public class MainActivity extends BaseActivity
                 }
             }
         });
+
+        // On crée le permission manager afin qu'il puisse charger les données de la bd
+        PermissionManager.getInstance();
 
         // Activation du Bluetooth
         if (BTAdapter != null && !BTAdapter.isEnabled()) {
