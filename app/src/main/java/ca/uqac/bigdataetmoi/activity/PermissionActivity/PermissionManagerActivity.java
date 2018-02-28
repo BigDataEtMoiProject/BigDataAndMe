@@ -9,6 +9,13 @@ import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 public class PermissionManagerActivity extends AppCompatActivity {
 
+    private static String PERMISSION_LOCATION = "ACCESS_FINE_LOCATION";
+    private static String PERMISSION_MICRO = "RECORD_AUDIO";
+    private static String PERMISSION_SMS = "BROADCAST_SMS";
+    private static String PERMISSION_CONTACTS = "READ_CONTACTS";
+    private static String PERMISSION_BLUETOOTH = "BLUETOOTH_ADMIN";
+    private static String PERMISSION_WIFI = "ACCESS_WIFI_STATE";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +45,7 @@ public class PermissionManagerActivity extends AppCompatActivity {
         switchSMS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PermissionManager.getInstance().setPermissionGranted("BROADCAST_SMS", b);
+                PermissionManager.getInstance().setPermissionGranted("READ_SMS", b);
             }
         });
 
