@@ -8,7 +8,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ca.uqac.bigdataetmoi.MainApplication;
@@ -35,6 +37,8 @@ public class PermissionManager
 
     private final static boolean DEFAULT_VALUE = true; // Valeur par défaut des permissions
 
+    private List<PermissionChangedListener> listeners = new ArrayList<>();
+
     private DatabaseManager dbManager;
     private Map<String, Boolean> permissionMap;
 
@@ -49,6 +53,10 @@ public class PermissionManager
         getStoredValues();
     }
 
+    public void addListener(PermissionChangedListener toAdd) {
+        listeners.add(toAdd);
+    }
+
     // Va chercher les données des permissions dans la bd.
     private void getStoredValues() {
         permissionMap = new HashMap<>();
@@ -58,7 +66,7 @@ public class PermissionManager
             public void onDataChange(DataSnapshot dataSnapshot) {
                 permissionMap.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    permissionMap.put(data.getKey(), (Boolean) data.getValue());
+                    permissionMap.put(data.getKey().replace('-', '.'), data.getValue(Boolean.class));
                 }
             }
             @Override
@@ -67,11 +75,8 @@ public class PermissionManager
     }
 
     // Demande la permission à l'utilisateur (pour android version 6 et plus)
-    private void requestPermission(String permission)
-    {
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(MainApplication.getCurrentActivity(), permission))
-            ActivityCompat.requestPermissions(MainApplication.getCurrentActivity(),
-                    new String[]{permission}, permission.hashCode());
+    private void requestPermission(String permission) {
+            ActivityCompat.requestPermissions(MainApplication.getCurrentActivity(), new String[]{permission}, 0);
     }
 
     // Retourne si oui ou non la permission demandée est accordée.
@@ -91,8 +96,7 @@ public class PermissionManager
     }
 
     // Met à jour la permission dans la bd selon si oui ou non on veut qu'elle soit activée.
-    public void setPermissionGranted(String permission, boolean granted)
-    {
+    public void setPermissionGranted(String permission, boolean granted) {
         // Dans un premier temps, il faut s'assurer de demander la permission à l'usager
         // Via le popup de permission android si nous somme dans la version android 6.0 et plus
         // Si l'usager accepte d'accorder la permission, cette fonction sera appelé une deuxième fois,
@@ -100,14 +104,16 @@ public class PermissionManager
         if(granted && ContextCompat.checkSelfPermission(MainApplication.getContext(), permission) == PackageManager.PERMISSION_DENIED)
             requestPermission(permission);
         else {
-            dbManager.getPermissionDbRef().child(permission).setValue(granted);
+            dbManager.getPermissionDbRef().child(permission.replace('.', '-')).setValue(granted);
+            permissionMap.put(permission,granted);
+            for (PermissionChangedListener listener : listeners)
+                listener.permissionChanged(permission, granted);
         }
     }
 
     // Méthode qui récupère le résultat après une demande de permission. (pour android version 6 et plus)
     // Elle est appelé si une activité qui hérite de BaseActivity recoit une réponse.
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         // Si la permission est acceptée, on met à jour les données dans la bd
         for(int i = 0 ; i < grantResults.length ; i++)
         {

@@ -53,9 +53,7 @@ public class DatabaseManager
     public DatabaseReference getSensorDataDbRef() {
         return mDb.child("sensordata").child(mUserId);
     }
-    public DatabaseReference getPermissionDbRef() {
-        return mDb.child("permission");
-    }
+    public DatabaseReference getPermissionDbRef() { return mDb.child("permission").child(mUserId); }
 
     public void storeSensorDataCollection(SensorDataCollection collection) {
         String timestamp = Long.toString(System.currentTimeMillis());

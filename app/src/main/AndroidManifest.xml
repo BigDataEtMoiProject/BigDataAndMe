@@ -76,7 +76,7 @@
 
         <activity android:name=".activity.app_usage_activity.UsageTimelineActivity" />
         <activity android:name=".activity.app_usage_activity.DonneesUtilisationActivity" />
-        <activity android:name=".activity.PermissionActivity.PermissionManagerActivity"></activity>
+        <activity android:name=".activity.PermissionManagerActivity"></activity>
     </application>
 
 </manifest>

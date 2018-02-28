@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="5dp"
-    tools:context="ca.uqac.bigdataetmoi.activity.PermissionActivity.PermissionManagerActivity">
+    tools:context="ca.uqac.bigdataetmoi.activity.PermissionManagerActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
