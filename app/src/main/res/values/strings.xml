@@ -25,4 +25,15 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+
+    <!-- Ecran permission -->
+    <string name="permission_manager_title">Permissions des capteurs</string>
+    <string name="permission_manager_access_location">Accès à la position de l\'appareil</string>
+    <string name="permission_manager_micro">Accès au micro de l\'appareil</string>
+    <string name="permission_manager_sms">Accès aux SMS de l\'appareil</string>
+    <string name="permission_manager_contacts">Accès aux contacts de l\'appareil</string>
+    <string name="permission_manager_bluetooth">Accès au Bluetooth de l\'appareil</string>
+    <string name="permission_manager_wifi">Accès au Wi-Fi de l\'appareil</string>
+    <string name="title_activity_permission_settings">Permissions des capteurs</string>
+
 </resources>
