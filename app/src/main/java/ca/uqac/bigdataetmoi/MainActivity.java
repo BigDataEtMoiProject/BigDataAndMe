@@ -19,13 +19,16 @@ import java.util.Arrays;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
+import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
 import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
+import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 import ca.uqac.bigdataetmoi.service.UpdateLockInfoService;
+import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
@@ -42,16 +45,20 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
        //démarre le service de surveillance du temps d'utilisation
         //Toast.makeText(this, "demande de creation...", Toast.LENGTH_LONG).show();
-        Intent alerteService = new Intent(MainActivity.this, UpdateLockInfoService.class);
-        alerteService.putExtra("screenState", false);
-        startService(alerteService);
+        //Intent alerteService = new Intent(MainActivity.this, UpdateLockInfoService.class);
+        //alerteService.putExtra("screenState", false);
+        //startService(alerteService);
 
+        // On crée les managers afin qu'il puisse charger les données de la bd
+        DatabaseManager.getInstance();
+        PermissionManager.getInstance();
 
         // Récupérer les vues du Layout
         mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
 
         // On peuple le listView
         String[] fonctions = new String[] {
+                "Gestion des permissions",
                 "Compteur de pas",
                 "Temps d'utilisation",
                 "Sommeil",
@@ -75,24 +82,27 @@ public class MainActivity extends BaseActivity
                 switch(i)
                 {
                     case 0:
-                        startActivity(new Intent(MainActivity.this, CompteurDePasActivity.class));
+                        startActivity(new Intent(MainActivity.this, PermissionManagerActivity.class));
                         break;
                     case 1:
-                        startActivity(new Intent(MainActivity.this, TempsUtilisationActivity.class));
+                        startActivity(new Intent(MainActivity.this, CompteurDePasActivity.class));
                         break;
                     case 2:
-                        startActivity(new Intent(MainActivity.this, SommeilActivity.class));
+                        startActivity(new Intent(MainActivity.this, TempsUtilisationActivity.class));
                         break;
                     case 3:
-                        startActivity(new Intent(MainActivity.this, GPSMapsActivity.class));
+                        startActivity(new Intent(MainActivity.this, SommeilActivity.class));
                         break;
                     case 4:
-                        startActivity(new Intent(MainActivity.this, TelephoneSmsActivity.class));
+                        startActivity(new Intent(MainActivity.this, GPSMapsActivity.class));
                         break;
                     case 5:
-                        startActivity(new Intent(MainActivity.this, DonneesUtilisationActivity.class));
+                        startActivity(new Intent(MainActivity.this, TelephoneSmsActivity.class));
                         break;
                     case 6:
+                        startActivity(new Intent(MainActivity.this, DonneesUtilisationActivity.class));
+                        break;
+                    case 7:
                         startActivity(new Intent(MainActivity.this, QuizzActivity.class));
                         break;
                 }
@@ -104,10 +114,7 @@ public class MainActivity extends BaseActivity
             BTAdapter.enable();
         }
 
-        //Il faut demander l'accès au GPS TODO: Améliorer la gestion des permissions
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { ACCESS_FINE_LOCATION }, 0);
-        }
+        // TODO : À quoi sert cette permission ??
         if (ContextCompat.checkSelfPermission(this, ACTION_USAGE_ACCESS_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { ACTION_USAGE_ACCESS_SETTINGS }, 0);
         }

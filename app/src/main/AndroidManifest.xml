@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.uqac.bigdataetmoi">
 
@@ -23,10 +22,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,10 +41,15 @@
         <activity android:name=".activity.quizz_activity.QuizzFacileActivity" />
         <activity android:name=".activity.quizz_activity.QuizzMoyenActivity" />
         <activity android:name=".activity.quizz_activity.QuizzDifficileActivity" />
-        <activity android:name=".activity.GPSMapsActivity" android:label="@string/title_activity_gpsmaps" />
+        <activity
+            android:name=".activity.GPSMapsActivity"
+            android:label="@string/title_activity_gpsmaps" />
+
         <service android:name=".service.UpdateLockInfoService" />
 
-        <receiver android:name=".service.MyLockReceiver"  android:exported="true">
+        <receiver
+            android:name=".service.MyLockReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_OFF" />
                 <action android:name="android.intent.action.SCREEN_ON" />
@@ -71,9 +75,8 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activity.app_usage_activity.UsageTimelineActivity" />
-        <activity android:name=".activity.app_usage_activity.DonneesUtilisationActivity"></activity>
+        <activity android:name=".activity.app_usage_activity.DonneesUtilisationActivity" />
+        <activity android:name=".activity.PermissionManagerActivity"></activity>
     </application>
-
-
 
 </manifest>
