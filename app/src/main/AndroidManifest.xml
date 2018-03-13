@@ -75,7 +75,6 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activity.app_usage_activity.UsageTimelineActivity" />
-        <activity android:name=".activity.app_usage_activity.DonneesUtilisationActivity" />
         <activity android:name=".activity.PermissionManagerActivity"></activity>
     </application>
 

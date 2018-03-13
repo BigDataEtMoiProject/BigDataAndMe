@@ -6,11 +6,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -20,17 +18,15 @@ import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
 import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
-import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
+import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.BigDataService;
-import ca.uqac.bigdataetmoi.service.UpdateLockInfoService;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
 
 public class MainActivity extends BaseActivity
@@ -43,11 +39,6 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       //démarre le service de surveillance du temps d'utilisation
-        //Toast.makeText(this, "demande de creation...", Toast.LENGTH_LONG).show();
-        //Intent alerteService = new Intent(MainActivity.this, UpdateLockInfoService.class);
-        //alerteService.putExtra("screenState", false);
-        //startService(alerteService);
 
         // On crée les managers afin qu'il puisse charger les données de la bd
         DatabaseManager.getInstance();
@@ -57,16 +48,7 @@ public class MainActivity extends BaseActivity
         mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
 
         // On peuple le listView
-        String[] fonctions = new String[] {
-                "Gestion des permissions",
-                "Compteur de pas",
-                "Temps d'utilisation",
-                "Sommeil",
-                "Lieux (GPS)",
-                "Téléphone et sms",
-                "Données d'utilisation",
-                "Quizz"
-              };
+        String[] fonctions = getResources().getStringArray(R.array.main_menu);
 
         ArrayList<String> fonctionList = new ArrayList<String>();
         fonctionList.addAll(Arrays.asList(fonctions));

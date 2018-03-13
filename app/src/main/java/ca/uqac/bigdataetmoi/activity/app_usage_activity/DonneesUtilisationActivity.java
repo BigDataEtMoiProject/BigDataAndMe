@@ -1,15 +1,19 @@
 package ca.uqac.bigdataetmoi.activity.app_usage_activity;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +27,7 @@ import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
+@RequiresApi(21)
 public class DonneesUtilisationActivity extends BaseActivity {
 
     private static final String TAG = DonneesUtilisationActivity.class.getSimpleName();
@@ -42,11 +47,28 @@ public class DonneesUtilisationActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_donnees_utilisation);
+        /*
+            Cette verification est necessaire car la classe UsageStatManager a ete
+            implementer avec l'API 21 d'Android.
 
-        //Initialiser et afficher les layouts, donnnées , etc.
-        setLayoutAndData();
+            A des fin de debugage et de pauvrete, j'ai du desactive la fonctionnalite :(
+         */
+        super.onCreate(savedInstanceState);
+
+        if(Build.VERSION.SDK_INT >= 21) {
+            setContentView(R.layout.activity_donnees_utilisation);
+
+            //Initialiser et afficher les layouts, donnnées , etc.
+            setLayoutAndData();
+        } else {
+            Context context = getApplicationContext();
+            CharSequence text = "Vous devez avoir la version 5.0 (LOLLIPOP) de Android pour utiliser cette fonctionnalite";
+
+            int duree = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, text, duree);
+            toast.show();
+        }
     }
 
 
@@ -80,7 +102,8 @@ public class DonneesUtilisationActivity extends BaseActivity {
         super.onResume();
 
         //Lire la dernière valeur de la base de données
-        readFirebaseDatabaseForLastValue();
+        if(Build.VERSION.SDK_INT >= 21)
+            readFirebaseDatabaseForLastValue();
     }
 
     public void setLayoutAndData() {
