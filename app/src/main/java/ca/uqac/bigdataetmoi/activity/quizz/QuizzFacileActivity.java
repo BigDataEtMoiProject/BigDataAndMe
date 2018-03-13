@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.quizz_activity;
+package ca.uqac.bigdataetmoi.activity.quizz;
 
 import java.util.Random;
 
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class QuizzFacileActivity extends BaseActivity {
 
     private QuizzLibrary QuestionLibrary = new QuizzLibrary();
@@ -33,11 +34,11 @@ public class QuizzFacileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quizzfacile);
 
-        mScoreView = (TextView)findViewById(R.id.facilescore);
-        mQuestionView = (TextView)findViewById(R.id.question);
-        mButtonChoice1 = (Button)findViewById(R.id.facilechoice1);
-        mButtonChoice2 = (Button)findViewById(R.id.facilechoice2);
-        mButtonChoice3 = (Button)findViewById(R.id.facilechoice3);
+        mScoreView = findViewById(R.id.facilescore);
+        mQuestionView = findViewById(R.id.question);
+        mButtonChoice1 = findViewById(R.id.facilechoice1);
+        mButtonChoice2 = findViewById(R.id.facilechoice2);
+        mButtonChoice3 = findViewById(R.id.facilechoice3);
 
         updateQuestion();
 

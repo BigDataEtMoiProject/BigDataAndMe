@@ -25,6 +25,7 @@ import ca.uqac.bigdataetmoi.database.data_models.PodoSensorData;
 //Dans cette classe on affiche le nombre de pas en temps réel , la moyenne du nombre de pas ainsi que le nombre de pas durant les 7 derniers jours
 //Appuyer sur no chart data available pour afficher le graphique au debut
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class CompteurDePasActivity extends BaseActivity {
 
 
@@ -44,10 +45,10 @@ public class CompteurDePasActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compteur_de_pas);
 
-        textView = (TextView)findViewById(R.id.txt);
+        textView = findViewById(R.id.txt);
 
         //graphique
-        mChart = (LineChart)findViewById(R.id.Linechart);
+        mChart = findViewById(R.id.Linechart);
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(false);
         yValues = new ArrayList<>();
@@ -55,8 +56,8 @@ public class CompteurDePasActivity extends BaseActivity {
         //Ajouté
         db=FirebaseDatabase.getInstance();
 
-        affichage_nbpas_moyenne = (TextView) findViewById(R.id.moyenne_pas);
-        nb_pas_veille = (TextView) findViewById(R.id.nb_pas_veille);
+        affichage_nbpas_moyenne = findViewById(R.id.moyenne_pas);
+        nb_pas_veille = findViewById(R.id.nb_pas_veille);
         nb_pas_veille.setText("");
         affichage_nbpas_moyenne.setText("");
         RecupererValeur();

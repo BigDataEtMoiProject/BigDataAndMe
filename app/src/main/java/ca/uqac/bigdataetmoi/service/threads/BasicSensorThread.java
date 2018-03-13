@@ -14,6 +14,7 @@ import ca.uqac.bigdataetmoi.database.DatabaseManager;
  * Cette classe à pour but la récupération des capteurs de base, c'est à dire ceux qui utilisent le SensorManager
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class BasicSensorThread extends Thread implements Runnable, SensorEventListener {
 
     private final long SENSOR_MIN_UPDATE_MILLIS = 120000; //Temps minimum entre deux écriture dans la BD (2 minutes)
@@ -93,10 +94,7 @@ public class BasicSensorThread extends Thread implements Runnable, SensorEventLi
         float delta = mAccelCurrent - mAccelLast;
         mAccel = mAccel * 0.9f + delta;
 
-        if(mAccel > 1.0) { // Cela veut dire qu'on bouge
-            return true;
-        }
-        else
-            return false;
+        // Cela veut dire qu'on bouge
+        return mAccel > 1.0;
     }
 }

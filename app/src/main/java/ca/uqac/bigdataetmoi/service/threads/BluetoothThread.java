@@ -17,6 +17,7 @@ import static ca.uqac.bigdataetmoi.MainActivity.BTAdapter;
  * Created by Raph on 21/11/2017.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class BluetoothThread extends Thread implements Runnable {
 
     private Context context;

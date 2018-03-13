@@ -19,13 +19,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import java.util.Locale;
 
 
 /**
  * Created by Nyemo on 03/11/2017.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class UpdateLockInfoService extends Service {
     boolean oldState = false;
     boolean screenState;
@@ -87,7 +88,7 @@ public class UpdateLockInfoService extends Service {
 
         String eol = System.getProperty("line.separator");
         BufferedWriter writer = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA_FRENCH);
         String toDay = sdf.format(new Date());
         //String toDay = new Date().getDate()
         Log.i("date", toDay);

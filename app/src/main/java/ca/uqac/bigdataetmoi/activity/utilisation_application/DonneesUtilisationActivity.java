@@ -1,6 +1,5 @@
-package ca.uqac.bigdataetmoi.activity.app_usage_activity;
+package ca.uqac.bigdataetmoi.activity.utilisation_application;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
@@ -21,19 +20,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
-@RequiresApi(21)
+@SuppressWarnings("HardCodedStringLiteral")
+@RequiresApi(22)
 public class DonneesUtilisationActivity extends BaseActivity {
 
     private static final String TAG = DonneesUtilisationActivity.class.getSimpleName();
 
     private static final long INIT_TIME_PERIOD = 1000 * 30;     //30 secondes
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy HH:mm:ss");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA_FRENCH);
 
     private long mAppStarted, mAppEnded, mPrevUsageTime;
     private String mAppInForeground, mAppInBackground;
@@ -106,6 +107,7 @@ public class DonneesUtilisationActivity extends BaseActivity {
             readFirebaseDatabaseForLastValue();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     public void setLayoutAndData() {
 
         mContext = getApplicationContext();

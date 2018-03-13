@@ -16,6 +16,7 @@ import ca.uqac.bigdataetmoi.database.data_models.Data;
  * Cette classe à pour but de gérer la base de données, c'est à dire son initialisation et la communication.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class DatabaseManager
 {
     private static DatabaseManager mInstance = null;

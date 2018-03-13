@@ -6,5 +6,5 @@ package ca.uqac.bigdataetmoi.database.data_models;
  */
 
 public interface Data {
-    public String getDataID();
+    String getDataID();
 }

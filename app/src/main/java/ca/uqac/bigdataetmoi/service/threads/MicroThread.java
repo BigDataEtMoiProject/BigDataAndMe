@@ -22,6 +22,7 @@ import ca.uqac.bigdataetmoi.database.DatabaseManager;
  * This class is a thread of the Mic
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnInfoListener
 {
     DatabaseManager dbManager;
@@ -66,7 +67,7 @@ public class MicroThread  extends Thread implements Runnable, MediaRecorder.OnIn
 
 
     private File getOutputFile() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.US);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA_FRENCH);
 
         return new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath().toString()

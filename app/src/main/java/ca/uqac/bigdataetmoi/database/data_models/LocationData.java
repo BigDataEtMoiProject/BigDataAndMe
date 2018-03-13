@@ -6,6 +6,7 @@ import android.location.Location;
  * Created by pat on 2018-02-03.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class LocationData extends Location implements Data
 {
     public static final String DATA_ID = "locations";

@@ -18,6 +18,7 @@ import ca.uqac.bigdataetmoi.database.data_models.WifiData;
  * Created by Raph on 21/11/2017.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class WifiThread extends Thread implements Runnable
 {
     private Context context;

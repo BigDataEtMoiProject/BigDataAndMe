@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import ca.uqac.bigdataetmoi.R;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class SignupActivity extends BaseActivity {
 
     private EditText field_Email, field_Password;
@@ -33,10 +34,10 @@ public class SignupActivity extends BaseActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        field_Email = (EditText) findViewById(R.id.signup_field_email);
-        field_Password = (EditText) findViewById(R.id.signup_field_password);
-        btn_Register = (Button) findViewById(R.id.signup_btn_register);
-        goToLogin = (TextView) findViewById((R.id.signup_text_go_to_login));
+        field_Email = findViewById(R.id.signup_field_email);
+        field_Password = findViewById(R.id.signup_field_password);
+        btn_Register = findViewById(R.id.signup_btn_register);
+        goToLogin = findViewById((R.id.signup_text_go_to_login));
 
         btn_Register.setOnClickListener(new View.OnClickListener() {
             @Override

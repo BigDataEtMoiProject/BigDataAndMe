@@ -44,6 +44,7 @@ Créé le 2017-11-16 par Patrick Lapointe
 But : Service qui récupère les infos des différents capteurs et qui envoie les données à la base de donnée.
 */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class BigDataService extends IntentService
 {
     final int LOC_UPDATE_MIN_TIME = 10000; //in ms
@@ -66,7 +67,7 @@ public class BigDataService extends IntentService
         dbManager = DatabaseManager.getInstance();
 
         // Activer la wifi si elle est désactiver
-        WifiThread.wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);;
+        WifiThread.wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (WifiThread.wifi.isWifiEnabled() == false)
         {
             WifiThread.wifi.setWifiEnabled(true);

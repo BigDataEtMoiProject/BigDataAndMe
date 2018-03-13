@@ -36,6 +36,24 @@
         <item>Quizz</item>
     </string-array>
 
+    <!-- Menu Quizz -->
+    <string-array name="quizz_menu">
+        <item>Quizz de Personnalité (Argent/Temps/Securité)</item>
+        <item>Quizz facile</item>
+        <item>Quizz moyen</item>
+        <item>Quizz difficile</item>
+    </string-array>
+
+    <!-- Sommeil -->
+    <string name="sleep_pitch_black">Noir</string>
+    <string name="sleep_dark">Sombre</string>
+    <string name="sleep_low">Faible éclairage</string>
+    <string name="sleep_med">Éclairage moyen</string>
+    <string name="sleep_normal">Éclairage normal</string>
+    <string name="sleep_bright">Clair</string>
+    <string name="sleep_really_bright">Très clair</string>
+    <string name="sleep_misc"> le </string>
+
     <!-- Ecran permission -->
     <string name="permission_manager_title">Permissions des capteurs</string>
     <string name="permission_manager_access_location">Accès à la position de l\'appareil</string>

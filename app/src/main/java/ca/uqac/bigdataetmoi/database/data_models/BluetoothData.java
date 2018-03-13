@@ -6,6 +6,7 @@ import java.util.Date;
  * Created by Raph on 21/11/2017.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class BluetoothData implements Data
 {
     public static final String DATA_ID = "bluetoothdata";

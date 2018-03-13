@@ -20,6 +20,7 @@ import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.data_models.LocationData;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class GPSMapsActivity extends BaseActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;

@@ -3,6 +3,7 @@ package ca.uqac.bigdataetmoi;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,9 +20,9 @@ import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
 import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
-import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
-import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
-import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
+import ca.uqac.bigdataetmoi.activity.sms_contact.TelephoneSmsActivity;
+import ca.uqac.bigdataetmoi.activity.utilisation_application.DonneesUtilisationActivity;
+import ca.uqac.bigdataetmoi.activity.quizz.QuizzActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
@@ -94,7 +95,9 @@ public class MainActivity extends BaseActivity
 
         // TODO : À quoi sert cette permission ??
         if (ContextCompat.checkSelfPermission(this, ACTION_USAGE_ACCESS_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { ACTION_USAGE_ACCESS_SETTINGS }, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityCompat.requestPermissions(this, new String[] { ACTION_USAGE_ACCESS_SETTINGS }, 0);
+            }
         }
 
 

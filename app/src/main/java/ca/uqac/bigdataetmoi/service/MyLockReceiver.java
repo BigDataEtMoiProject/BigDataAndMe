@@ -10,6 +10,7 @@ import android.util.Log;
  * Created by Nyemo on 03/11/2017.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class MyLockReceiver extends BroadcastReceiver {
 
    boolean screenON = true;

@@ -6,6 +6,7 @@ import java.util.Date;
  * Created by Job on 29/12/2017.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class AudioData implements Data {
     public static final String DATA_ID = "SoundData";
 

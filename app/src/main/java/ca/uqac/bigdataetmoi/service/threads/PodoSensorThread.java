@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
@@ -19,6 +20,7 @@ import ca.uqac.bigdataetmoi.database.data_models.PodoSensorData;
 
 //Cette classe est un thread qui permet de stocker les données récupérées dans le  podomètre dans la base de données
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class PodoSensorThread extends Thread implements Runnable,SensorEventListener
 {
     private Sensor mySensor;
@@ -31,13 +33,13 @@ public class PodoSensorThread extends Thread implements Runnable,SensorEventList
     public PodoSensorThread(Context context) {
         mContext = context;
         mStepOffset = 0;
-        mPrevPodoMillis =System.currentTimeMillis(); ;
+        mPrevPodoMillis =System.currentTimeMillis();
         dbManager = DatabaseManager.getInstance();
-        SM = (SensorManager)mContext.getSystemService(context.SENSOR_SERVICE);
+        SM = (SensorManager)mContext.getSystemService(Context.SENSOR_SERVICE);
         mySensor = SM.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        SM.registerListener((SensorEventListener) this, mySensor , SensorManager.SENSOR_DELAY_NORMAL);
+        SM.registerListener(this, mySensor , SensorManager.SENSOR_DELAY_NORMAL);
         CompteurDePasActivity mainActivity = new CompteurDePasActivity();
-        mainActivity.nb = 0;
+        CompteurDePasActivity.nb = 0;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class PodoSensorThread extends Thread implements Runnable,SensorEventList
 
         //On met à jour les mouvement si celui-ci a lieu au minimum 24 heures plus tard
         if (currMillis - mPrevPodoMillis > 86400000) {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA_FRENCH).format(new Date());
             dbManager.storeSensorData(new PodoSensorData(timeStamp, CompteurDePasActivity.nb));
             mPrevPodoMillis = currMillis;
             mStepOffset = 0;
