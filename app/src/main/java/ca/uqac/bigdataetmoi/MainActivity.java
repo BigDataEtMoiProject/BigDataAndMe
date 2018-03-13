@@ -20,7 +20,6 @@ import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
 import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
-import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
@@ -33,7 +32,7 @@ public class MainActivity extends BaseActivity
 {
     private ListView mFonctionsListView;
     private ArrayAdapter<String> mFonctionListAdapter;
-    public final static BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();;
+    public final static BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +44,15 @@ public class MainActivity extends BaseActivity
         PermissionManager.getInstance();
 
         // Récupérer les vues du Layout
-        mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
+        mFonctionsListView = findViewById(R.id.fonctionsListView);
 
         // On peuple le listView
         String[] fonctions = getResources().getStringArray(R.array.main_menu);
 
-        ArrayList<String> fonctionList = new ArrayList<String>();
+        ArrayList<String> fonctionList = new ArrayList<>();
         fonctionList.addAll(Arrays.asList(fonctions));
 
-        mFonctionListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fonctionList);
+        mFonctionListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fonctionList);
 
         mFonctionsListView.setAdapter(mFonctionListAdapter);
 
@@ -70,21 +69,18 @@ public class MainActivity extends BaseActivity
                         startActivity(new Intent(MainActivity.this, CompteurDePasActivity.class));
                         break;
                     case 2:
-                        startActivity(new Intent(MainActivity.this, TempsUtilisationActivity.class));
-                        break;
-                    case 3:
                         startActivity(new Intent(MainActivity.this, SommeilActivity.class));
                         break;
-                    case 4:
+                    case 3:
                         startActivity(new Intent(MainActivity.this, GPSMapsActivity.class));
                         break;
-                    case 5:
+                    case 4:
                         startActivity(new Intent(MainActivity.this, TelephoneSmsActivity.class));
                         break;
-                    case 6:
+                    case 5:
                         startActivity(new Intent(MainActivity.this, DonneesUtilisationActivity.class));
                         break;
-                    case 7:
+                    case 6:
                         startActivity(new Intent(MainActivity.this, QuizzActivity.class));
                         break;
                 }

@@ -33,7 +33,6 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".activity.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
-        <activity android:name=".activity.TempsUtilisationActivity" />
         <activity android:name=".activity.TelephoneSmsActivity" />
         <activity android:name=".activity.app_usage_activity.DonneesUtilisationActivity" />
         <activity android:name=".activity.quizz_activity.QuizzActivity" />

@@ -29,7 +29,6 @@
     <string-array name="main_menu">
         <item>Gestion des permissions</item>
         <item>Compteur de pas</item>
-        <item>Temps d\'utilisation</item>
         <item>Sommeil</item>
         <item>Lieux (GPS)</item>
         <item>Téléphone et sms</item>
