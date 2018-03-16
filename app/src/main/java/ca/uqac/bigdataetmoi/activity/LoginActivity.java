@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity {
         WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);;
         if (wifi.isWifiEnabled() == false)
         {
-            Toast.makeText(getApplicationContext(), "Activation de la wifi", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Activation de la mWifiManager", Toast.LENGTH_LONG).show();
             wifi.setWifiEnabled(true);
         }
     }

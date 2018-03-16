@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".MainApplication"
@@ -22,15 +23,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        -->
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.SignupActivity" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".activity.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
         <activity android:name=".activity.TempsUtilisationActivity" />
@@ -56,6 +63,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".service.BroadcastOnBoot"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".service.BigDataService"
             android:enabled="true"
@@ -70,12 +84,14 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
 
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activity.app_usage_activity.UsageTimelineActivity" />
-        <activity android:name=".activity.app_usage_activity.DonneesUtilisationActivity" />
         <activity android:name=".activity.PermissionManagerActivity"></activity>
     </application>
 

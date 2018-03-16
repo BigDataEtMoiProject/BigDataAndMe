@@ -12,16 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
 public class DonneesUtilisationActivity extends BaseActivity {
 
@@ -99,7 +96,7 @@ public class DonneesUtilisationActivity extends BaseActivity {
         //Stats Manager pour récolter l'information sur les applications utilisé
         statsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
         dbManager = DatabaseManager.getInstance();
-        usageRef = dbManager.getDbRef(UsageData.DATA_ID);
+        //usageRef = dbManager.getDbRef(UsageData.DATA_ID);
 
     }
 
@@ -129,7 +126,7 @@ public class DonneesUtilisationActivity extends BaseActivity {
     }
 
     public final void readFirebaseDatabaseForLastValue() {
-
+    /*
         usageRef.limitToLast(1).orderByChild("timeAppEnd").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -157,6 +154,7 @@ public class DonneesUtilisationActivity extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+       */
     }
 
     private UsageData getLastDataInDatabase(DataSnapshot ds) {
@@ -269,7 +267,7 @@ public class DonneesUtilisationActivity extends BaseActivity {
                     usage.setPackageName(mAppInForeground);
                     usage.setTimeAppBegin(mAppStarted);
                     usage.setTimeAppEnd(mAppEnded);
-                    dbManager.storeSensorData(usage);
+                    //dbManager.storeSensorData(usage);
 
                     //Put variable at 0 to assure data a clean
                     mAppStarted = mAppEnded = 0;

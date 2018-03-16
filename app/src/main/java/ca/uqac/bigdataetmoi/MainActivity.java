@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -27,31 +28,22 @@ import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.BigDataService;
-import ca.uqac.bigdataetmoi.service.UpdateLockInfoService;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
 
 public class MainActivity extends BaseActivity
 {
     private ListView mFonctionsListView;
     private ArrayAdapter<String> mFonctionListAdapter;
-    public final static BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       //démarre le service de surveillance du temps d'utilisation
-        //Toast.makeText(this, "demande de creation...", Toast.LENGTH_LONG).show();
-        //Intent alerteService = new Intent(MainActivity.this, UpdateLockInfoService.class);
-        //alerteService.putExtra("screenState", false);
-        //startService(alerteService);
 
-        // On crée les managers afin qu'il puisse charger les données de la bd
-        DatabaseManager.getInstance();
-        PermissionManager.getInstance();
+        // On met l'identifieur du téléphone dans la classe MainApplication
+        MainApplication.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
         // Récupérer les vues du Layout
         mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
@@ -72,7 +64,6 @@ public class MainActivity extends BaseActivity
         fonctionList.addAll(Arrays.asList(fonctions));
 
         mFonctionListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fonctionList);
-
         mFonctionsListView.setAdapter(mFonctionListAdapter);
 
         // On définie les actions lors d'un clic sur un item
@@ -109,20 +100,11 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        // Activation du Bluetooth
-        if (BTAdapter != null && !BTAdapter.isEnabled()) {
-            BTAdapter.enable();
-        }
-
         // TODO : À quoi sert cette permission ??
         if (ContextCompat.checkSelfPermission(this, ACTION_USAGE_ACCESS_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { ACTION_USAGE_ACCESS_SETTINGS }, 0);
         }
 
-
-        // Le service de l,application est censé être démarré automatiquement lors du démarrage du système,
-        // mais on le démarre ici quand-même au cas ou il aurait été arrêté.
-        Intent serviceIntent = new Intent(getApplicationContext(), BigDataService.class);
-        getApplicationContext().startService(serviceIntent);
+        BigDataService.startRecurrence(getApplicationContext());
     }
 }
