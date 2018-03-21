@@ -1,11 +1,10 @@
-package ca.uqac.bigdataetmoi.database.data_models;
+package ca.uqac.bigdataetmoi.activity.app_usage_activity;
 
 /**
  * Created by jul_samson on 17-11-17.
  */
 
-@SuppressWarnings("HardCodedStringLiteral")
-public class UsageData implements Data
+public class UsageData
 {
     public static final String DATA_ID = "usagedata";
 
@@ -20,9 +19,6 @@ public class UsageData implements Data
         mTimeAppBegin = appBegin;
         mTimeAppEnd = appEnd;
     }
-
-    @Override
-    public String getDataID() { return DATA_ID; }
 
     public String getPackageName() {
         return mPackageName;

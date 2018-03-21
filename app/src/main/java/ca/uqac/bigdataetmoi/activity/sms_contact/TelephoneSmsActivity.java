@@ -1,5 +1,13 @@
 package ca.uqac.bigdataetmoi.activity.sms_contact;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,28 +19,22 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
+import ca.uqac.bigdataetmoi.utility.PermissionManager;
+import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_SMS;
 
+// ACTIVITY
 @SuppressWarnings("HardCodedStringLiteral")
 public class TelephoneSmsActivity extends BaseActivity {
 
-    private SmsManager smsMan;
     private ListView listView;
     private List<String> listInfo;
     private ArrayAdapter<String> adapter;
-    private final int PERMISSION_CODE = 0x0800;
     private List<ContactModel> contacts;
+    private AlertDialog.Builder builder;
+    PermissionManager permissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,38 +43,41 @@ public class TelephoneSmsActivity extends BaseActivity {
 
         listView = findViewById(R.id.contactList);
         listInfo = new ArrayList<String>();
-
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listInfo);
+        permissionManager = PermissionManager.getInstance();
 
-        int permissionCheck = ContextCompat.checkSelfPermission(this, "android.permission.READ_CONTACTS");
-        if(permissionCheck != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this, new String[]{"android.permission.READ_CONTACTS"}, PERMISSION_CODE);
-        }
-        permissionCheck = ContextCompat.checkSelfPermission(this, "android.permission.READ_SMS");
-        if(permissionCheck != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this, new String[]{"android.permission.READ_SMS"}, PERMISSION_CODE);
-        }
+        // On verifie si la permission est OK
+        if(permissionManager.isGranted(READ_SMS) && permissionManager.isGranted(READ_CONTACTS)){
 
-        contacts = getPhoneContacts();
-        getPhoneSMS();
-        while(!contacts.isEmpty())
-        {
-            ContactModel temp = contacts.remove(0);
-            String tempInfo = temp.getNom() + " -- " + temp.getNumero() + " -- SMS " + temp.getNbrSMSEnvoye();
-            listInfo.add(tempInfo);
-            listView.setAdapter(adapter);
+            // * Permission ok on affiche les infos *
+            contacts = getPhoneContacts();
+            getPhoneSMS();
+            while(!contacts.isEmpty())
+            {
+                ContactModel temp = contacts.remove(0);
+                String tempInfo = temp.getNom() + " -- " + temp.getNumero() + " -- SMS " + temp.getNbrSMSEnvoye();
+                listInfo.add(tempInfo);
+                listView.setAdapter(adapter);
+            }
+
+        }else{
+
+            // * Permission non ok on affiche une boite de dialogue *
+            builder = new AlertDialog.Builder(this);
+            builder.setMessage("Permission READ_SMS et READ_CONTACTS non accordée.");
+            builder.create().show();
+
         }
     }
 
     protected void onStart() { super.onStart(); }
-
     protected void onResume()
     {
         super.onResume();
     }
 
+
+    // Pick up contacts from the phone
     private List<ContactModel> getPhoneContacts()
     {
         List<ContactModel> listeContact = new ArrayList<ContactModel>();
@@ -99,6 +104,7 @@ public class TelephoneSmsActivity extends BaseActivity {
         return listeContact;
     }
 
+    // Pick up SMS from the phone
     private List<SMSModel> getPhoneSMS()
     {
         List<SMSModel> listeSMS = new ArrayList<SMSModel>();

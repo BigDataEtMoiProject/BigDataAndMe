@@ -15,20 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
+import ca.uqac.bigdataetmoi.activity.app_usage_activity.UsageData;
+import ca.uqac.bigdataetmoi.activity.utilisation_application.UsageListAdapter;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
 @SuppressWarnings("HardCodedStringLiteral")
 public class UsageTimelineActivity extends BaseActivity {
@@ -115,7 +113,7 @@ public class UsageTimelineActivity extends BaseActivity {
         mContext = getApplicationContext();
         //Initialize database manager
         dbManager = DatabaseManager.getInstance();
-        usageRef = dbManager.getDbRef(UsageData.DATA_ID);
+        //usageRef = dbManager.getDbRef(UsageData.DATA_ID);
 
         ActionBar actionBar = getActionBar();
 
@@ -177,7 +175,7 @@ public class UsageTimelineActivity extends BaseActivity {
     }
 
     private void readAndDisplaySelectedDate(final Calendar cal) {
-
+/*
         usageRef.orderByChild("timeAppEnd").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
@@ -224,6 +222,7 @@ public class UsageTimelineActivity extends BaseActivity {
 
             }
         });
+*/
     }
 
     private String getDayFromData(DataSnapshot usage) {

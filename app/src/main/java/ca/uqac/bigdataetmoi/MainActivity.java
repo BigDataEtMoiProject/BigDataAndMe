@@ -4,19 +4,17 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
-import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.BigDataService;
-import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 public class MainActivity extends BaseActivity implements OnMapReadyCallback {
     private ListView mFonctionsListView;
@@ -28,9 +26,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // On crée les managers afin qu'il puisse charger les données de la bd
-        DatabaseManager.getInstance();
-        PermissionManager.getInstance();
+        // On met l'identifieur du téléphone dans la classe MainApplication
+        MainApplication.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mainMap);
         mapFragment.getMapAsync(this);
@@ -80,11 +77,6 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback {
             }
         });
 
-        // Activation du Bluetooth
-        if (BTAdapter != null && !BTAdapter.isEnabled()) {
-            BTAdapter.enable();
-        }
-
         // TODO : À quoi sert cette permission ??
         if (ContextCompat.checkSelfPermission(this, ACTION_USAGE_ACCESS_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -93,10 +85,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback {
         }
         */
 
-        // Le service de l'application est censé être démarré automatiquement lors du démarrage du système,
-        // mais on le démarre ici quand-même au cas ou il aurait été arrêté.
-        Intent serviceIntent = new Intent(getApplicationContext(), BigDataService.class);
-        getApplicationContext().startService(serviceIntent);
+        BigDataService.startRecurrence(getApplicationContext());
     }
 
     @Override

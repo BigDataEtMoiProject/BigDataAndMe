@@ -1,153 +1,139 @@
 package ca.uqac.bigdataetmoi.service;
-
-import android.app.IntentService;
-
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
-
 import android.content.Context;
-
 import android.content.Intent;
-
-import android.content.pm.PackageManager;
-
-import android.location.Location;
-
-import android.location.LocationListener;
-
-import android.location.LocationManager;
-
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
-
+import android.os.Handler;
 import android.os.IBinder;
-
-import android.support.v4.content.ContextCompat;
-
+import android.provider.Settings;
 import android.util.Log;
 
-import android.widget.Toast;
-
-
-
+import ca.uqac.bigdataetmoi.MainApplication;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.data_models.LocationData;
-import ca.uqac.bigdataetmoi.service.threads.BasicSensorThread;
-import ca.uqac.bigdataetmoi.service.threads.BluetoothThread;
-import ca.uqac.bigdataetmoi.service.threads.MicroThread;
-import ca.uqac.bigdataetmoi.service.threads.PodoSensorThread;
-import ca.uqac.bigdataetmoi.service.threads.WifiThread;
-
-import static ca.uqac.bigdataetmoi.MainActivity.BTAdapter;
+import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.service.info_provider.BasicSensorInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.BluetoothInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
+import ca.uqac.bigdataetmoi.service.info_provider.GPSInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.MicroInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.PodometerInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
 
 /*
 Créé le 2017-11-16 par Patrick Lapointe
 But : Service qui récupère les infos des différents capteurs et qui envoie les données à la base de donnée.
 */
 
-@SuppressWarnings("HardCodedStringLiteral")
-public class BigDataService extends IntentService
+public class BigDataService extends Service implements DataReadyListener
 {
-    final int LOC_UPDATE_MIN_TIME = 10000; //in ms
-    final int LOC_UPDATE_MIN_DISTANCE = 0; //in sec
+    private final static int REPETITION_DELAY = 5; // Mise à jour des données au x minutes
+    private final static int MAXIMUM_WAITING_TIME = 30; // On arrête le service si nous avons attendu plus de x secondes
 
-    Thread mBasicSensorThread;
-    Thread MicThread;
-    Thread PodoSensorThread;
+    private BasicSensorInfoProvider mBasicSensorProvider;
+    private GPSInfoProvider mGPSInfoProvider;
+    private WifiInfoProvider mWifiInfoProvider;
+    private BluetoothInfoProvider mBluetoothInfoProvider;
+    private PodometerInfoProvider mPodometerInfoProvider;
+    private MicroInfoProvider mMicroInfoProvider;
 
-    public static DatabaseManager dbManager;
+    private DataCollection mDataCollection;
 
-    public BigDataService()
+    // Le service va rouler à une intervalle donnée. Le but est de récupérer les données voulues puis
+    // s'arrête de lui-même.
+    public static void startRecurrence(Context context)
     {
-        super("BigDataService");
+        Intent intent = new Intent(context, BigDataService.class);
+
+        // Si L'intent n'est pas déjà scédulé, on le crée
+        if(PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_NO_CREATE) == null)
+        {
+            PendingIntent scheduledIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager scheduler = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            scheduler.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * REPETITION_DELAY, scheduledIntent);
+        }
     }
 
     @Override
     public void onCreate()
     {
-        dbManager = DatabaseManager.getInstance();
+        mDataCollection = new DataCollection();
 
-        // Activer la wifi si elle est désactiver
-        WifiThread.wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if (WifiThread.wifi.isWifiEnabled() == false)
-        {
-            WifiThread.wifi.setWifiEnabled(true);
-        }
+        // On met l'identifieur du téléphone dans la classe MainApplication
+        MainApplication.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
         Log.v("BigDataService", "BigDataService service has been created");
     }
-
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         Log.w("BigDataService", "BigDataService service has started");
 
-        // Démarrage du Thread pour le Micro
-        MicThread = new Thread(new MicroThread(this));
-        MicThread.start();
+        // On crée le provider pour les senseurs de base.
+        mBasicSensorProvider = new BasicSensorInfoProvider(this);
+        mBasicSensorProvider.addDataReadyListener(this);
 
-        //Démarrage du Thread pour le podometre
-        PodoSensorThread = new Thread(new PodoSensorThread(this));
-        PodoSensorThread.start();
+        // On crée le provider pour la position de l'appareil
+        mGPSInfoProvider = new GPSInfoProvider(this);
+        mGPSInfoProvider.addDataReadyListener(this);
 
-        // Démarrage du Thread pour les senseurs de base
-        mBasicSensorThread = new Thread(new BasicSensorThread(this));
-        mBasicSensorThread.start();
+        mWifiInfoProvider = new WifiInfoProvider(this);
+        mWifiInfoProvider.addDataReadyListener(this);
 
-        // Pour le bluetooth
-        if(BTAdapter != null) {
-            Thread t = new Thread(new BluetoothThread(this));
-            t.start();
-        }
+        mBluetoothInfoProvider = new BluetoothInfoProvider(this);
+        mBluetoothInfoProvider.addDataReadyListener(this);
 
-        // Pour le wifi
-        Thread tW = new Thread(new WifiThread(this));
-        tW.start();
+        mPodometerInfoProvider = new PodometerInfoProvider(this);
+        mPodometerInfoProvider.addDataReadyListener(this);
 
-        // Pour le GPS
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
+        mMicroInfoProvider = new MicroInfoProvider();
+        mMicroInfoProvider.addDataReadyListener(this);
+
+        // On n'attends pas nécéssairement d'avoir toutes les données,
+        // on écris dans la bd après un délais prédéterminé.
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onLocationChanged(Location location) {
-                dbManager.storeSensorData(new LocationData(location));
+            public void run() {
+                writeData();
             }
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {}
-            @Override
-            public void onProviderEnabled(String s) {}
-            @Override
-            public void onProviderDisabled(String s) {}
-        };
-
-        boolean accessCoarseLocation = (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
-        boolean accessFineLocation = (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
-
-        if (accessCoarseLocation && accessFineLocation)
-        {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOC_UPDATE_MIN_TIME, LOC_UPDATE_MIN_DISTANCE, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOC_UPDATE_MIN_TIME, LOC_UPDATE_MIN_DISTANCE, locationListener);
-        } else {
-            Toast.makeText(getBaseContext(), "Permission to use location : denied", Toast.LENGTH_SHORT).show();
-        }
+        }, MAXIMUM_WAITING_TIME * 1000);
 
         return Service.START_STICKY;
     }
 
     @Override
-    public IBinder onBind(Intent arg0) {
+    public void dataReady(DataCollection data) {
+        // Stocker les données dans le SensorDataCollection
+        mDataCollection.receiveData(data);
+
+        // Si on a stocké tous les données, il est temps d'enregistrer le tout dans la bd
+        if(mDataCollection.allDataReceived())
+            writeData();
+    }
+
+    @Override
+    public IBinder onBind(Intent arg) {
         Log.i("BigDataService", "Service onBind");
         return null;
     }
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(BluetoothThread.bReciever);
-        unregisterReceiver(WifiThread.bRecieverW);
+        mBasicSensorProvider.unregisterDataReadyListener(this);
+        mGPSInfoProvider.unregisterDataReadyListener(this);
+        mWifiInfoProvider.unregisterDataReadyListener(this);
+        mBluetoothInfoProvider.unregisterDataReadyListener(this);
+        mPodometerInfoProvider.unregisterDataReadyListener(this);
+        mMicroInfoProvider.unregisterDataReadyListener(this);
         Log.i("BigDataService", "Service onDestroy");
     }
 
-    protected void onHandleIntent(Intent intent) {
-        Log.i("BigDataService", "Service onHandleIntent");
+    private void writeData() {
+        // Stockage dans la bd
+        DatabaseManager.getInstance().storeSensorDataCollection(mDataCollection);
+        // On arrête le service
+        stopSelf();
     }
 }

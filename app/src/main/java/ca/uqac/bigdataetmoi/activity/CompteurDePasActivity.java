@@ -1,26 +1,23 @@
 package ca.uqac.bigdataetmoi.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
+import android.text.format.DateFormat;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
-import ca.uqac.bigdataetmoi.MainApplication;
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.data_models.PodoSensorData;
+import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
 //Dans cette classe on affiche le nombre de pas en temps réel , la moyenne du nombre de pas ainsi que le nombre de pas durant les 7 derniers jours
 //Appuyer sur no chart data available pour afficher le graphique au debut
@@ -38,7 +35,7 @@ public class CompteurDePasActivity extends BaseActivity {
     private LineChart mChart;
     ArrayList <Entry> yValues;
 
-    FirebaseDatabase db;
+    DatabaseManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +44,9 @@ public class CompteurDePasActivity extends BaseActivity {
 
         textView = findViewById(R.id.txt);
 
+        //Pour lecture de la bd
+        dbManager = DatabaseManager.getInstance();
+
         //graphique
         mChart = findViewById(R.id.Linechart);
         mChart.setDragEnabled(true);
@@ -54,16 +54,47 @@ public class CompteurDePasActivity extends BaseActivity {
         yValues = new ArrayList<>();
 
         //Ajouté
-        db=FirebaseDatabase.getInstance();
-
-        affichage_nbpas_moyenne = findViewById(R.id.moyenne_pas);
-        nb_pas_veille = findViewById(R.id.nb_pas_veille);
+        affichage_nbpas_moyenne = (TextView) findViewById(R.id.moyenne_pas);
+        nb_pas_veille = (TextView) findViewById(R.id.nb_pas_veille);
         nb_pas_veille.setText("");
         affichage_nbpas_moyenne.setText("");
-        RecupererValeur();
-
-        runTimer();
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Récupérer les données de la bd (dernier enregistrement
+        Query query = dbManager.getSensorDataDbRef().orderByKey().limitToLast(1);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // On retrouve la donnée
+                if(dataSnapshot.hasChildren()) {
+                    DataSnapshot child = dataSnapshot.getChildren().iterator().next();
+                    long timestamp = Long.parseLong(child.getKey());
+                    DataCollection data = child.getValue(DataCollection.class);
+
+                    // Conversion du timestamp en date
+                    Calendar cal = Calendar.getInstance(Locale.CANADA_FRENCH);
+                    cal.setTimeInMillis(timestamp);
+                    String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
+
+                    // On rempli les champs de l'écran
+                    textView.setText("      COMPTEUR DE PAS\n\n      Nb de pas aujourd'hui : " + Float.toString(data.steps) + "pas");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
+
+    /*
+        Patrick lapointe
+        Ancienne lecture de la bd, j'ai laissé le code pour ceux qui voudraient faire re-marcher la grille
 
     private void RecupererValeur() {
         nb_pas_veille.setText("");
@@ -95,13 +126,13 @@ public class CompteurDePasActivity extends BaseActivity {
                     // nb_pas_veille.append(Float.toString(dataSnapshot1.getValue(PodoSensorData.class).getpMove()) + "\n");
                     if (compteur == 0)
                         nb_pas_veille.setText(Float.toString(dataSnapshot1.getValue(PodoSensorData.class).getpMove()) + "\n");
-                    /*
-                    if (compteur < 7)
-                    {
-                        yValues.add(new Entry(compteur,dataSnapshot1.getValue(PodoSensorData.class).getpMove()));
 
-                    }
-                    */
+                    //if (compteur < 7)
+                    //{
+                     //   yValues.add(new Entry(compteur,dataSnapshot1.getValue(PodoSensorData.class).getpMove()));
+
+                    //}
+
 
                     yValues.set(6,new Entry(6,dataSnapshot1.getValue(PodoSensorData.class).getpMove()));
 
@@ -134,16 +165,5 @@ public class CompteurDePasActivity extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {            }
         });
     }
-
-    private void runTimer() {
-        //java text view associated with the xml one
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                textView.setText("      COMPTEUR DE PAS\n\n      Nb de pas aujourd'hui : " + Float.toString(nb) + "pas");
-                handler.postDelayed(this, 1000);
-            }
-        });
-    }
+    */
 }
