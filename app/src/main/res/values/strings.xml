@@ -26,15 +26,11 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- Menu Principal -->
-    <string-array name="main_menu">
-        <item>Gestion des permissions</item>
-        <item>Compteur de pas</item>
-        <item>Sommeil</item>
-        <item>Lieux (GPS)</item>
-        <item>Téléphone et sms</item>
-        <item>Données d\'utilisation</item>
-        <item>Quizz</item>
-    </string-array>
+    <string name="acceuil">Accueil</string>
+    <string name="profile">Mon profil</string>
+    <string name="preferences">Preferences</string>
+    <string name="a_propos">A propos</string>
+    <string name="deconnection">Se deconnecter</string>
     <string name="heure">Heure: </string>
 
     <!-- Menu Quizz -->

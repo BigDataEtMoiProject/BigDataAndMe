@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/grp1"
+            android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_acceuil"
+            android:icon="@drawable/main_menu"
+            android:title="@string/acceuil" />
+    </group>
+
+    <group android:id="@+id/grp2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/profile"
+            android:title="@string/profile" />
+    </group>
+
+    <group android:id="@+id/grp3"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_parametre"
+            android:icon="@drawable/parametre"
+            android:title="@string/preferences" />
+    </group>
+
+    <group android:id="@+id/grp4"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_propos"
+            android:icon="@drawable/a_propos"
+            android:title="@string/a_propos" />
+    </group>
+
+    <group android:id="@+id/grp5"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_deconnection"
+            android:icon="@drawable/logout"
+            android:title="@string/deconnection" />
+    </group>
+</menu>
