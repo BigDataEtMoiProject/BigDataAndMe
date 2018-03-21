@@ -3,34 +3,22 @@ package ca.uqac.bigdataetmoi;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
-import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
-import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
-import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
-import ca.uqac.bigdataetmoi.activity.SommeilActivity;
-import ca.uqac.bigdataetmoi.activity.sms_contact.TelephoneSmsActivity;
-import ca.uqac.bigdataetmoi.activity.utilisation_application.DonneesUtilisationActivity;
-import ca.uqac.bigdataetmoi.activity.quizz.QuizzActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
-import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
-
-public class MainActivity extends BaseActivity
-{
+public class MainActivity extends BaseActivity implements OnMapReadyCallback {
     private ListView mFonctionsListView;
     private ArrayAdapter<String> mFonctionListAdapter;
     public final static BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -44,6 +32,10 @@ public class MainActivity extends BaseActivity
         DatabaseManager.getInstance();
         PermissionManager.getInstance();
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mainMap);
+        mapFragment.getMapAsync(this);
+
+        /*
         // Récupérer les vues du Layout
         mFonctionsListView = findViewById(R.id.fonctionsListView);
 
@@ -99,11 +91,20 @@ public class MainActivity extends BaseActivity
                 ActivityCompat.requestPermissions(this, new String[] { ACTION_USAGE_ACCESS_SETTINGS }, 0);
             }
         }
+        */
 
-
-        // Le service de l,application est censé être démarré automatiquement lors du démarrage du système,
+        // Le service de l'application est censé être démarré automatiquement lors du démarrage du système,
         // mais on le démarre ici quand-même au cas ou il aurait été arrêté.
         Intent serviceIntent = new Intent(getApplicationContext(), BigDataService.class);
         getApplicationContext().startService(serviceIntent);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            return;
+
+        googleMap.setMyLocationEnabled(true);
     }
 }

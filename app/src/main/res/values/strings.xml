@@ -35,6 +35,7 @@
         <item>Données d\'utilisation</item>
         <item>Quizz</item>
     </string-array>
+    <string name="heure">Heure: </string>
 
     <!-- Menu Quizz -->
     <string-array name="quizz_menu">
