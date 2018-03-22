@@ -8,22 +8,37 @@ import java.util.List;
  */
 
 // MODELE CONTACTS
-class ContactModel{
+class ContactModel {
+    private String id;
     private String nom;
     private String numero;
     private List<SMSModel> listeSMSEnvoye;
-    private int nbrSMSEnvoye;
 
-    ContactModel (String _nom,  String _numero)
-    {
+    ContactModel(String _id, String _nom, String _numero) {
+        id = _id;
         nom = _nom;
         numero = _numero;
-        nbrSMSEnvoye = 0;
         listeSMSEnvoye = new ArrayList<SMSModel>();
     }
 
-    public String getNom() {return nom;}
-    public String getNumero() {return numero;}
-    public void addSMSEnvoye(SMSModel sms) {listeSMSEnvoye.add(sms); nbrSMSEnvoye++;}
-    public int getNbrSMSEnvoye() {return nbrSMSEnvoye;}
+    String getId() {
+        return id;
+    }
+
+    String getNom() {
+        return this.nom;
+    }
+
+    String getNumero() {
+        return numero;
+    }
+
+    void addSMSEnvoye(SMSModel sms) {
+        listeSMSEnvoye.add(sms);
+    }
+
+    int getNbrSMSEnvoye() {
+        return listeSMSEnvoye.size();
+    }
+
 }
