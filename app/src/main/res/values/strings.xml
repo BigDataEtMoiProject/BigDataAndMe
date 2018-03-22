@@ -61,4 +61,22 @@
     <string name="permission_manager_wifi">Accès au Wi-Fi de l\'appareil</string>
     <string name="title_activity_permission_settings">Permissions des capteurs</string>
 
+    <!-- Endroits bruyants -->
+    <string name="noisy_places_title">Endroits bruyants</string>
+    <string name="img_noise_descr">Diagramme circulaire indiquant les endroits visités les plus bruyants</string>
+    <string name="img_color_red">Zone de couleur rouge</string>
+    <string name="img_color_green">Zone de couleur verte</string>
+    <string name="img_color_blue">Zone de couleur bleue</string>
+    <string name="img_color_yellow">Zone de couleur jaune</string>
+    <string name="red_meaning">Bruit élevé</string>
+    <string name="green_meaning">Bruit moyen</string>
+    <string name="blue_meaning">Bruit faible</string>
+    <string name="yellow_meaning">Aucun bruit</string>
+    
+    <!-- About Activity -->
+    <string name="about_title">A propos</string>
+    <string name="about_description">Cette application fut réalisée par des étudiants de l\'UQAC en informatique et des étudiants de l\'IUT d\'Orsay.
+        Ce fut un projet de conception d\'une application pour sensibiliser les personnes sur les différentes informations que leur téléphone peut
+        récupérer sans qu\'ils le sachent. \n\nRéalisé par : </string>
+
 </resources>
