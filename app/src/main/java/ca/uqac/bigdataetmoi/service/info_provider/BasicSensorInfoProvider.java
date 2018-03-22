@@ -60,9 +60,16 @@ public class BasicSensorInfoProvider extends InfoProvider implements SensorEvent
             mProximityDistance = event.values[0];
         }
 
+        // Si tous les données de sensuers ont été recues
+        if (mLightLuxLevel != null && mAccelIsMoving != null && mProximityDistance != null)
+            envoyerDonnees();
+    }
+
+    private void envoyerDonnees()
+    {
         // On verifie que le capteur de lumière n'est pas leurré par la proximité (exemple: telephone dans la poche, dans un sac)
         // Lorsque l'on a lu toutes les données, on arrête d'écouter et on envoie les données.
-        if(mLightLuxLevel >= 10 /*lux*/ && mAccelIsMoving != null && mProximityDistance >= 15 /*cm*/) {
+        if(mLightLuxLevel <= 10 /*lux*/ && mAccelIsMoving != null && mProximityDistance >= 15 /*cm*/) {
             mSensorManager.unregisterListener(this);
 
             DataCollection collection = new DataCollection();
