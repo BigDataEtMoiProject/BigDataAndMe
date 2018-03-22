@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.quizz_activity;
+package ca.uqac.bigdataetmoi.activity.quizz;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,15 +23,10 @@ public class QuizzActivity extends BaseActivity {
         setContentView(R.layout.activity_quizz);
 
         // Récupérer les vues du Layout
-        ListView myListView = (ListView) findViewById(R.id.quizzListView);
+        ListView myListView = findViewById(R.id.quizzListView);
 
         // On peuple le listView
-        String[] fonctions = new String[] {
-                "Quizz de Personnalité (Argent/Temps/Securité)",
-                "Quizz Facile",
-                "Quizz Moyen",
-                "Quizz Difficile",
-                };
+        String[] fonctions = getResources().getStringArray(R.array.quizz_menu);
 
         ArrayList<String> fonctionList = new ArrayList<String>();
         fonctionList.addAll(Arrays.asList(fonctions));

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity">
+    tools:context="ca.uqac.bigdataetmoi.activity.sms_contact.TelephoneSmsActivity">
 
     <ListView
         android:id="@+id/contactList"

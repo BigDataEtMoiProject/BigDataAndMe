@@ -23,6 +23,7 @@ import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.MainApplication;
 import ca.uqac.bigdataetmoi.R;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class LoginActivity extends BaseActivity {
 
     private EditText field_Email, field_Password;
@@ -36,9 +37,9 @@ public class LoginActivity extends BaseActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        field_Email = (EditText) findViewById(R.id.signin_field_email);
-        field_Password = (EditText) findViewById(R.id.signin_field_password);
-        btn_Login = (Button) findViewById(R.id.signin_btn_login);
+        field_Email = findViewById(R.id.signin_field_email);
+        field_Password = findViewById(R.id.signin_field_password);
+        btn_Login = findViewById(R.id.signin_btn_login);
 
         btn_Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +74,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);;
+        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifi.isWifiEnabled() == false)
         {
             Toast.makeText(getApplicationContext(), "Activation de la mWifiManager", Toast.LENGTH_LONG).show();

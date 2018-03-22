@@ -27,10 +27,10 @@ public class SommeilActivity extends BaseActivity {
         setContentView(R.layout.activity_sommeil);
 
         //Récupération des views
-        mLuxTextView = (TextView) findViewById(R.id.luxTextView);
-        mInterLuxTextView = (TextView) findViewById(R.id.interLuxTextView);
-        mAccelTextView = (TextView) findViewById(R.id.accelTextView);
-        mProximiTextView = (TextView) findViewById(R.id.proximiTextView);
+        mLuxTextView = findViewById(R.id.luxTextView);
+        mInterLuxTextView = findViewById(R.id.interLuxTextView);
+        mAccelTextView = findViewById(R.id.accelTextView);
+        mProximiTextView = findViewById(R.id.proximiTextView);
 
         //Pour lecture de la bd
         dbManager = DatabaseManager.getInstance();
@@ -54,13 +54,13 @@ public class SommeilActivity extends BaseActivity {
                     // Conversion du timestamp en date
                     Calendar cal = Calendar.getInstance(Locale.CANADA_FRENCH);
                     cal.setTimeInMillis(timestamp);
-                    String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
+                    @SuppressWarnings("HardCodedStringLiteral") String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
 
                     // On rempli les champs de l'écran
-                    mAccelTextView.setText(data.isMoving + " le " + date);
-                    mLuxTextView.setText(data.luxLevel + " le " + date);
+                    mAccelTextView.setText(data.isMoving + getString(R.string.sleep_misc) + date);
+                    mLuxTextView.setText(data.luxLevel + getString(R.string.sleep_misc) + date);
                     mInterLuxTextView.setText(interpreterLux(data.luxLevel));
-                    mProximiTextView.setText(data.proximityDistance + " le " + date);
+                    mProximiTextView.setText(data.proximityDistance + getString(R.string.sleep_misc) + date);
                 }
             }
 
@@ -69,24 +69,24 @@ public class SommeilActivity extends BaseActivity {
         });
     }
 
-    static private String interpreterLux(float lux)
+    private String interpreterLux(float lux)
     {
         String text;
 
         if(lux <= 10.0)
-            text = "Noir";
+            text = getString(R.string.sleep_pitch_black);
         else if(lux <= 30.0)
-            text = "Sombre";
+            text = getString(R.string.sleep_dark);
         else if(lux <= 125)
-            text = "Faible éclairage";
+            text = getString(R.string.sleep_low);
         else if(lux <= 300)
-            text = "Éclairage moyen";
+            text = getString(R.string.sleep_med);
         else if(lux <= 700)
-            text = "Éclairage normal";
+            text = getString(R.string.sleep_normal);
         else if(lux <= 7500)
-            text = "Clair";
+            text = getString(R.string.sleep_bright);
         else
-            text = "Très clair";
+            text = getString(R.string.sleep_really_bright);
 
         return text;
     }

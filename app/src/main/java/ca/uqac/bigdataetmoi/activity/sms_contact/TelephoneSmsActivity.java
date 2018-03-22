@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.activity.sms_contact;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8,81 +8,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import android.app.AlertDialog;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_SMS;
 
-
-// MODELE CONTACTS
-class ContactModel{
-    private String nom;
-    private String numero;
-    private List<SMSModel> listeSMSEnvoye;
-    private int nbrSMSEnvoye;
-
-    ContactModel (String _nom,  String _numero)
-    {
-        nom = _nom;
-        numero = _numero;
-        nbrSMSEnvoye = 0;
-        listeSMSEnvoye = new ArrayList<SMSModel>();
-    }
-
-    public String getNom() {return nom;}
-    public String getNumero() {return numero;}
-    public void addSMSEnvoye(SMSModel sms) {listeSMSEnvoye.add(sms); nbrSMSEnvoye++;}
-    public int getNbrSMSEnvoye() {return nbrSMSEnvoye;}
-}
-
-
-// MODELE SMS
-class SMSModel{
-    private ContactModel contactAssocie;
-    private String numero;
-    private Date date;
-
-    SMSModel(String _numero, Date _date, List<ContactModel> listeContact)
-    {
-        numero = _numero;
-        date = _date;
-        fetchContact(numero, listeContact);
-    }
-
-    public ContactModel getContactAssocie() {return contactAssocie;}
-    public String getNumero(){return numero;}
-    public Date getDate(){return date;}
-
-
-    private void fetchContact(String numero, List<ContactModel> listeContact)
-    {
-        Log.d("fetchContact", numero);
-        int i = 0;
-        while(i < listeContact.size() && numero.compareTo(listeContact.get(i).getNumero()) != 0)
-        {
-            Log.d("numero contact", listeContact.get(i).getNumero());
-            ++i;
-        }
-        if(i == listeContact.size())
-        {
-            contactAssocie = null;
-        } else
-        {
-            contactAssocie = listeContact.get(i);
-            listeContact.get(i).addSMSEnvoye(this);
-        }
-    }
-}
-
-
 // ACTIVITY
+@SuppressWarnings("HardCodedStringLiteral")
 public class TelephoneSmsActivity extends BaseActivity {
 
     private ListView listView;
@@ -178,7 +122,7 @@ public class TelephoneSmsActivity extends BaseActivity {
         {
             String adresse = smsTel.getString(smsTel.getColumnIndex("address"));
             String date_str = smsTel.getString(smsTel.getColumnIndex("date"));
-            Date date = getDate(Long.parseLong(date_str), "yyyy/MM/dd hh:mm:ss");
+            Date date = getDate(Long.parseLong(date_str), "yyyyMMdd_HHmmss");
             Log.d("SMS", adresse + " " + date.toString());
 
             SMSModel sms = new SMSModel(adresse, date, contacts);
@@ -190,7 +134,7 @@ public class TelephoneSmsActivity extends BaseActivity {
     private Date getDate(long milliSeconds, String dateFormat)
     {
         // Create a DateFormatter object for displaying date in specified format.
-        DateFormat formatter = new SimpleDateFormat(dateFormat);
+        DateFormat formatter = new SimpleDateFormat(dateFormat, Locale.CANADA_FRENCH);
 
         // Create a calendar object that will convert the date and time value in milliseconds to date.
         Calendar calendar = Calendar.getInstance();

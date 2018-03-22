@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.app_usage_activity;
+package ca.uqac.bigdataetmoi.activity.utilisation_application;
 
 import android.app.ActionBar;
 import android.app.DatePickerDialog;
@@ -20,11 +20,15 @@ import com.google.firebase.database.DatabaseReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
+import ca.uqac.bigdataetmoi.activity.app_usage_activity.UsageData;
+import ca.uqac.bigdataetmoi.activity.utilisation_application.UsageListAdapter;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class UsageTimelineActivity extends BaseActivity {
 
     //Variable for the date picker
@@ -38,9 +42,9 @@ public class UsageTimelineActivity extends BaseActivity {
     ListView mUsageList;
     ProgressBar mProgressBar;
 
-    private static final SimpleDateFormat hourMinFormat = new SimpleDateFormat("HH:mm:ss");
-    private static final SimpleDateFormat dayMonthFormat = new SimpleDateFormat("dd MMMM yyyy");
-    private static final SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+    private static final SimpleDateFormat hourMinFormat = new SimpleDateFormat("HH:mm:ss", Locale.CANADA_FRENCH);
+    private static final SimpleDateFormat dayMonthFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.CANADA_FRENCH);
+    private static final SimpleDateFormat dayFormat = new SimpleDateFormat("dd", Locale.CANADA_FRENCH);
     private int index;
     private int lastIndex;
     private long sumItemTimeDifference;
@@ -114,25 +118,25 @@ public class UsageTimelineActivity extends BaseActivity {
         ActionBar actionBar = getActionBar();
 
         //Display "No data available" only if there no data
-        mNoData = (TextView) findViewById(R.id.noData);
+        mNoData = findViewById(R.id.noData);
         mNoData.setVisibility(View.GONE);
 
         //Display the load icon before listview appear
-        mProgressBar = (ProgressBar) findViewById(R.id.loadingData);
+        mProgressBar = findViewById(R.id.loadingData);
         mProgressBar.setVisibility(View.VISIBLE);
 
         //Display ic_event and initialize OnClick Method
         //Display selected day
         mCurrentDate = Calendar.getInstance();
 
-        mSelectDay = (TextView) findViewById(R.id.dateSelected);
+        mSelectDay = findViewById(R.id.dateSelected);
         mSelectDay.setText(dayMonthFormat.format(mCurrentDate.getTimeInMillis()));
 
         mIsPhoneClose = false;
         mItemToGroupList = new ArrayList<>();
 
         //Set list and custom
-        mUsageList = (ListView) findViewById(R.id.usageList);
+        mUsageList = findViewById(R.id.usageList);
         dispUsageList = new ArrayList<>();
         adapter = new UsageListAdapter(this, R.layout.usage_list_layout, dispUsageList);
 

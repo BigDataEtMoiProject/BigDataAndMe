@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ca.uqac.bigdataetmoi.activity.app_usage_activity.UsageTimelineActivity">
+    tools:context="ca.uqac.bigdataetmoi.activity.utilisation_application.UsageTimelineActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,7 +56,8 @@
                 android:layout_columnSpan="1"
                 android:layout_rowSpan="1"
                 android:layout_gravity="left"
-                app:srcCompat="@mipmap/ic_launcher" />
+                app:srcCompat="@mipmap/ic_launcher"
+                android:contentDescription="Application 1" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -65,7 +66,8 @@
                 android:layout_columnSpan="1"
                 android:layout_rowSpan="1"
                 android:layout_gravity="center"
-                app:srcCompat="@mipmap/ic_launcher_round" />
+                app:srcCompat="@mipmap/ic_launcher_round"
+                android:contentDescription="Application 2" />
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -73,7 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="1"
                 android:layout_rowSpan="1"
-                app:srcCompat="@mipmap/ic_launcher_round" />
+                app:srcCompat="@mipmap/ic_launcher_round"
+                android:contentDescription="Application 3" />
 
         </GridLayout>
 

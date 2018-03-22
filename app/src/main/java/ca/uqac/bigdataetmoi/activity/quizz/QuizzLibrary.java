@@ -1,12 +1,13 @@
-package ca.uqac.bigdataetmoi.activity.quizz_activity;
+package ca.uqac.bigdataetmoi.activity.quizz;
 
 /**
  * Created by Maxime Berthet on 23/11/2017.
  */
 
-public class QuizzLibrary {
+@SuppressWarnings("HardCodedStringLiteral")
+class QuizzLibrary {
 
-    public String PersoQuestions [] = {
+    String PersoQuestions [] = {
             "Si tu dois créer une adresse mail il vaut mieux :",
             "Avant d'installer une application il vaut mieux :",
             "Si j'ai déjà une application mobile est déjà installée sur mon téléphone et que je doute des données qu'elle peut prendre sur moi :",
@@ -67,62 +68,56 @@ public class QuizzLibrary {
             "FQ41C :", "FQ42C :","FQ43C :", "FQ44C :", "FQ45C :", "FQ46C :","FQ47C :", "FQ48C :", "FQ49C :", "FQ50C :"
     };
 
-    public String getPersoQuestion(int a) {
-        String question = PersoQuestions[a];
-        return question;
+    String getPersoQuestion(int a) {
+        return PersoQuestions[a];
     }
 
-    public String getPersoChoice1(int a) {
-        String choice0 = PersoChoices[a][0];
-        return choice0;
+    String getPersoChoice1(int a) {
+        return PersoChoices[a][0];
     }
 
-    public String getPersoChoice2(int a) {
-        String choice1 = PersoChoices[a][1];
-        return choice1;
+    String getPersoChoice2(int a) {
+        return PersoChoices[a][1];
     }
 
-    public String getPersoChoice3(int a) {
-        String choice2 = PersoChoices[a][2];
-        return choice2;
+    String getPersoChoice3(int a) {
+        return PersoChoices[a][2];
     }
 
-    public String getMoneyAnswer(int a) {
-        String answer = MoneyAnswers[a];
-        return answer;
+    String getMoneyAnswer(int a) {
+        return MoneyAnswers[a];
     }
 
-    public String getTimeAnswer(int a) {
-        String answer = TimeAnswers[a];
-        return answer;
+    String getTimeAnswer(int a) {
+        return TimeAnswers[a];
     }
 
-    public String getSecurityAnswer(int a) {
+    String getSecurityAnswer(int a) {
         String answer = SecurityAnswers[a];
         return answer;
     }
 
-    public static String getFacileQuestion(int a) {
+    static String getFacileQuestion(int a) {
         String question = facileQuestions[a];
         return question;
     }
 
-    public static String getFacileChoice1(int a) {
+    static String getFacileChoice1(int a) {
         String choice0 = facileChoices[a][0];
         return choice0;
     }
 
-    public static String getFacileChoice2(int a) {
+    static String getFacileChoice2(int a) {
         String choice1 = facileChoices[a][1];
         return choice1;
     }
 
-    public static String getFacileChoice3(int a) {
+    static String getFacileChoice3(int a) {
         String choice2 = facileChoices[a][2];
         return choice2;
     }
 
-    public static String getFacileCorrectAnswer(int a) {
+    static String getFacileCorrectAnswer(int a) {
         String answer = facileCorrectAnswers[a];
         return answer;
     }

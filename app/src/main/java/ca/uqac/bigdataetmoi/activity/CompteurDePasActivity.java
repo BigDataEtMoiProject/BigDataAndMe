@@ -22,6 +22,7 @@ import ca.uqac.bigdataetmoi.database.DatabaseManager;
 //Dans cette classe on affiche le nombre de pas en temps réel , la moyenne du nombre de pas ainsi que le nombre de pas durant les 7 derniers jours
 //Appuyer sur no chart data available pour afficher le graphique au debut
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class CompteurDePasActivity extends BaseActivity {
 
 
@@ -41,13 +42,13 @@ public class CompteurDePasActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compteur_de_pas);
 
-        textView = (TextView)findViewById(R.id.txt);
+        textView = findViewById(R.id.txt);
 
         //Pour lecture de la bd
         dbManager = DatabaseManager.getInstance();
 
         //graphique
-        mChart = (LineChart)findViewById(R.id.Linechart);
+        mChart = findViewById(R.id.Linechart);
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(false);
         yValues = new ArrayList<>();

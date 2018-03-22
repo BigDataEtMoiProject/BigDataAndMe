@@ -14,6 +14,13 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+
+    <permission
+        android:name="com.example.app.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.example.app.permission.MAPS_RECEIVE" />
 
     <application
         android:name=".MainApplication"
@@ -40,14 +47,13 @@
         <activity android:name=".activity.SignupActivity" />
         <activity android:name=".activity.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
-        <activity android:name=".activity.TempsUtilisationActivity" />
-        <activity android:name=".activity.TelephoneSmsActivity" />
-        <activity android:name=".activity.app_usage_activity.DonneesUtilisationActivity" />
-        <activity android:name=".activity.quizz_activity.QuizzActivity" />
-        <activity android:name=".activity.quizz_activity.QuizzPersonaliteActivity" />
-        <activity android:name=".activity.quizz_activity.QuizzFacileActivity" />
-        <activity android:name=".activity.quizz_activity.QuizzMoyenActivity" />
-        <activity android:name=".activity.quizz_activity.QuizzDifficileActivity" />
+        <activity android:name=".activity.sms_contact.TelephoneSmsActivity" />
+        <activity android:name=".activity.utilisation_application.DonneesUtilisationActivity" />
+        <activity android:name=".activity.quizz.QuizzActivity" />
+        <activity android:name=".activity.quizz.QuizzPersonaliteActivity" />
+        <activity android:name=".activity.quizz.QuizzFacileActivity" />
+        <activity android:name=".activity.quizz.QuizzMoyenActivity" />
+        <activity android:name=".activity.quizz.QuizzDifficileActivity" />
         <activity
             android:name=".activity.GPSMapsActivity"
             android:label="@string/title_activity_gpsmaps" />
@@ -91,7 +97,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activity.app_usage_activity.UsageTimelineActivity" />
+        <activity android:name=".activity.utilisation_application.UsageTimelineActivity" />
         <activity android:name=".activity.PermissionManagerActivity"></activity>
     </application>
 

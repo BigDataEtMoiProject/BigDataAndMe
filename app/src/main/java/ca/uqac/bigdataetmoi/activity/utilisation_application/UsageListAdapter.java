@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.app_usage_activity;
+package ca.uqac.bigdataetmoi.activity.utilisation_application;
 
 import android.content.Context;
 import android.content.pm.PackageItemInfo;
@@ -14,12 +14,14 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class UsageListAdapter extends ArrayAdapter<UsageData> {
 
-    private static final SimpleDateFormat hourMinFormat = new SimpleDateFormat("HH:mm:ss");
+    private static final SimpleDateFormat hourMinFormat = new SimpleDateFormat("HH:mm:ss", Locale.CANADA_FRENCH);
     private Context mContext;
     private int mResource;
     private PackageManager mPackageManager;
@@ -52,11 +54,11 @@ public class UsageListAdapter extends ArrayAdapter<UsageData> {
             mApplicationInfo = mPackageManager.getApplicationInfo(packageName, 0);
         } catch (PackageManager.NameNotFoundException e) { }
 
-        TextView hourMinViewEnd = (TextView)convertView.findViewById(R.id.hourMinView);
-        TextView hourMinViewBegin = (TextView)convertView.findViewById(R.id.hourMinView2);
-        ImageView appIconView = (ImageView)convertView.findViewById(R.id.appIconView);
-        TextView appNameView = (TextView)convertView.findViewById(R.id.appNameView);
-        TextView timeAppView = (TextView)convertView.findViewById(R.id.timeAppView);
+        TextView hourMinViewEnd = convertView.findViewById(R.id.hourMinView);
+        TextView hourMinViewBegin = convertView.findViewById(R.id.hourMinView2);
+        ImageView appIconView = convertView.findViewById(R.id.appIconView);
+        TextView appNameView = convertView.findViewById(R.id.appNameView);
+        TextView timeAppView = convertView.findViewById(R.id.timeAppView);
 
         hourMinViewEnd.setText(hourMinFormat.format(timeAppEnd));
         hourMinViewBegin.setText(hourMinFormat.format(timeAppBegin));

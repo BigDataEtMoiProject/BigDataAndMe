@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import ca.uqac.bigdataetmoi.R;
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class GPSMapsActivity extends BaseActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;

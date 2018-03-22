@@ -6,36 +6,20 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
 import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
-import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
-import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
-import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
-import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
-import ca.uqac.bigdataetmoi.activity.SommeilActivity;
-import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
-import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
-import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
-import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.BigDataService;
-import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
-import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
-
-public class MainActivity extends BaseActivity
-{
+public class MainActivity extends BaseActivity implements OnMapReadyCallback {
     private ListView mFonctionsListView;
     private ArrayAdapter<String> mFonctionListAdapter;
+    public final static BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,25 +29,21 @@ public class MainActivity extends BaseActivity
         // On met l'identifieur du téléphone dans la classe MainApplication
         MainApplication.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mainMap);
+        mapFragment.getMapAsync(this);
+
+        /*
         // Récupérer les vues du Layout
-        mFonctionsListView = (ListView) findViewById(R.id.fonctionsListView);
+        mFonctionsListView = findViewById(R.id.fonctionsListView);
 
         // On peuple le listView
-        String[] fonctions = new String[] {
-                "Gestion des permissions",
-                "Compteur de pas",
-                "Temps d'utilisation",
-                "Sommeil",
-                "Lieux (GPS)",
-                "Téléphone et sms",
-                "Données d'utilisation",
-                "Quizz"
-              };
+        String[] fonctions = getResources().getStringArray(R.array.main_menu);
 
-        ArrayList<String> fonctionList = new ArrayList<String>();
+        ArrayList<String> fonctionList = new ArrayList<>();
         fonctionList.addAll(Arrays.asList(fonctions));
 
-        mFonctionListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fonctionList);
+        mFonctionListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fonctionList);
+
         mFonctionsListView.setAdapter(mFonctionListAdapter);
 
         // On définie les actions lors d'un clic sur un item
@@ -79,21 +59,18 @@ public class MainActivity extends BaseActivity
                         startActivity(new Intent(MainActivity.this, CompteurDePasActivity.class));
                         break;
                     case 2:
-                        startActivity(new Intent(MainActivity.this, TempsUtilisationActivity.class));
-                        break;
-                    case 3:
                         startActivity(new Intent(MainActivity.this, SommeilActivity.class));
                         break;
-                    case 4:
+                    case 3:
                         startActivity(new Intent(MainActivity.this, GPSMapsActivity.class));
                         break;
-                    case 5:
+                    case 4:
                         startActivity(new Intent(MainActivity.this, TelephoneSmsActivity.class));
                         break;
-                    case 6:
+                    case 5:
                         startActivity(new Intent(MainActivity.this, DonneesUtilisationActivity.class));
                         break;
-                    case 7:
+                    case 6:
                         startActivity(new Intent(MainActivity.this, QuizzActivity.class));
                         break;
                 }
@@ -102,9 +79,21 @@ public class MainActivity extends BaseActivity
 
         // TODO : À quoi sert cette permission ??
         if (ContextCompat.checkSelfPermission(this, ACTION_USAGE_ACCESS_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { ACTION_USAGE_ACCESS_SETTINGS }, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityCompat.requestPermissions(this, new String[] { ACTION_USAGE_ACCESS_SETTINGS }, 0);
+            }
         }
+        */
 
         BigDataService.startRecurrence(getApplicationContext());
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            return;
+
+        googleMap.setMyLocationEnabled(true);
     }
 }

@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.017" />
 
-    <TextView
+    <EditText
         android:id="@+id/nb_pas_veille"
         android:layout_width="388dp"
         android:layout_height="36dp"

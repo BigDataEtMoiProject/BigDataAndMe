@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.quizz_activity;
+package ca.uqac.bigdataetmoi.activity.quizz;
 
 import android.os.Bundle;
 

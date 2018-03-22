@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.quizz_activity;
+package ca.uqac.bigdataetmoi.activity.quizz;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
 
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class QuizzPersonaliteActivity extends BaseActivity {
     private QuizzLibrary QuestionLibrary = new QuizzLibrary();
 
@@ -35,10 +36,10 @@ public class QuizzPersonaliteActivity extends BaseActivity {
 
         setContentView(R.layout.activity_quizzpersonalite);
 
-        QuestionView = (TextView)findViewById(R.id.question);
-        ButtonChoice1 = (Button)findViewById(R.id.button);
-        ButtonChoice2 = (Button)findViewById(R.id.button2);
-        ButtonChoice3 = (Button)findViewById(R.id.button3);
+        QuestionView = findViewById(R.id.question);
+        ButtonChoice1 = findViewById(R.id.button);
+        ButtonChoice2 = findViewById(R.id.button2);
+        ButtonChoice3 = findViewById(R.id.button3);
 
         updateQuestion();
 

@@ -25,6 +25,31 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
+    <!-- Menu Principal -->
+    <string name="acceuil">Accueil</string>
+    <string name="profile">Mon profil</string>
+    <string name="preferences">Preferences</string>
+    <string name="a_propos">A propos</string>
+    <string name="deconnection">Se deconnecter</string>
+    <string name="heure">Heure: </string>
+
+    <!-- Menu Quizz -->
+    <string-array name="quizz_menu">
+        <item>Quizz de Personnalité (Argent/Temps/Securité)</item>
+        <item>Quizz facile</item>
+        <item>Quizz moyen</item>
+        <item>Quizz difficile</item>
+    </string-array>
+
+    <!-- Sommeil -->
+    <string name="sleep_pitch_black">Noir</string>
+    <string name="sleep_dark">Sombre</string>
+    <string name="sleep_low">Faible éclairage</string>
+    <string name="sleep_med">Éclairage moyen</string>
+    <string name="sleep_normal">Éclairage normal</string>
+    <string name="sleep_bright">Clair</string>
+    <string name="sleep_really_bright">Très clair</string>
+    <string name="sleep_misc"> le </string>
 
     <!-- Ecran permission -->
     <string name="permission_manager_title">Permissions des capteurs</string>
