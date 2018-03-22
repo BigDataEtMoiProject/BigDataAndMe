@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import ca.uqac.bigdataetmoi.database.DataCollection;
 
@@ -14,7 +15,7 @@ import ca.uqac.bigdataetmoi.database.DataCollection;
  */
 
 public class BasicSensorInfoProvider extends InfoProvider implements SensorEventListener {
-    private Boolean mAccelIsMoving; // On garde en m^moire si oui ou non on a bougé lors du dernier interval
+    private Boolean mAccelIsMoving; // On garde en memoire si oui ou non on a bougé lors du dernier interval
     private Float mLightLuxLevel;
     private Float mProximityDistance;
     private float mAccel, mAccelCurrent, mAccelLast;
@@ -39,7 +40,6 @@ public class BasicSensorInfoProvider extends InfoProvider implements SensorEvent
         // Pour le capteur de proximité
         Sensor proximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         mSensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-
     }
 
     @Override
@@ -49,22 +49,20 @@ public class BasicSensorInfoProvider extends InfoProvider implements SensorEvent
     public final void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_LIGHT) {
             mLightLuxLevel = event.values[0];
-        }
-        else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float[] gravity = event.values.clone();
             if(checkIfMooving(gravity[0], gravity[1], gravity[2]))
                 mAccelIsMoving = true;
             else if(mAccelIsMoving == null)
                 mAccelIsMoving = false;
             // TODO : Les données de mouvement vont peut-être etre erronées vu qu'il faut que le téléphone soit en mouvement au moment exacte ou on récupère le senseur.
-        }
-        else if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+        } else if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
             mProximityDistance = event.values[0];
         }
 
+        // On verifie que le capteur de lumière n'est pas leurré par la proximité (exemple: telephone dans la poche, dans un sac)
         // Lorsque l'on a lu toutes les données, on arrête d'écouter et on envoie les données.
-        if(mLightLuxLevel != null && mAccelIsMoving != null && mProximityDistance != null)
-        {
+        if(mLightLuxLevel >= 10 /*lux*/ && mAccelIsMoving != null && mProximityDistance >= 15 /*cm*/) {
             mSensorManager.unregisterListener(this);
 
             DataCollection collection = new DataCollection();

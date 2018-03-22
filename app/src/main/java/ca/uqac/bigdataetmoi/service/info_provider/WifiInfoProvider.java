@@ -17,7 +17,7 @@ import static android.content.Context.WIFI_SERVICE;
 /**
  * Created by Raph on 21/11/2017.
  *
- *  Modifié par Patrick lapointe le 2018-03-13
+ * Modifié par Patrick lapointe le 2018-03-13
  */
 
 public class WifiInfoProvider extends InfoProvider
