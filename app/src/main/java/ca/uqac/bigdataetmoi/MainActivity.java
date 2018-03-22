@@ -1,6 +1,5 @@
 package ca.uqac.bigdataetmoi;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -23,12 +22,10 @@ import ca.uqac.bigdataetmoi.activity.GPSMapsActivity;
 import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
 import ca.uqac.bigdataetmoi.activity.quizz_activity.QuizzActivity;
 import ca.uqac.bigdataetmoi.activity.SommeilActivity;
-import ca.uqac.bigdataetmoi.activity.TelephoneSmsActivity;
+import ca.uqac.bigdataetmoi.activity.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.TempsUtilisationActivity;
 import ca.uqac.bigdataetmoi.activity.app_usage_activity.DonneesUtilisationActivity;
-import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.BigDataService;
-import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS;
 
