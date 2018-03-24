@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import android.app.AlertDialog;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
