@@ -10,15 +10,13 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.telephony.SmsManager;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import ca.uqac.bigdataetmoi.R;
@@ -42,10 +40,11 @@ public class TelephoneSmsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_telephone_sms);
+        setupActionBar();
 
         listView = findViewById(R.id.contactList);
-        listInfo = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listInfo);
+        listInfo = new ArrayList<>();
+        adapter = new ContactAdapter(this, listInfo);
         permissionManager = PermissionManager.getInstance();
 
         // On verifie si la permission est OK
@@ -72,10 +71,22 @@ public class TelephoneSmsActivity extends BaseActivity {
         }
     }
 
-    protected void onStart() { super.onStart(); }
-    protected void onResume()
-    {
-        super.onResume();
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            // Show the Up button in the action bar.
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Back arrow clicked
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

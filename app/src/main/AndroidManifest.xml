@@ -13,13 +13,14 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
     <permission
         android:name="com.example.app.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.example.app.permission.MAPS_RECEIVE" />
 
     <application
@@ -30,6 +31,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <!--
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
@@ -41,6 +43,7 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -68,11 +71,11 @@
                 <action android:name="android.intent.action.SCREEN_ON" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".service.BroadcastOnBoot"
+        <receiver
+            android:name=".service.BroadcastOnBoot"
             android:enabled="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
@@ -90,15 +93,21 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
 
-        <meta-data android:name="com.google.android.gms.version"
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activity.utilisation_application.UsageTimelineActivity" />
-        <activity android:name=".activity.PermissionManagerActivity"></activity>
+        <activity android:name=".activity.PermissionManagerActivity" />
+        <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/about_title" />
+        <activity android:name=".activity.utilisation_application.TempsUtilisationDetailsActivity" />
+        <activity android:name=".activity.NoisyPlacesActivity"
+            android:label="@string/noisy_places_title"/>
     </application>
 
 </manifest>
