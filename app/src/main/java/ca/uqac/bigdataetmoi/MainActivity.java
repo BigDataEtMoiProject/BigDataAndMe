@@ -7,6 +7,7 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -62,6 +63,8 @@ public class MainActivity extends BaseActivity
 
         mFonctionListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fonctionList);
         mFonctionsListView.setAdapter(mFonctionListAdapter);
+
+        Log.w("BIG DATA Id : ", MainApplication.getUserId());
 
         // On définie les actions lors d'un clic sur un item
         mFonctionsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

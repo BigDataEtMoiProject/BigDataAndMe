@@ -19,6 +19,7 @@ public class DataCollection {
     public List<String> bluetoothSSID;
     public Float steps;
     public Double soundLevel;
+    public Boolean screenState;
 
     public DataCollection() {}
 
@@ -26,7 +27,7 @@ public class DataCollection {
     public boolean allDataReceived() {
         if(isMoving != null && luxLevel != null && proximityDistance != null
                 && location != null && wifiSSID != null && bluetoothSSID != null
-                && steps != null && soundLevel != null)
+                && steps != null && soundLevel != null && screenState != null)
             return true;
         else
             return false;
@@ -50,5 +51,7 @@ public class DataCollection {
             steps = collection.steps;
         if(collection.soundLevel != null)
             soundLevel = collection.soundLevel;
+        if(collection.screenState != null)
+            screenState = collection.screenState;
     }
 }

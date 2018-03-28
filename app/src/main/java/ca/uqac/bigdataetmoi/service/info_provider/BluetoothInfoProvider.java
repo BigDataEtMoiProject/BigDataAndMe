@@ -24,7 +24,7 @@ import static android.Manifest.permission.*;
 
 public class BluetoothInfoProvider extends InfoProvider
 {
-    private final static int SEARCH_SECONDS = 10;
+    private final static int SEARCH_SECONDS = 20;
 
     private BluetoothAdapter mBTAdapter;
     private BroadcastReceiver mBroadCastReceiver;

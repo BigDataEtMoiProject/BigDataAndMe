@@ -23,6 +23,7 @@ import ca.uqac.bigdataetmoi.service.info_provider.GPSInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.InfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.MicroInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.PodometerInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.ScreenStateInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
 
 /*
@@ -37,6 +38,8 @@ public class BigDataService extends Service implements DataReadyListener
 
     private List<InfoProvider> mProviders = new ArrayList<>();
     private DataCollection mDataCollection;
+    Handler mHandler;
+    Runnable mRunnable;
 
     // Le service va rouler à une intervalle donnée. Le but est de récupérer les données voulues puis
     // s'arrête de lui-même.
@@ -77,6 +80,14 @@ public class BigDataService extends Service implements DataReadyListener
         accelerometerInfoProvider.addDataReadyListener(this);
         mProviders.add(accelerometerInfoProvider);
 
+        ScreenStateInfoProvider screenStateInfoProvider = new ScreenStateInfoProvider(this);
+        screenStateInfoProvider.addDataReadyListener(this);
+        mProviders.add(screenStateInfoProvider);
+
+        PodometerInfoProvider podometerInfoProvider = new PodometerInfoProvider(this);
+        podometerInfoProvider.addDataReadyListener(this);
+        mProviders.add(podometerInfoProvider);
+
         GPSInfoProvider GPSInfoProvider = new GPSInfoProvider(this);
         GPSInfoProvider.addDataReadyListener(this);
         mProviders.add(GPSInfoProvider);
@@ -89,23 +100,20 @@ public class BigDataService extends Service implements DataReadyListener
         bluetoothInfoProvider.addDataReadyListener(this);
         mProviders.add(bluetoothInfoProvider);
 
-        PodometerInfoProvider podometerInfoProvider = new PodometerInfoProvider(this);
-        podometerInfoProvider.addDataReadyListener(this);
-        mProviders.add(podometerInfoProvider);
-
         MicroInfoProvider microInfoProvider = new MicroInfoProvider();
         microInfoProvider.addDataReadyListener(this);
         mProviders.add(microInfoProvider);
 
         // On n'attends pas nécéssairement d'avoir toutes les données,
         // on écris dans la bd après un délais prédéterminé.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        mHandler = new Handler();
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 writeData();
             }
-        }, MAXIMUM_WAITING_TIME * 1000);
+        };
+        mHandler.postDelayed(mRunnable, MAXIMUM_WAITING_TIME * 1000);
 
         return Service.START_STICKY;
     }
@@ -117,7 +125,10 @@ public class BigDataService extends Service implements DataReadyListener
 
         // Si on a stocké tous les données, il est temps d'enregistrer le tout dans la bd
         if(mDataCollection.allDataReceived())
+        {
+            mHandler.removeCallbacks(mRunnable);
             writeData();
+        }
     }
 
     @Override
