@@ -9,13 +9,18 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.uqac.bigdataetmoi.MainApplication;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.service.info_provider.AccelerometerInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.BasicSensorInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.BluetoothInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
 import ca.uqac.bigdataetmoi.service.info_provider.GPSInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.InfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.MicroInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.PodometerInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
@@ -28,15 +33,9 @@ But : Service qui récupère les infos des différents capteurs et qui envoie le
 public class BigDataService extends Service implements DataReadyListener
 {
     private final static int REPETITION_DELAY = 5; // Mise à jour des données au x minutes
-    private final static int MAXIMUM_WAITING_TIME = 30; // On arrête le service si nous avons attendu plus de x secondes
+    private final static int MAXIMUM_WAITING_TIME = 45; // On arrête le service si nous avons attendu plus de x secondes
 
-    private BasicSensorInfoProvider mBasicSensorProvider;
-    private GPSInfoProvider mGPSInfoProvider;
-    private WifiInfoProvider mWifiInfoProvider;
-    private BluetoothInfoProvider mBluetoothInfoProvider;
-    private PodometerInfoProvider mPodometerInfoProvider;
-    private MicroInfoProvider mMicroInfoProvider;
-
+    private List<InfoProvider> mProviders = new ArrayList<>();
     private DataCollection mDataCollection;
 
     // Le service va rouler à une intervalle donnée. Le but est de récupérer les données voulues puis
@@ -70,25 +69,33 @@ public class BigDataService extends Service implements DataReadyListener
     {
         Log.w("BigDataService", "BigDataService service has started");
 
-        // On crée le provider pour les senseurs de base.
-        mBasicSensorProvider = new BasicSensorInfoProvider(this);
-        mBasicSensorProvider.addDataReadyListener(this);
+        BasicSensorInfoProvider basicSensorProvider = new BasicSensorInfoProvider(this);
+        basicSensorProvider.addDataReadyListener(this);
+        mProviders.add(basicSensorProvider);
 
-        // On crée le provider pour la position de l'appareil
-        mGPSInfoProvider = new GPSInfoProvider(this);
-        mGPSInfoProvider.addDataReadyListener(this);
+        AccelerometerInfoProvider accelerometerInfoProvider = new AccelerometerInfoProvider(this);
+        accelerometerInfoProvider.addDataReadyListener(this);
+        mProviders.add(accelerometerInfoProvider);
 
-        mWifiInfoProvider = new WifiInfoProvider(this);
-        mWifiInfoProvider.addDataReadyListener(this);
+        GPSInfoProvider GPSInfoProvider = new GPSInfoProvider(this);
+        GPSInfoProvider.addDataReadyListener(this);
+        mProviders.add(GPSInfoProvider);
 
-        mBluetoothInfoProvider = new BluetoothInfoProvider(this);
-        mBluetoothInfoProvider.addDataReadyListener(this);
+        WifiInfoProvider wifiInfoProvider = new WifiInfoProvider(this);
+        wifiInfoProvider.addDataReadyListener(this);
+        mProviders.add(wifiInfoProvider);
 
-        mPodometerInfoProvider = new PodometerInfoProvider(this);
-        mPodometerInfoProvider.addDataReadyListener(this);
+        BluetoothInfoProvider bluetoothInfoProvider = new BluetoothInfoProvider(this);
+        bluetoothInfoProvider.addDataReadyListener(this);
+        mProviders.add(bluetoothInfoProvider);
 
-        mMicroInfoProvider = new MicroInfoProvider();
-        mMicroInfoProvider.addDataReadyListener(this);
+        PodometerInfoProvider podometerInfoProvider = new PodometerInfoProvider(this);
+        podometerInfoProvider.addDataReadyListener(this);
+        mProviders.add(podometerInfoProvider);
+
+        MicroInfoProvider microInfoProvider = new MicroInfoProvider();
+        microInfoProvider.addDataReadyListener(this);
+        mProviders.add(microInfoProvider);
 
         // On n'attends pas nécéssairement d'avoir toutes les données,
         // on écris dans la bd après un délais prédéterminé.
@@ -121,12 +128,9 @@ public class BigDataService extends Service implements DataReadyListener
 
     @Override
     public void onDestroy() {
-        mBasicSensorProvider.unregisterDataReadyListener(this);
-        mGPSInfoProvider.unregisterDataReadyListener(this);
-        mWifiInfoProvider.unregisterDataReadyListener(this);
-        mBluetoothInfoProvider.unregisterDataReadyListener(this);
-        mPodometerInfoProvider.unregisterDataReadyListener(this);
-        mMicroInfoProvider.unregisterDataReadyListener(this);
+        for (InfoProvider provider : mProviders)
+            provider.unregisterDataReadyListener(this);
+
         Log.i("BigDataService", "Service onDestroy");
     }
 
