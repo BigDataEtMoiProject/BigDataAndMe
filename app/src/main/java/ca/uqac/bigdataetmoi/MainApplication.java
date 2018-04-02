@@ -14,9 +14,9 @@ public class MainApplication extends Application
     private static BaseActivity mCurrentActivity = null;
 
     //global var that stores userID
-    private String userID;
-    public String getUserId(){return userID;}
-    public void setUserID(String newuid){userID = newuid;}
+    private static String userID;
+    public static String getUserId(){return userID;}
+    public static void setUserID(String newuid){userID = newuid;}
 
     public static FirebaseUser user;
 

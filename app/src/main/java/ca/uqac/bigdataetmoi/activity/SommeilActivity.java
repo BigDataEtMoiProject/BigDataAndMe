@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.SensorDataCollection;
+import ca.uqac.bigdataetmoi.database.DataCollection;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
 public class SommeilActivity extends BaseActivity {
@@ -41,7 +41,6 @@ public class SommeilActivity extends BaseActivity {
         super.onResume();
 
         //Récupérer les données de la bd (dernier enregistrement
-
         Query query = dbManager.getSensorDataDbRef().orderByKey().limitToLast(1);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -50,7 +49,7 @@ public class SommeilActivity extends BaseActivity {
                 if(dataSnapshot.hasChildren()) {
                     DataSnapshot child = dataSnapshot.getChildren().iterator().next();
                     long timestamp = Long.parseLong(child.getKey());
-                    SensorDataCollection data = child.getValue(SensorDataCollection.class);
+                    DataCollection data = child.getValue(DataCollection.class);
 
                     // Conversion du timestamp en date
                     Calendar cal = Calendar.getInstance(Locale.CANADA_FRENCH);

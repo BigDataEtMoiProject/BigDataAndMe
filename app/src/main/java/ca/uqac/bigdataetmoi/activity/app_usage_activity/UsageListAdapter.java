@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.data_models.UsageData;
 
 public class UsageListAdapter extends ArrayAdapter<UsageData> {
 

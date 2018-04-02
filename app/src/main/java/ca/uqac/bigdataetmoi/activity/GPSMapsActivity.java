@@ -1,7 +1,6 @@
 package ca.uqac.bigdataetmoi.activity;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -9,16 +8,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.data_models.LocationData;
 
 public class GPSMapsActivity extends BaseActivity implements OnMapReadyCallback {
 
@@ -28,7 +20,7 @@ public class GPSMapsActivity extends BaseActivity implements OnMapReadyCallback 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLocationsRef = DatabaseManager.getInstance().getDbRef(LocationData.DATA_ID);
+        //mLocationsRef = DatabaseManager.getInstance().getDbRef(LocationData.DATA_ID);
 
         setContentView(R.layout.activity_gpsmaps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -57,6 +49,7 @@ public class GPSMapsActivity extends BaseActivity implements OnMapReadyCallback 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         //fetch all locations and print them
+        /*
         mLocationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -78,5 +71,6 @@ public class GPSMapsActivity extends BaseActivity implements OnMapReadyCallback 
                 Toast.makeText(GPSMapsActivity.this, "ERROR : Cannot retrieve data locations ; Operation cancelled", Toast.LENGTH_LONG).show();
             }
         });
+        */
     }
 }
