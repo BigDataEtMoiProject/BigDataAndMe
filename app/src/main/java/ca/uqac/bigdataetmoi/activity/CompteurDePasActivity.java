@@ -99,7 +99,7 @@ public class CompteurDePasActivity extends BaseActivity {
     private void RecupererValeur() {
         nb_pas_veille.setText("");
 
-        DatabaseReference dB = db.getReference("users").child(MainApplication.user.getUid()).child("podosensordata");
+        DatabaseReference dB = db.getReference("users").child(ActivityFetcher.user.getUid()).child("podosensordata");
         dB.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override

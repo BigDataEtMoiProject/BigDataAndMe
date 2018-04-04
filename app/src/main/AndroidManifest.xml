@@ -24,8 +24,7 @@
     <uses-permission android:name="com.example.app.permission.MAPS_RECEIVE" />
 
     <application
-        android:name=".MainApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -40,7 +39,7 @@
             </intent-filter>
         </activity>
         -->
-        <activity android:name=".MainActivity">
+        <activity android:name=".startup.MainMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

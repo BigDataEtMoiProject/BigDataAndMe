@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.startup;
 
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -15,10 +15,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 
-public class MainActivity extends BaseActivity implements OnMapReadyCallback {
+public class MainMenu extends BaseActivity implements OnMapReadyCallback {
     private FusedLocationProviderClient location;
     private GoogleMap map;
 
@@ -27,8 +28,11 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // On met l'identifieur du téléphone dans la classe MainApplication
-        MainApplication.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        //On assigne l'acitivite courante dans le Fetcher
+        ActivityFetcher.setCurrentActivity(this);
+
+        // On met l'identifieur du téléphone dans la classe ActivityFetcher
+        ActivityFetcher.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mainMap);
         mapFragment.getMapAsync(this);

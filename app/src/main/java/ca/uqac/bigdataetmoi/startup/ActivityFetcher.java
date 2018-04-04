@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.startup;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,9 +8,9 @@ import com.google.firebase.auth.FirebaseUser;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
 
 
-public class MainApplication extends Application
+public class ActivityFetcher extends Application
 {
-    private static MainApplication mInstance;
+    private static ActivityFetcher mInstance;
     private static BaseActivity mCurrentActivity = null;
 
     //global var that stores userID

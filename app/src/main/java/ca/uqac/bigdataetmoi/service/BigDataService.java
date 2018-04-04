@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
-import ca.uqac.bigdataetmoi.MainApplication;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcher;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.DataCollection;
 import ca.uqac.bigdataetmoi.service.info_provider.BasicSensorInfoProvider;
@@ -59,8 +59,8 @@ public class BigDataService extends Service implements DataReadyListener
     {
         mDataCollection = new DataCollection();
 
-        // On met l'identifieur du téléphone dans la classe MainApplication
-        MainApplication.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        // On met l'identifieur du téléphone dans la classe ActivityFetcher
+        ActivityFetcher.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
         Log.v("BigDataService", "BigDataService service has been created");
     }
