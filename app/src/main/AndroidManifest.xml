@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         -->
-        <activity android:name=".startup.MainMenu">
+        <activity android:name=".startup.MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

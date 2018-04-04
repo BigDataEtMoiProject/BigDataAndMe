@@ -1,5 +1,7 @@
 package ca.uqac.bigdataetmoi;
 
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
+
 public interface IBaseView<T> {
-    public void setPresenter(T presenter);
+    void setPresenter(T presenter);
 }

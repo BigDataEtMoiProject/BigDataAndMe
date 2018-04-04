@@ -8,9 +8,9 @@ import com.google.firebase.auth.FirebaseUser;
 import ca.uqac.bigdataetmoi.activity.BaseActivity;
 
 
-public class ActivityFetcher extends Application
+public class ActivityFetcherActivity extends Application
 {
-    private static ActivityFetcher mInstance;
+    private static ActivityFetcherActivity mInstance;
     private static BaseActivity mCurrentActivity = null;
 
     //global var that stores userID

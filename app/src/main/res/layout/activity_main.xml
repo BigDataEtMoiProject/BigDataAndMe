@@ -16,27 +16,14 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="ca.uqac.bigdataetmoi.startup.MainMenu">
+            tools:context="ca.uqac.bigdataetmoi.startup.MainMenuActivity">
 
-            <TextView
+            <fragment android:name="ca.uqac.bigdataetmoi.startup.MainMenuFragment"
+                android:id="@+id/main_menu"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/heure"
-                android:textAlignment="center" />
-
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="28dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="5dp" />
-
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:id="@+id/mainMap"
-                tools:context=".MapsActivity"
-                android:name="com.google.android.gms.maps.SupportMapFragment" />
+                android:layout_height="match_parent"
+                />
         </LinearLayout>
     </FrameLayout>
 

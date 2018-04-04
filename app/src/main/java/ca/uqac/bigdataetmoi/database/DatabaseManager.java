@@ -3,7 +3,7 @@ package ca.uqac.bigdataetmoi.database;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import ca.uqac.bigdataetmoi.startup.ActivityFetcher;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 
 /**
  * Created by Patrick Lapointe on 2017-11-16.
@@ -25,7 +25,7 @@ public class DatabaseManager
     }
 
     private DatabaseManager() {
-        mUserId = ActivityFetcher.getUserId();
+        mUserId = ActivityFetcherActivity.getUserId();
         mDb = FirebaseDatabase.getInstance().getReference();
     }
 

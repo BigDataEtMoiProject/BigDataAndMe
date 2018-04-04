@@ -3,7 +3,7 @@ package ca.uqac.bigdataetmoi.activity;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
-import ca.uqac.bigdataetmoi.startup.ActivityFetcher;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 /**
@@ -18,7 +18,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ActivityFetcher.setCurrentActivity(this);
+        ActivityFetcherActivity.setCurrentActivity(this);
     }
 
     @Override

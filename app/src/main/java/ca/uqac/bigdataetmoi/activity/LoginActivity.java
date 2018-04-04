@@ -18,8 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import ca.uqac.bigdataetmoi.startup.ActivityFetcher;
-import ca.uqac.bigdataetmoi.startup.MainMenu;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
+import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 import ca.uqac.bigdataetmoi.R;
 
 @SuppressWarnings("HardCodedStringLiteral")
@@ -63,8 +63,8 @@ public class LoginActivity extends BaseActivity {
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, getString(R.string.signin_error_wrong_email_or_password), Toast.LENGTH_LONG).show();
                                 } else {
-                                    ActivityFetcher.user = auth.getCurrentUser();
-                                    Log.e("LOGIN", ActivityFetcher.user.getUid());
+                                    ActivityFetcherActivity.user = auth.getCurrentUser();
+                                    Log.e("LOGIN", ActivityFetcherActivity.user.getUid());
                                     launchMainActivity();
                                 }
                             }
@@ -82,7 +82,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void launchMainActivity(){
-        startActivity(new Intent(LoginActivity.this, MainMenu.class));
+        startActivity(new Intent(LoginActivity.this, MainMenuActivity.class));
         finish();
     }
 
