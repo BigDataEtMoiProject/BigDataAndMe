@@ -14,11 +14,10 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.activity.app_usage_activity.UsageData;
+import ca.uqac.bigdataetmoi.database.data.UsageData;
 
 @SuppressWarnings("HardCodedStringLiteral")
 public class UsageListAdapter extends ArrayAdapter<UsageData> {
