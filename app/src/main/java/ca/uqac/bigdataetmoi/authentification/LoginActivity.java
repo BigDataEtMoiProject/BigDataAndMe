@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.login;
 
 
 import android.content.Context;
@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ca.uqac.bigdataetmoi.activity.BaseActivity;
+import ca.uqac.bigdataetmoi.activity.SignupActivity;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 import ca.uqac.bigdataetmoi.R;

@@ -18,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.login.LoginActivity;
 
 @SuppressWarnings("HardCodedStringLiteral")
 public class SignupActivity extends BaseActivity {
