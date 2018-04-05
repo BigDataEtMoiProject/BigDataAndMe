@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.startup;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.utility;
 
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 

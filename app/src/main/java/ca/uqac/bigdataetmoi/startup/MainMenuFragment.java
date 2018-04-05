@@ -42,7 +42,7 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
-        View rootView = inflater.inflate(R.layout.location, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main_menu, container, false);
         map = (MapView) rootView.findViewById(R.id.mapView);
         map.onCreate(savedBundle);
         map.onResume();
@@ -93,6 +93,12 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.start();
+    }
+
+    @Override
     public void setPresenter(@NonNull IMainMenuContract.Presenter presenter) {
         if(presenter != null)
             this.presenter = presenter;
@@ -110,6 +116,11 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
 
     @Override
     public void afficherEndroits() {
+
+    }
+
+    @Override
+    public void afficherApplication() {
 
     }
 }

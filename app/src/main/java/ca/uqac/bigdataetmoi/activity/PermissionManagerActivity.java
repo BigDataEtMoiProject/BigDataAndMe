@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.Manifest.permission.*;

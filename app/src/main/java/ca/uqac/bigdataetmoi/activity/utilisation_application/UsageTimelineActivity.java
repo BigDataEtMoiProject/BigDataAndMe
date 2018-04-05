@@ -23,9 +23,9 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.activity.BaseActivity;
-import ca.uqac.bigdataetmoi.activity.app_usage_activity.UsageData;
-import ca.uqac.bigdataetmoi.activity.utilisation_application.UsageListAdapter;
+import ca.uqac.bigdataetmoi.database.adapter.UsageListAdapter;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
+import ca.uqac.bigdataetmoi.database.data.UsageData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
 @SuppressWarnings("HardCodedStringLiteral")

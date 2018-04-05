@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.utilisation_application;
+package ca.uqac.bigdataetmoi.database.adapter;
 
 import android.content.Context;
 import android.content.pm.PackageItemInfo;

@@ -5,8 +5,6 @@ import android.content.Context;
 
 import com.google.firebase.auth.FirebaseUser;
 
-import ca.uqac.bigdataetmoi.activity.BaseActivity;
-
 
 public class ActivityFetcherActivity extends Application
 {

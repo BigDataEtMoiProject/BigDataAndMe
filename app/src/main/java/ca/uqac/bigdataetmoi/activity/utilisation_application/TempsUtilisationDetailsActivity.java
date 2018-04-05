@@ -5,7 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.activity.BaseActivity;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
 public class TempsUtilisationDetailsActivity extends BaseActivity {
 

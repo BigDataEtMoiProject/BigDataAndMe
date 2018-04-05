@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.app_usage_activity;
+package ca.uqac.bigdataetmoi.database.data;
 
 /**
  * Created by jul_samson on 17-11-17.

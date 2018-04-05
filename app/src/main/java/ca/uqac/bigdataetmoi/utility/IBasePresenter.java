@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.utility;
 
 public interface IBasePresenter {
     void start();

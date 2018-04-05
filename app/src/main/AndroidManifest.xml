@@ -31,14 +31,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--
-        <activity android:name=".activity.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
         <activity android:name=".startup.MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,19 +38,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SignupActivity" />
+        <activity android:name=".authentification.LoginActivity" />
+        <activity android:name=".authentification.SignupActivity" />
         <activity android:name=".activity.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
         <activity android:name=".activity.sms_contact.TelephoneSmsActivity" />
         <activity android:name=".activity.utilisation_application.DonneesUtilisationActivity" />
-        <activity android:name=".activity.quizz.QuizzActivity" />
-        <activity android:name=".activity.quizz.QuizzPersonaliteActivity" />
-        <activity android:name=".activity.quizz.QuizzFacileActivity" />
-        <activity android:name=".activity.quizz.QuizzMoyenActivity" />
-        <activity android:name=".activity.quizz.QuizzDifficileActivity" />
-        <activity
-            android:name=".activity.GPSMapsActivity"
-            android:label="@string/title_activity_gpsmaps" />
 
         <service android:name=".service.UpdateLockInfoService" />
 
@@ -102,7 +87,7 @@
         <activity android:name=".activity.utilisation_application.UsageTimelineActivity" />
         <activity android:name=".activity.PermissionManagerActivity" />
         <activity
-            android:name=".activity.AboutActivity"
+            android:name=".menu.AboutActivity"
             android:label="@string/about_title" />
         <activity android:name=".activity.utilisation_application.TempsUtilisationDetailsActivity" />
         <activity android:name=".activity.NoisyPlacesActivity"

@@ -1,4 +1,7 @@
 package ca.uqac.bigdataetmoi.localisation_details;
 
-public class LocalisationDetailsFragment {
+import android.app.Fragment;
+
+public class LocalisationDetailsFragment extends Fragment {
+
 }

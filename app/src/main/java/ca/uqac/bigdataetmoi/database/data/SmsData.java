@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.sms_contact;
+package ca.uqac.bigdataetmoi.database.data;
 
 import android.util.Log;
 
@@ -9,21 +9,21 @@ import java.util.List;
  * Created by Michael on 2018-03-13.
  */
 @SuppressWarnings("HardCodedStringLiteral")
-class SMSModel{
-    private ContactModel contactAssocie;
+public class SmsData {
+    private ContactData contactAssocie;
     private String numero;
     private Date date;
 
-    SMSModel(String _numero, Date _date, List<ContactModel> listeContact)
+    public SmsData(String _numero, Date _date, List<ContactData> listeContact)
     {
         numero = _numero;
         date = _date;
         fetchContact(numero, listeContact);
     }
-    public ContactModel getContactAssocie() {return contactAssocie;}
+    public ContactData getContactAssocie() {return contactAssocie;}
     public String getNumero(){return numero;}
     public Date getDate(){return date;}
-    private void fetchContact(String numero, List<ContactModel> listeContact)
+    private void fetchContact(String numero, List<ContactData> listeContact)
     {
         Log.d("fetchContact", numero);
         int i = 0;

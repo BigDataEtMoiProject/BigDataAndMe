@@ -1,14 +1,5 @@
 package ca.uqac.bigdataetmoi.activity.sms_contact;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,9 +10,23 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.activity.BaseActivity;
+import ca.uqac.bigdataetmoi.database.adapter.ContactAdapter;
+import ca.uqac.bigdataetmoi.database.data.ContactData;
+import ca.uqac.bigdataetmoi.database.data.SmsData;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
+
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_SMS;
 
@@ -32,7 +37,7 @@ public class TelephoneSmsActivity extends BaseActivity {
     private ListView listView;
     private List<String> listInfo;
     private ArrayAdapter<String> adapter;
-    private List<ContactModel> contacts;
+    private List<ContactData> contacts;
     private AlertDialog.Builder builder;
     PermissionManager permissionManager;
 
@@ -55,7 +60,7 @@ public class TelephoneSmsActivity extends BaseActivity {
             getPhoneSMS();
             while(!contacts.isEmpty())
             {
-                ContactModel temp = contacts.remove(0);
+                ContactData temp = contacts.remove(0);
                 String tempInfo = temp.getNom() + " -- " + temp.getNumero() + " -- SMS " + temp.getNbrSMSEnvoye();
                 listInfo.add(tempInfo);
                 listView.setAdapter(adapter);
@@ -91,9 +96,9 @@ public class TelephoneSmsActivity extends BaseActivity {
 
 
     // Pick up contacts from the phone
-    private List<ContactModel> getPhoneContacts()
+    private List<ContactData> getPhoneContacts()
     {
-        List<ContactModel> listeContact = new ArrayList<ContactModel>();
+        List<ContactData> listeContact = new ArrayList<ContactData>();
 
         Cursor tel = getContentResolver().query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -110,7 +115,7 @@ public class TelephoneSmsActivity extends BaseActivity {
             String localCode = numeroTel_temp.substring(6,9);
             String numero = numeroTel_temp.substring(10);
             String numeroTel = regionCode+localCode+numero;
-            ContactModel temp = new ContactModel(nom, numeroTel);
+            ContactData temp = new ContactData(nom, numeroTel);
             listeContact.add(temp);
         }
 
@@ -118,9 +123,9 @@ public class TelephoneSmsActivity extends BaseActivity {
     }
 
     // Pick up SMS from the phone
-    private List<SMSModel> getPhoneSMS()
+    private List<SmsData> getPhoneSMS()
     {
-        List<SMSModel> listeSMS = new ArrayList<SMSModel>();
+        List<SmsData> listeSMS = new ArrayList<SmsData>();
         Log.d("getPhoneSMS", "Started");
 
         Cursor smsTel = getContentResolver().query(
@@ -138,7 +143,7 @@ public class TelephoneSmsActivity extends BaseActivity {
             Date date = getDate(Long.parseLong(date_str), "yyyyMMdd_HHmmss");
             Log.d("SMS", adresse + " " + date.toString());
 
-            SMSModel sms = new SMSModel(adresse, date, contacts);
+            SmsData sms = new SmsData(adresse, date, contacts);
             listeSMS.add(sms);
         }
         return listeSMS;

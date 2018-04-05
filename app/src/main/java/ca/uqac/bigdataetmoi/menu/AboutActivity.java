@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.menu;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;

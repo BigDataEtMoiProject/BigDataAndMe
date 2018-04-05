@@ -15,6 +15,7 @@ import java.util.Locale;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.DataCollection;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
 public class SommeilActivity extends BaseActivity {
 

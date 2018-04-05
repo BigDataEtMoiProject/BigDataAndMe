@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.activity.BaseActivity;
-import ca.uqac.bigdataetmoi.activity.app_usage_activity.UsageData;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
+import ca.uqac.bigdataetmoi.database.data.UsageData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
 @SuppressWarnings("HardCodedStringLiteral")

@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.authentification;
 
 
 import android.content.Intent;
@@ -18,7 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.login.LoginActivity;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
 @SuppressWarnings("HardCodedStringLiteral")
 public class SignupActivity extends BaseActivity {

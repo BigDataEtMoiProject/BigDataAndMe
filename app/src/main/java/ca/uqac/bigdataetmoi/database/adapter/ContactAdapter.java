@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.activity.sms_contact;
+package ca.uqac.bigdataetmoi.database.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,10 +12,10 @@ import java.util.List;
 
 import ca.uqac.bigdataetmoi.R;
 
-class ContactAdapter extends ArrayAdapter<String> {
+public class ContactAdapter extends ArrayAdapter<String> {
     private final Context mContext;
 
-    ContactAdapter(Context context, List<String> infos) {
+    public ContactAdapter(Context context, List<String> infos) {
         super(context, R.layout.list_communication_item, infos);
         mContext = context;
     }
