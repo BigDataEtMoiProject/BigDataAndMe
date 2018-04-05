@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             tools:context="ca.uqac.bigdataetmoi.startup.MainMenuActivity">
 
-            <fragment android:name="ca.uqac.bigdataetmoi.startup.MainMenuFragment"
+            <fragment android:name="ca.uqac.bigdataetmoi.startup.MainMenuMapFragment"
                 android:id="@+id/main_menu"
                 android:layout_weight="1"
                 android:layout_width="match_parent"

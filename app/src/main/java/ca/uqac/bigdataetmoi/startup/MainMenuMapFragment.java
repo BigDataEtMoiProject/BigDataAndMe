@@ -93,13 +93,23 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
     }
 
     @Override
-    public void ouvrirDetaislEndroit(String idLocation) {
+    public void setPresenter(@NonNull IMainMenuContract.Presenter presenter) {
+        if(presenter != null)
+            this.presenter = presenter;
+    }
+
+    @Override
+    public void ouvrirDetailsEndroit(String idLocation) {
 
     }
 
     @Override
-    public void setPresenter(@NonNull IMainMenuContract.Presenter presenter) {
-        if(presenter != null)
-            this.presenter = presenter;
+    public void ouvrirDetailsApplication(String idApplication) {
+
+    }
+
+    @Override
+    public void afficherEndroits() {
+
     }
 }
