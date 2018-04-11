@@ -3,6 +3,8 @@ package ca.uqac.bigdataetmoi.database;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
+
 import ca.uqac.bigdataetmoi.MainApplication;
 
 /**
@@ -35,10 +37,16 @@ public class DatabaseManager
         return mDb.child("sensordata").child(mUserId);
     }
     public DatabaseReference getPermissionDbRef() { return mDb.child("permission").child(mUserId); }
+    public DatabaseReference getCalculationDbRef() { return mDb.child("calculationdata").child(mUserId); }
 
     public void storeSensorDataCollection(DataCollection collection) {
         String timestamp = Long.toString(System.currentTimeMillis());
         getSensorDataDbRef().child(timestamp).setValue(collection);
+    }
+
+    public void storeSommeilCalculationData(int sleepTime) {
+        String date = Calendar.getInstance().getTime().toString();
+        getSensorDataDbRef().child(date).setValue(sleepTime);
     }
 }
 

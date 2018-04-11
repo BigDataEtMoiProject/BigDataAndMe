@@ -15,6 +15,7 @@ import java.util.List;
 import ca.uqac.bigdataetmoi.MainApplication;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.service.data_interpretation.SommeilInfo;
 import ca.uqac.bigdataetmoi.service.info_provider.AccelerometerInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.BasicSensorInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.BluetoothInfoProvider;
@@ -114,6 +115,10 @@ public class BigDataService extends Service implements DataReadyListener
             }
         };
         mHandler.postDelayed(mRunnable, MAXIMUM_WAITING_TIME * 1000);
+
+        // On vérifie que les calculs du temps de sommeil pour la journée précédente ont été fait.
+        // Si c'est pas le cas, on effectue le calcul. (cela se fait à l'interne de la classe)
+        SommeilInfo sommeilInfo = new SommeilInfo();
 
         return Service.START_STICKY;
     }

@@ -9,6 +9,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import ca.uqac.bigdataetmoi.database.DataCollection;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.info_provider.InfoProvider;
@@ -40,23 +43,18 @@ public class SommeilInfo extends InfoProvider {
 
     public SommeilInfo () {
         dbManager = DatabaseManager.getInstance();
-        myHandler = new Handler();
-        Log.i("APPLI", "SLEEP TIME IN A HOUR = " + sleepTime);
-        myHandler.postDelayed(new Runnable() { //calcul du temps de sommeil sur les 10 dernieres minutes
-            @Override
-            public void run() {
-                Log.i("APPLI", "VERIFICATION SI L'UTILISATEUR DORT SUR 10 MINUTES");
-                calcul();
-            }
-        },180000); // execution de la fonction toutes les 10 min
+        sleepTime = 0;
 
-        myHandler.postDelayed(new Runnable() {  //recuperation du temps de sommeil sur 24H
-            @Override
-            public void run() {
-                Log.i("APPLI", "MOYENNE DU SOMMEIL SUR 24H");
-                recup();
-            }
-        },86400000);    // execution de la fonction toutes les 24 heures
+        // On trouve la date d'hier
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date hier = cal.getTime();
+        Log.i("Hier : ", hier.toString());
+
+        // TODO On vérifie si la donnée de la journée précédente est inscrite dans la BD
+
+        // S'il n'y a pas de données d'inscrite, on effectue le calcul et on inscrit la donnée
+        calcul();
     }
 
     private void calcul() {
@@ -67,31 +65,19 @@ public class SommeilInfo extends InfoProvider {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // On retrouve la donnée
-                if (dataSnapshot.hasChildren()) {
+                while (dataSnapshot.hasChildren()) {
                     DataSnapshot child = dataSnapshot.getChildren().iterator().next();
                     DataCollection data = child.getValue(DataCollection.class);
-                    if (!isSleep(data.isMoving, data.luxLevel, data.proximityDistance, data.soundLevel)) {
-                        verifSommeil = false;
+                    if (isSleep(data.isMoving, data.luxLevel, data.proximityDistance, data.soundLevel)) {
+                        sleepTime += 5;
                     }
                 }
+                dbManager.storeSommeilCalculationData(sleepTime);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                if (verifSommeil) sleepTime = sleepTime + 10;   // on rajoute 10 min de sommeil à la journée}
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
 
-
-    }
-
-    private void recup() {
-        //stockage dans la bd du temps de sommeil
-        DataCollection collection = new DataCollection();
-        //collection.sleepTime = getSleepTime();
-        generateDataReadyEvent(collection);
-
-        //reinitialisation de sleepTime
-        sleepTime = 0;
     }
 }
