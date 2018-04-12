@@ -29,7 +29,9 @@ public class GPSInfoProvider extends InfoProvider implements LocationListener
         if (PermissionManager.getInstance().isGranted(ACCESS_FINE_LOCATION)){
             try {
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOC_UPDATE_MIN_TIME, LOC_UPDATE_MIN_DISTANCE, this);
-            } catch (SecurityException e) {}
+            } catch (SecurityException e) {
+                e.getMessage();
+            }
         }
     }
 

@@ -42,19 +42,8 @@
         <activity android:name=".authentification.SignupActivity" />
         <activity android:name=".activity.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
-        <activity android:name=".activity.sms_contact.TelephoneSmsActivity" />
         <activity android:name=".activity.utilisation_application.DonneesUtilisationActivity" />
 
-        <service android:name=".service.UpdateLockInfoService" />
-
-        <receiver
-            android:name=".service.MyLockReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.SCREEN_OFF" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-            </intent-filter>
-        </receiver>
         <receiver
             android:name=".service.BroadcastOnBoot"
             android:enabled="true">

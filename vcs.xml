@@ -6,8 +6,24 @@
           <option name="url" value="https://github.com/BigDataEtMoi/big-data" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/BigDataEtMoi/big-data.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/Wearenn/My-Knowledge" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/Wearenn/My-Knowledge.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://Pierre_Wenzel@bitbucket.org/Erwan_ROMANZIN/projet_android.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="$USER_HOME$/Documents/UQAC/Big_data_et_moi" />
+    <option name="cloneParentDir" value="$USER_HOME$/Documents/UQAC/Informatique_mobile/Projet document" />
   </component>
 </application>

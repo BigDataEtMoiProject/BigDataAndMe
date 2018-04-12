@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.utility.PermissionManager;
+
+import static android.Manifest.permission.*;
 
 /**
  * Created by Raph on 21/11/2017.
@@ -21,7 +24,7 @@ import ca.uqac.bigdataetmoi.database.DataCollection;
 
 public class BluetoothInfoProvider extends InfoProvider
 {
-    private final static int SEARCH_SECONDS = 10;
+    private final static int SEARCH_SECONDS = 20;
 
     private BluetoothAdapter mBTAdapter;
     private BroadcastReceiver mBroadCastReceiver;
@@ -30,44 +33,48 @@ public class BluetoothInfoProvider extends InfoProvider
 
     public BluetoothInfoProvider(final Context context)
     {
-        mBluetoothSSID = new ArrayList<>();
-        mBTAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        // Activation du Bluetooth
-        if (mBTAdapter != null && !mBTAdapter.isEnabled()) {
-            mBTAdapter.enable();
-        }
-
-        // Si le bluetooth est activé, on démarre une découverte
-        if (mBTAdapter != null && mBTAdapter.isEnabled())
+        if(PermissionManager.getInstance().isGranted(BLUETOOTH_ADMIN))
         {
-            mBroadCastReceiver = new BroadcastReceiver() {
-                public void onReceive(Context context, Intent intent) {
-                    String action = intent.getAction();
-                    if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                        mBluetoothSSID.add(device.getName());
+            mBluetoothSSID = new ArrayList<>();
+            mBTAdapter = BluetoothAdapter.getDefaultAdapter();
+
+            // Activation du Bluetooth
+            if (mBTAdapter != null && !mBTAdapter.isEnabled())
+            {
+                mBTAdapter.enable();
+            }
+
+            // Si le bluetooth est activé, on démarre une découverte
+            if (mBTAdapter != null && mBTAdapter.isEnabled())
+            {
+                mBroadCastReceiver = new BroadcastReceiver() {
+                    public void onReceive(Context context, Intent intent) {
+                        String action = intent.getAction();
+                        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                            mBluetoothSSID.add(device.getName());
+                        }
                     }
-                }
-            };
+                };
 
-            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            context.registerReceiver(mBroadCastReceiver, filter);
-            mBTAdapter.startDiscovery();
+                IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+                context.registerReceiver(mBroadCastReceiver, filter);
+                mBTAdapter.startDiscovery();
 
-            // On cherche durant un nombre de secondes prédéterminées puis on arrête la recherche et on écris le résultat
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mBTAdapter.cancelDiscovery();
-                    context.unregisterReceiver(mBroadCastReceiver);
+                // On cherche durant un nombre de secondes prédéterminées puis on arrête la recherche et on écris le résultat
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mBTAdapter.cancelDiscovery();
+                        context.unregisterReceiver(mBroadCastReceiver);
 
-                    DataCollection collection = new DataCollection();
-                    collection.bluetoothSSID = mBluetoothSSID;
-                    generateDataReadyEvent(collection);
-                }
-            }, SEARCH_SECONDS * 1000);
+                        DataCollection collection = new DataCollection();
+                        collection.bluetoothSSID = mBluetoothSSID;
+                        generateDataReadyEvent(collection);
+                    }
+                }, SEARCH_SECONDS * 1000);
+            }
         }
     }
 }

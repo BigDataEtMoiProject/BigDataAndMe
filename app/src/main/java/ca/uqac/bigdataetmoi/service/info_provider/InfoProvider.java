@@ -10,6 +10,7 @@ import ca.uqac.bigdataetmoi.database.DataCollection;
  */
 
 public class InfoProvider {
+
     private List<DataReadyListener> listeners = new ArrayList<>();
 
     public void addDataReadyListener(DataReadyListener listener) {
