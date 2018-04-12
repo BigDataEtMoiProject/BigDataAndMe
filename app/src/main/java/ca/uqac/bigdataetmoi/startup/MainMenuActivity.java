@@ -70,18 +70,19 @@ public class MainMenuActivity extends BaseActivity{
                 Log.d("BDEM", "nav_deconnection");
                 ActivityFetcherActivity.setUserID(null);
                 startActivity(new Intent(this, LoginActivity.class));
-
+                return true;
             case R.id.nav_accueil:
                 Log.d("BDEM", "nav_accueil");
                 startActivity(new Intent(this, MainMenuFragment.class));
-
+                return true;
             case R.id.nav_parametre:
                 Log.d("BDEM", "nav_parametre");
                 startActivity(new Intent(this, PermissionManagerActivity.class));
-
+                return true;
             case R.id.nav_propos:
                 Log.d("BDEM", "nav_apropos");
                 startActivity(new Intent(this, AboutActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
