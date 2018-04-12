@@ -9,14 +9,15 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
+import ca.uqac.bigdataetmoi.service.data_interpretation.SommeilInfo;
+import ca.uqac.bigdataetmoi.service.info_provider.AccelerometerInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.ScreenStateInfoProvider;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.uqac.bigdataetmoi.MainApplication;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.DataCollection;
-import ca.uqac.bigdataetmoi.service.data_interpretation.SommeilInfo;
-import ca.uqac.bigdataetmoi.service.info_provider.AccelerometerInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.BasicSensorInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.BluetoothInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
@@ -24,7 +25,6 @@ import ca.uqac.bigdataetmoi.service.info_provider.GPSInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.InfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.MicroInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.PodometerInfoProvider;
-import ca.uqac.bigdataetmoi.service.info_provider.ScreenStateInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
 
 /*
@@ -62,8 +62,8 @@ public class BigDataService extends Service implements DataReadyListener
     {
         mDataCollection = new DataCollection();
 
-        // On met l'identifieur du téléphone dans la classe MainApplication
-        MainApplication.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        // On met l'identifieur du téléphone dans la classe ActivityFetcherActivity
+        ActivityFetcherActivity.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
         Log.v("BigDataService", "BigDataService service has been created");
     }

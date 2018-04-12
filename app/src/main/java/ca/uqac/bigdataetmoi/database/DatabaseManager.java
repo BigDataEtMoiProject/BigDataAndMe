@@ -3,18 +3,18 @@ package ca.uqac.bigdataetmoi.database;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import ca.uqac.bigdataetmoi.MainApplication;
 
 /**
  * Created by Patrick Lapointe on 2017-11-16.
  * Cette classe à pour but de gérer la base de données, c'est à dire son initialisation et la communication.
  */
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class DatabaseManager
 {
     private static DatabaseManager mInstance = null;
@@ -29,7 +29,7 @@ public class DatabaseManager
     }
 
     private DatabaseManager() {
-        mUserId = MainApplication.getUserId();
+        mUserId = ActivityFetcherActivity.getUserId();
         mDb = FirebaseDatabase.getInstance().getReference();
     }
 

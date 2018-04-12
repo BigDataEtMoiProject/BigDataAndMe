@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.Manifest.permission.*;
@@ -21,12 +22,12 @@ public class PermissionManagerActivity extends BaseActivity {
 
         permissionManager = PermissionManager.getInstance();
 
-        switchLocation = (Switch) findViewById(R.id.switch_location);
-        switchMicrophone = (Switch) findViewById(R.id.switch_micro);
-        switchSMS = (Switch) findViewById(R.id.switch_sms);
-        switchContacts = (Switch) findViewById(R.id.switch_contacts);
-        switchBluetooth = (Switch) findViewById(R.id.switch_bluetooth);
-        switchWifi = (Switch) findViewById(R.id.switch_wifi);
+        switchLocation = findViewById(R.id.switch_location);
+        switchMicrophone = findViewById(R.id.switch_micro);
+        switchSMS = findViewById(R.id.switch_sms);
+        switchContacts = findViewById(R.id.switch_contacts);
+        switchBluetooth = findViewById(R.id.switch_bluetooth);
+        switchWifi = findViewById(R.id.switch_wifi);
 
         // Charger les valeurs selon le permissionManager
         updateSwitchButtons();

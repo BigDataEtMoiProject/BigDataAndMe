@@ -20,6 +20,7 @@ import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.DataCollection;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.service.data_interpretation.SommeilInfo;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
 public class SommeilActivity extends BaseActivity {
 
@@ -38,10 +39,10 @@ public class SommeilActivity extends BaseActivity {
         dbManager.storeSommeilCalculationData(130);*/
 
         //Récupération des views
-        mLuxTextView = (TextView) findViewById(R.id.luxTextView);
-        mInterLuxTextView = (TextView) findViewById(R.id.interLuxTextView);
-        mAccelTextView = (TextView) findViewById(R.id.accelTextView);
-        mProximiTextView = (TextView) findViewById(R.id.proximiTextView);
+        mLuxTextView = findViewById(R.id.luxTextView);
+        mInterLuxTextView = findViewById(R.id.interLuxTextView);
+        mAccelTextView = findViewById(R.id.accelTextView);
+        mProximiTextView = findViewById(R.id.proximiTextView);
 
         //Pour lecture de la bd
         dbManager = DatabaseManager.getInstance();

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_accueil"
+            android:icon="@drawable/main_menu"
+            android:title="@string/acceuil" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/profile"
+            android:title="@string/profile" />
+
+        <item
+            android:id="@+id/nav_parametre"
+            android:icon="@drawable/parametre"
+            android:title="@string/preferences" />
+
+        <item
+            android:id="@+id/nav_propos"
+            android:icon="@drawable/a_propos"
+            android:title="@string/a_propos" />
+        <item
+            android:id="@+id/nav_deconnection"
+            android:icon="@drawable/logout"
+            android:title="@string/deconnection" />
+    </group>
+
+</menu>

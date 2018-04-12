@@ -18,10 +18,12 @@ import java.util.Locale;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.DataCollection;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
 //Dans cette classe on affiche le nombre de pas en temps réel , la moyenne du nombre de pas ainsi que le nombre de pas durant les 7 derniers jours
 //Appuyer sur no chart data available pour afficher le graphique au debut
 
+@SuppressWarnings("HardCodedStringLiteral")
 public class CompteurDePasActivity extends BaseActivity {
 
 
@@ -41,13 +43,13 @@ public class CompteurDePasActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compteur_de_pas);
 
-        textView = (TextView)findViewById(R.id.txt);
+        textView = findViewById(R.id.txt);
 
         //Pour lecture de la bd
         dbManager = DatabaseManager.getInstance();
 
         //graphique
-        mChart = (LineChart)findViewById(R.id.Linechart);
+        mChart = findViewById(R.id.Linechart);
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(false);
         yValues = new ArrayList<>();
@@ -98,7 +100,7 @@ public class CompteurDePasActivity extends BaseActivity {
     private void RecupererValeur() {
         nb_pas_veille.setText("");
 
-        DatabaseReference dB = db.getReference("users").child(MainApplication.user.getUid()).child("podosensordata");
+        DatabaseReference dB = db.getReference("users").child(ActivityFetcherActivity.user.getUid()).child("podosensordata");
         dB.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ca.uqac.bigdataetmoi.MainApplication;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
 /**
@@ -76,7 +76,7 @@ public class PermissionManager
 
     // Demande la permission à l'utilisateur (pour android version 6 et plus)
     private void requestPermission(String permission) {
-            ActivityCompat.requestPermissions(MainApplication.getCurrentActivity(), new String[]{permission}, 0);
+            ActivityCompat.requestPermissions(ActivityFetcherActivity.getCurrentActivity(), new String[]{permission}, 0);
     }
 
     // Retourne si oui ou non la permission demandée est accordée.
@@ -84,7 +84,7 @@ public class PermissionManager
     public boolean isGranted(String permission) {
         boolean granted = false;
 
-        if (ContextCompat.checkSelfPermission(MainApplication.getContext(), permission) == PackageManager.PERMISSION_GRANTED)
+        if (ContextCompat.checkSelfPermission(ActivityFetcherActivity.getCurrentActivity(), permission) == PackageManager.PERMISSION_GRANTED)
         {
             if (permissionMap.get(permission) == null)
                 granted = DEFAULT_VALUE;
@@ -101,7 +101,7 @@ public class PermissionManager
         // Via le popup de permission android si nous somme dans la version android 6.0 et plus
         // Si l'usager accepte d'accorder la permission, cette fonction sera appelé une deuxième fois,
         // mais le traitement sera différent vue que la permission sera accordée.
-        if(granted && ContextCompat.checkSelfPermission(MainApplication.getContext(), permission) == PackageManager.PERMISSION_DENIED)
+        if(granted && ContextCompat.checkSelfPermission(ActivityFetcherActivity.getContext(), permission) == PackageManager.PERMISSION_DENIED)
             requestPermission(permission);
         else {
             dbManager.getPermissionDbRef().child(permission.replace('.', '-')).setValue(granted);
