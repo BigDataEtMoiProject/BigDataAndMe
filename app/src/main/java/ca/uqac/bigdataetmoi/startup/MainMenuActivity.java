@@ -10,7 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
+import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 
 public class MainMenuActivity extends BaseActivity{
@@ -22,7 +24,7 @@ public class MainMenuActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        //On assigne l'acitivite courante dans le Fetcher
+        //On assigne l'activite courante dans le Fetcher
         ActivityFetcherActivity.setCurrentActivity(this);
 
         // On met l'identifieur du téléphone dans la classe ActivityFetcherActivity
@@ -68,6 +70,18 @@ public class MainMenuActivity extends BaseActivity{
                 Log.d("BDEM", "nav_deconnection");
                 ActivityFetcherActivity.setUserID(null);
                 startActivity(new Intent(this, LoginActivity.class));
+
+            case R.id.nav_accueil:
+                Log.d("BDEM", "nav_accueil");
+                startActivity(new Intent(this, MainMenuFragment.class));
+
+            case R.id.nav_parametre:
+                Log.d("BDEM", "nav_parametre");
+                startActivity(new Intent(this, PermissionManagerActivity.class));
+
+            case R.id.nav_propos:
+                Log.d("BDEM", "nav_apropos");
+                startActivity(new Intent(this, AboutActivity.class));
             default:
                 return super.onOptionsItemSelected(item);
         }
