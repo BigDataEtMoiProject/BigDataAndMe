@@ -25,6 +25,7 @@ public class DataCollection {
 
     // Détermine si les données on tous été recues
     public boolean allDataReceived() {
+
         if(isMoving != null && luxLevel != null && proximityDistance != null
                 && location != null && wifiSSID != null && bluetoothSSID != null
                 && steps != null && soundLevel != null && screenState != null)

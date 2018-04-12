@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="LUMINOSITÉ (LUX)" />
+        android:text="Moyenne" />
 
     <TextView
         android:id="@+id/luxTextView"
@@ -25,14 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text=" " />
+        android:text="_______________________" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="INTERPRÉTATION" />
+        android:text="Mois Dernier" />
 
     <TextView
         android:id="@+id/interLuxTextView"
@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="ACCÉLÉROMÈTRE (En mouvement)" />
+        android:text="Semaine Dernière" />
 
     <TextView
         android:id="@+id/accelTextView"
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="PROXIMITÉE (Distance)" />
+        android:text="Hier" />
 
     <TextView
         android:id="@+id/proximiTextView"

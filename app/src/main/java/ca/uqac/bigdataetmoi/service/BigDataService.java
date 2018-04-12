@@ -116,9 +116,11 @@ public class BigDataService extends Service implements DataReadyListener
         };
         mHandler.postDelayed(mRunnable, MAXIMUM_WAITING_TIME * 1000);
 
+
+
         // On vérifie que les calculs du temps de sommeil pour la journée précédente ont été fait.
         // Si c'est pas le cas, on effectue le calcul. (cela se fait à l'interne de la classe)
-        SommeilInfo sommeilInfo = new SommeilInfo();
+        new SommeilInfo();
 
         return Service.START_STICKY;
     }

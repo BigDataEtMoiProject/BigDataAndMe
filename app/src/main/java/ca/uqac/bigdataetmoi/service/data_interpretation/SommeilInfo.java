@@ -77,8 +77,7 @@ public class SommeilInfo extends InfoProvider {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // On boucle sur chaque enregistrement qui correspond à 5 minutes
-                while (dataSnapshot.hasChildren()) {
-                    DataSnapshot child = dataSnapshot.getChildren().iterator().next();
+                for(DataSnapshot child : dataSnapshot.getChildren() ){
                     DataCollection data = child.getValue(DataCollection.class);
                     if (isSleep(data.isMoving, data.luxLevel, data.proximityDistance, data.soundLevel)) {
                         sleepTime += 5;

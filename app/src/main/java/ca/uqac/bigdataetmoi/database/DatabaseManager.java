@@ -3,6 +3,7 @@ package ca.uqac.bigdataetmoi.database;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +48,7 @@ public class DatabaseManager
     }
 
     public void storeSommeilCalculationData(int sleepTime) {
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMdd");
+        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy MM dd");
         getCalculationDbRef().child(formatter.format(new Date())).setValue(sleepTime);
     }
 }
