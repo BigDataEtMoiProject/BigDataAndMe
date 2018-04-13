@@ -19,7 +19,6 @@ import java.util.Locale;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.database.data.UsageData;
 
-@SuppressWarnings("HardCodedStringLiteral")
 public class UsageListAdapter extends ArrayAdapter<UsageData> {
 
     private static final SimpleDateFormat hourMinFormat = new SimpleDateFormat("HH:mm:ss", Locale.CANADA_FRENCH);

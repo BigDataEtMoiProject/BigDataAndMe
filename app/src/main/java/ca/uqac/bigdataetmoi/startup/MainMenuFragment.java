@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,21 +28,12 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
     FusedLocationProviderClient location;
     GoogleMap googleMap;
 
-    public MainMenuFragment(){};
-
-    public static MainMenuFragment init() {
-        return new MainMenuFragment();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceBundle) {
-        super.onCreate(savedInstanceBundle);
-    }
+    public MainMenuFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
         View rootView = inflater.inflate(R.layout.fragment_main_menu, container, false);
-        map = (MapView) rootView.findViewById(R.id.mapView);
+        map = rootView.findViewById(R.id.mapView);
         map.onCreate(savedBundle);
         map.onResume();
 
@@ -100,8 +90,7 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
 
     @Override
     public void setPresenter(@NonNull IMainMenuContract.Presenter presenter) {
-        if(presenter != null)
-            this.presenter = presenter;
+        this.presenter = presenter;
     }
 
     @Override

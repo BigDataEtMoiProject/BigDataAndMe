@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Created by Michael on 2018-03-13.
  */
-@SuppressWarnings("HardCodedStringLiteral")
 public class SmsData {
     private ContactData contactAssocie;
     private String numero;
