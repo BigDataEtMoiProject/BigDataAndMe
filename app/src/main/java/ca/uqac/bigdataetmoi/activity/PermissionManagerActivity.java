@@ -20,6 +20,9 @@ public class PermissionManagerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission_manager);
 
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         permissionManager = PermissionManager.getInstance();
 
         switchLocation = findViewById(R.id.switch_location);

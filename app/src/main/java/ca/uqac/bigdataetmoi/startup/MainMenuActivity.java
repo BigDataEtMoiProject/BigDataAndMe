@@ -4,6 +4,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,11 +20,15 @@ import ca.uqac.bigdataetmoi.service.BigDataService;
 public class MainMenuActivity extends BaseActivity{
 
     private MainMenuPresenter mainMenuPresenter;
+    private DrawerLayout mDrawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         //On assigne l'activite courante dans le Fetcher
         ActivityFetcherActivity.setCurrentActivity(this);
@@ -59,21 +65,16 @@ public class MainMenuActivity extends BaseActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.nav_accueil:
+                Log.d("BDEM", "nav_accueil");
+                startActivity(new Intent(this, MainMenuFragment.class));
+                return true;
             case R.id.nav_profile:
                 if(ActivityFetcherActivity.getUserId() != null) {
                     /*
                         Afficher le profil utilisateur?
                      */
                 }
-                return true;
-            case R.id.nav_deconnection:
-                Log.d("BDEM", "nav_deconnection");
-                ActivityFetcherActivity.setUserID(null);
-                startActivity(new Intent(this, LoginActivity.class));
-                return true;
-            case R.id.nav_accueil:
-                Log.d("BDEM", "nav_accueil");
-                startActivity(new Intent(this, MainMenuFragment.class));
                 return true;
             case R.id.nav_parametre:
                 Log.d("BDEM", "nav_parametre");
@@ -83,8 +84,23 @@ public class MainMenuActivity extends BaseActivity{
                 Log.d("BDEM", "nav_apropos");
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
+            case R.id.nav_deconnection:
+                Log.d("BDEM", "nav_deconnection");
+                ActivityFetcherActivity.setUserID(null);
+                startActivity(new Intent(this, LoginActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Close Navigation drawer when Back button is pressed and Drawer is open
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawers();
+        } else {
+            super.onBackPressed();
         }
     }
 }

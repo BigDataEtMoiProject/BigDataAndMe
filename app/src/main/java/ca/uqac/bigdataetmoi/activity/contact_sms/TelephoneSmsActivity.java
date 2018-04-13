@@ -18,7 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.activity.BaseActivity;
+import ca.uqac.bigdataetmoi.startup.BaseActivity;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.Manifest.permission.READ_CONTACTS;
