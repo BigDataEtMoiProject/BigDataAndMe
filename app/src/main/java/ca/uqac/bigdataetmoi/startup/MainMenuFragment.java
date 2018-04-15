@@ -17,6 +17,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import ca.uqac.bigdataetmoi.R;
@@ -85,7 +86,8 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
     @Override
     public void onResume() {
         super.onResume();
-        presenter.start();
+        if(presenter != null)
+            presenter.start();
     }
 
     @Override

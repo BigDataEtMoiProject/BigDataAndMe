@@ -12,19 +12,52 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 
 
 
-public abstract class AbstractDataManager {
+public abstract class AbstractDataManager implements DataReadyListener {
 
     protected enum DataPath {SENSOR_DATA, CALCULATION_DATA};
-    private DatabaseReference mRootDbRef;
-    private String mCurrentIdentification;
+    private static DatabaseReference mRootDbRef;
+    private static String mCurrentIdentification;
+    private ArrayList<DataReadyListener> listeners;
 
-    private AbstractDataManager() {
+    public AbstractDataManager() {
+        if(mRootDbRef == null || mCurrentIdentification == null)
+            setRef();
+
+        listeners = new ArrayList<DataReadyListener>();
+    }
+
+    private static void setRef()
+    {
         mCurrentIdentification = ActivityFetcherActivity.getUserId();
         mRootDbRef = FirebaseDatabase.getInstance().getReference();
+    }
+
+    @Override
+    public void dataReady(Object o)
+    {
+        for(DataReadyListener listener : listeners)
+        {
+            listener.dataReady(o);
+        }
+    }
+
+    public void addDataReadyListener(DataReadyListener listener)
+    {
+        listeners.add(listener);
+    }
+
+    public void removeDataReadyListener(DataReadyListener listener)
+    {
+        listeners.remove(listener);
     }
 
     // Fonction qui permet de retourner le chemin associé à un groupe de donnée.
@@ -59,7 +92,7 @@ public abstract class AbstractDataManager {
     // Lecture d'une donnée selon sa clé
     protected void readDataByKey(DataPath dataPath, String key, final ValueEventListener resultListener) {
 
-        mRootDbRef.child(getPath(dataPath)).equalTo(key).addValueEventListener(new ValueEventListener() {
+        mRootDbRef.child(getPath(dataPath)).child(key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 resultListener.onDataChange(dataSnapshot);

@@ -13,5 +13,7 @@ public class LocalisationActivity extends BaseActivity {
         setContentView(R.layout.activity_localisation);
 
         ActivityFetcherActivity.setCurrentActivity(this);
+
+
     }
 }

@@ -126,9 +126,12 @@ public class BigDataService extends Service implements DataReadyListener
     }
 
     @Override
-    public void dataReady(DataCollection data) {
+    public void dataReady(Object data) {
         // Stocker les données dans le SensorDataCollection
-        mDataCollection.receiveData(data);
+        if(data.getClass() == DataCollection.class)
+            mDataCollection.receiveData((DataCollection)data);
+        else
+            return;
 
         // Si on a stocké tous les données, il est temps d'enregistrer le tout dans la bd
         if(mDataCollection.allDataReceived())

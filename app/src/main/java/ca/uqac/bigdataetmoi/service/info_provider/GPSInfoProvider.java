@@ -39,7 +39,8 @@ public class GPSInfoProvider extends InfoProvider implements LocationListener
     public void onLocationChanged(Location location) {
         mLocationManager.removeUpdates(this);
         DataCollection collection = new DataCollection();
-        collection.location = location;
+        collection.latitude = location.getLatitude();
+        collection.longitude = location.getLongitude();
         generateDataReadyEvent(collection);
     }
     @Override
