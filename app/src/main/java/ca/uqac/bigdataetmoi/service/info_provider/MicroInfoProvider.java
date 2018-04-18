@@ -13,6 +13,7 @@ import static android.Manifest.permission.*;
 /**
  * Créé par ?
  * Modifié par Patrick Lapointe le 2018-03-15
+ * Récupération des données du micro et écriture dans la base de données
  */
 
 public class MicroInfoProvider extends InfoProvider implements MediaRecorder.OnInfoListener

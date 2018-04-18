@@ -18,8 +18,8 @@ import static android.Manifest.permission.*;
 
 /**
  * Created by Raph on 21/11/2017.
- *
  * Modifié par Patrick lapointe le 2018-03-13
+ * Récupération des données du bluetooth et écriture dans la base de données
  */
 
 public class BluetoothInfoProvider extends InfoProvider
@@ -28,7 +28,6 @@ public class BluetoothInfoProvider extends InfoProvider
 
     private BluetoothAdapter mBTAdapter;
     private BroadcastReceiver mBroadCastReceiver;
-
     private List<String> mBluetoothSSID;
 
     public BluetoothInfoProvider(final Context context)

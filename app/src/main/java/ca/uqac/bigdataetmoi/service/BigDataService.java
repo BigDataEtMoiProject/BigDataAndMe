@@ -27,9 +27,9 @@ import ca.uqac.bigdataetmoi.service.info_provider.MicroInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.PodometerInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
 
-/*
-Créé le 2017-11-16 par Patrick Lapointe
-But : Service qui récupère les infos des différents capteurs et qui envoie les données à la base de donnée.
+/**
+* Créé le 2017-11-16 par Patrick Lapointe
+* Service qui récupère les infos des différents capteurs et qui envoie les données à la base de donnée.
 */
 
 public class BigDataService extends Service implements DataReadyListener
