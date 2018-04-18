@@ -4,10 +4,14 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
@@ -15,28 +19,39 @@ import ca.uqac.bigdataetmoi.authentification.LoginActivity;
 import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 
-public class MainMenuActivity extends BaseActivity{
+public class MainMenuActivity extends BaseActivity {
 
     private MainMenuPresenter mainMenuPresenter;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        //On assigne l'activite courante dans le Fetcher
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        // Add the nav drawer button to the Action Bar
+        ActionBar actionbar = getSupportActionBar();
+        assert actionbar != null;
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+
+        // Initialize nav drawer features
+        setupNavigationDrawerFeatures();
+
+        // On assigne l'activite courante dans le Fetcher
         ActivityFetcherActivity.setCurrentActivity(this);
 
         // On met l'identifieur du téléphone dans la classe ActivityFetcherActivity
         ActivityFetcherActivity.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
         MainMenuFragment frag = (MainMenuFragment) getFragmentManager().findFragmentById(R.layout.fragment_main_menu);
-        if(frag == null) {
-            //On cree le fragment
-            frag = MainMenuFragment.init();
-            //On l'ajoute a l'activite a l'aide des FragmentTransactions
+        if (frag == null) {
+            frag = new MainMenuFragment();
+            // On l'ajoute a l'activite a l'aide des FragmentTransactions
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.add(R.id.main_menu_frame, frag);
+            transaction.replace(R.id.main_menu_frame, frag);
             transaction.commit();
         }
 
@@ -45,46 +60,75 @@ public class MainMenuActivity extends BaseActivity{
         BigDataService.startRecurrence(getApplicationContext());
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    /*
-        Cette methode est appellee quand un utilisateur appuit sur un bouton
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.nav_profile:
-                if(ActivityFetcherActivity.getUserId() != null) {
-                    /*
-                        Afficher le profil utilisateur?
-                     */
+            case android.R.id.home :
+                // Open or close navigation menu
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawers();
+                } else {
+                    mDrawerLayout.openDrawer(GravityCompat.START);
                 }
                 return true;
-            case R.id.nav_deconnection:
-                Log.d("BDEM", "nav_deconnection");
-                ActivityFetcherActivity.setUserID(null);
-                startActivity(new Intent(this, LoginActivity.class));
-                return true;
-            case R.id.nav_accueil:
-                Log.d("BDEM", "nav_accueil");
-                startActivity(new Intent(this, MainMenuFragment.class));
-                return true;
-            case R.id.nav_parametre:
-                Log.d("BDEM", "nav_parametre");
-                startActivity(new Intent(this, PermissionManagerActivity.class));
-                return true;
-            case R.id.nav_propos:
-                Log.d("BDEM", "nav_apropos");
-                startActivity(new Intent(this, AboutActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Close Navigation drawer when Back button is pressed and Drawer is open
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawers();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    // Setup Navigation Drawer features
+    private void setupNavigationDrawerFeatures() {
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        // Close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_accueil :
+                                Log.d("BDEM", "nav_accueil");
+                                Toast.makeText(MainMenuActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                                // TODO: nav home
+
+                                break;
+                            case R.id.nav_profile :
+                                Toast.makeText(MainMenuActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                                // TODO: nav profile
+
+                                if (ActivityFetcherActivity.getUserId() != null) {
+                                    /*
+                                        Afficher le profil utilisateur?
+                                     */
+                                }
+                                break;
+                            case R.id.nav_parametre :
+                                startActivity(new Intent(MainMenuActivity.this, PermissionManagerActivity.class));
+                                break;
+                            case R.id.nav_propos :
+                                startActivity(new Intent(MainMenuActivity.this, AboutActivity.class));
+                                break;
+                            case R.id.nav_deconnection :
+                                Log.d("BDEM", "nav_deconnection");
+                                ActivityFetcherActivity.setUserID(null);
+                                startActivity(new Intent(MainMenuActivity.this, LoginActivity.class));
+                                break;
+                        }
+                        return true;
+                    }
+                });
     }
 }

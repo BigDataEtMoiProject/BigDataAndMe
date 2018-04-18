@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
-@SuppressWarnings("HardCodedStringLiteral")
 public class SignupActivity extends BaseActivity {
 
     private EditText field_Email, field_Password;

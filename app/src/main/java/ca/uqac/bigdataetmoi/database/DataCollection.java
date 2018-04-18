@@ -14,7 +14,8 @@ public class DataCollection {
     public Boolean isMoving;
     public Float luxLevel;
     public Float proximityDistance;
-    public Location location;
+    public Double latitude;
+    public Double longitude;
     public List<String> wifiSSID;
     public List<String> bluetoothSSID;
     public Float steps;
@@ -27,7 +28,7 @@ public class DataCollection {
     public boolean allDataReceived() {
 
         if(isMoving != null && luxLevel != null && proximityDistance != null
-                && location != null && wifiSSID != null && bluetoothSSID != null
+                && latitude != null && longitude != null && wifiSSID != null && bluetoothSSID != null
                 && steps != null && soundLevel != null && screenState != null)
             return true;
         else
@@ -42,8 +43,10 @@ public class DataCollection {
             luxLevel = collection.luxLevel;
         if(collection.proximityDistance != null)
             proximityDistance = collection.proximityDistance;
-        if(collection.location != null)
-            location = collection.location;
+        if(collection.latitude != null)
+            latitude = collection.latitude;
+        if(collection.longitude != null)
+            longitude = collection.longitude;
         if(collection.wifiSSID != null)
             wifiSSID = collection.wifiSSID;
         if(collection.bluetoothSSID != null)

@@ -6,5 +6,5 @@ import ca.uqac.bigdataetmoi.database.DataCollection;
  */
 
 public interface DataReadyListener {
-    void dataReady(DataCollection data);
+    void dataReady(Object data);
 }

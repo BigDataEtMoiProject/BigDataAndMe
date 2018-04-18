@@ -25,7 +25,6 @@ import ca.uqac.bigdataetmoi.startup.BaseActivity;
 import ca.uqac.bigdataetmoi.database.data.UsageData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
-@SuppressWarnings("HardCodedStringLiteral")
 @RequiresApi(22)
 public class DonneesUtilisationActivity extends BaseActivity {
 

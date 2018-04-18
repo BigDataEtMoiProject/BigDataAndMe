@@ -23,7 +23,6 @@ import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 import ca.uqac.bigdataetmoi.R;
 
-@SuppressWarnings("HardCodedStringLiteral")
 public class LoginActivity extends BaseActivity {
 
     private EditText field_Email, field_Password;

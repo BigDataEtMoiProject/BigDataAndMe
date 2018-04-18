@@ -28,7 +28,6 @@ import ca.uqac.bigdataetmoi.startup.BaseActivity;
 import ca.uqac.bigdataetmoi.database.data.UsageData;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 
-@SuppressWarnings("HardCodedStringLiteral")
 public class UsageTimelineActivity extends BaseActivity {
 
     //Variable for the date picker

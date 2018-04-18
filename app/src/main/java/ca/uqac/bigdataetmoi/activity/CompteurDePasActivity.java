@@ -23,7 +23,6 @@ import ca.uqac.bigdataetmoi.startup.BaseActivity;
 //Dans cette classe on affiche le nombre de pas en temps réel , la moyenne du nombre de pas ainsi que le nombre de pas durant les 7 derniers jours
 //Appuyer sur no chart data available pour afficher le graphique au debut
 
-@SuppressWarnings("HardCodedStringLiteral")
 public class CompteurDePasActivity extends BaseActivity {
 
 
