@@ -2,6 +2,11 @@ package ca.uqac.bigdataetmoi.application_usage;
 
 import android.graphics.drawable.Drawable;
 
+/**
+ * Created by Joshua on 18/04/2018
+ * Classe metier pour l'utilisation des interfaces
+ */
+
 public class UsageApp {
     //Nom
     private String name;

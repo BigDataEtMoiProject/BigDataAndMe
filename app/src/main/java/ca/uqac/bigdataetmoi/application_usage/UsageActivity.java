@@ -9,6 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import ca.uqac.bigdataetmoi.R;
 
+/**
+ * Created by Joshua on 18/04/2018
+ * Affichage des données d'utilisation des applications
+ */
+
 @RequiresApi(21)
 public class UsageActivity extends AppCompatActivity{private UsageStatsManager statsManager;
     private UsagePresenter up;

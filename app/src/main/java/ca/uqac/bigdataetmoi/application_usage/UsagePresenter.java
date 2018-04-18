@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * Created by Joshua on 18/04/2018
+ * recuperation des données d'utilisation des applications du telephone
+ */
+
 @RequiresApi(21)
 public class UsagePresenter {
     private UsageStatsManager statsManager;
