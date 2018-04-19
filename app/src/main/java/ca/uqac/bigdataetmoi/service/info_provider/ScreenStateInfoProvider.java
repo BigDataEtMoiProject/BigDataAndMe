@@ -1,6 +1,7 @@
 package ca.uqac.bigdataetmoi.service.info_provider;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
@@ -27,7 +28,8 @@ public class ScreenStateInfoProvider extends InfoProvider
                 PowerManager powerManager = (PowerManager) mContext.getApplicationContext().getSystemService(Context.POWER_SERVICE);
 
                 Boolean screenState = false;
-                if(powerManager.isInteractive())
+
+                if(Build.VERSION.SDK_INT >= 20 && powerManager.isInteractive())
                     screenState = true;
 
                 DataCollection dataCollection = new DataCollection();

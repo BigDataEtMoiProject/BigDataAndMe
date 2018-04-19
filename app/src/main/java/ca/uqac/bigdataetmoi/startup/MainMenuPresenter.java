@@ -3,10 +3,16 @@ package ca.uqac.bigdataetmoi.startup;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ca.uqac.bigdataetmoi.database.data.LocationData;
+import ca.uqac.bigdataetmoi.database.helper.MapDataHelper;
 import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
 
 public class MainMenuPresenter implements IMainMenuContract.Presenter, DataReadyListener {
@@ -34,12 +40,17 @@ public class MainMenuPresenter implements IMainMenuContract.Presenter, DataReady
     }
 
     @Override
-    public void fetchEndroits() {
-        /**
-         * Need to add the number of location data in the DB
-         */
-        LocationData donnee = new LocationData(this);
-        locations.add(donnee);
+    public void fetchEndroits(String dateBeginning, String dateEnd) {
+        MapDataHelper mapHelper = new MapDataHelper();
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            Date beginning = formatter.parse(dateBeginning);
+            Date end = formatter.parse(dateEnd);
+
+            mapHelper.fetchAllLocations(this, beginning.getTime(), end.getTime());
+        }catch (ParseException e) {
+            Log.d("BDEM EXCEP", e.getMessage());
+        }
     }
 
     @Override
@@ -49,21 +60,22 @@ public class MainMenuPresenter implements IMainMenuContract.Presenter, DataReady
 
     @Override
     public void start() {
-        fetchEndroits();
+        fetchEndroits("01-04-2018", "18-04-2018");
     }
 
     @Override
     public void dataReady(Object o) {
-        if(o.getClass() == Boolean.class)
-        {
-            Boolean response = (Boolean) o;
-            if(response.booleanValue())
-                completedLocations++;
-
-            if(locations.size() == completedLocations)
-            {
-                Log.d("BDEM", "debug");
+        if(o.getClass() == DataSnapshot.class) {
+            DataSnapshot data = (DataSnapshot)o;
+            //TODO: Reinitialiser la base de donnee pour supprimer les valeurs non conforme (location --> latitude, longitude)
+            for(DataSnapshot childData : data.getChildren()) {
+                System.out.println(childData.getKey());
+                for(DataSnapshot child_childData : childData.getChildren()) {
+                    System.out.println("-->"+child_childData.getKey());
+                }
             }
+        } else if (o.getClass() == Exception.class) {
+            Log.d("BDEM EXCEP", ((Exception)o).getMessage());
         }
     }
 }

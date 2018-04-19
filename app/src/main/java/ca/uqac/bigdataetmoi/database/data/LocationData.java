@@ -16,6 +16,7 @@ public class LocationData extends AbstractDataManager {
     private final String key_lat = "latitude";
     private final String key_long = "longitude";
     private Boolean complete = false;
+    private DataReadyListener listener;
 
     /**
      * Lors de la construction de l'objet, les methodes getLatitude() et getLongitude()
@@ -26,9 +27,17 @@ public class LocationData extends AbstractDataManager {
      */
     public LocationData(DataReadyListener listener)
     {
-        super.addDataReadyListener(listener);
+        this.listener = listener;
+        super.addDataReadyListener(this.listener);
         getLatitude();
         getLongitude();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.removeDataReadyListener(this.listener);
+
+        super.finalize();
     }
 
     private void setLatitude(Double latitude)
@@ -93,7 +102,7 @@ public class LocationData extends AbstractDataManager {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot location = dataSnapshot.child(key_long);
                 longitude = (Double) location.getValue();
-                setLatitude(longitude);
+                setLongitude(longitude);
                 checkComplete();
                 dataReady(complete);
             }
@@ -108,9 +117,7 @@ public class LocationData extends AbstractDataManager {
     }
 
     /**
-     *
      * @return True si toutes les donnees ont ete lu dans la BDD, sinon False
-     *
      */
     public Boolean isComplete() {
         return complete;

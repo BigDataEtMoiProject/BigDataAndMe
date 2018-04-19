@@ -25,7 +25,6 @@ public class UsageActivity extends AppCompatActivity{private UsageStatsManager s
 
         up = new UsagePresenter((UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE), getPackageManager());
 
-
     }
 
 }
