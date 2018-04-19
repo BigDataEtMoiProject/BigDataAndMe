@@ -9,6 +9,7 @@ import ca.uqac.bigdataetmoi.database.DataCollection;
 
 /**
  * Created by pat on 2018-03-28.
+ * Récupération de l'état de l'écran du téléphone et écriture dans la base de données
  */
 
 public class ScreenStateInfoProvider extends InfoProvider
@@ -33,6 +34,6 @@ public class ScreenStateInfoProvider extends InfoProvider
                 dataCollection.screenState = screenState;
                 generateDataReadyEvent(dataCollection);
             }
-        }, 5000);
+        }, 5000);//
     }
 }

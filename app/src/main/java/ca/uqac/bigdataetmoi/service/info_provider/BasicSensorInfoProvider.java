@@ -38,13 +38,13 @@ public class BasicSensorInfoProvider extends InfoProvider implements SensorEvent
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_LIGHT) {
+        if(event.sensor.getType() == Sensor.TYPE_LIGHT) {   //récupération des données du capteur de lumière
             mLightLuxLevel = event.values[0];
-        } else if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+        } else if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {   //récupération des données du capteur de proximité
             mProximityDistance = event.values[0];
         }
 
-        // Si tous les données de sensuers ont été recues
+        // Si toutes les données de sensors ont été recues
         if (mLightLuxLevel != null && mProximityDistance != null)
             envoyerDonnees();
     }
