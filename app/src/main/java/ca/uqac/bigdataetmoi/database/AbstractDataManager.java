@@ -60,8 +60,7 @@ public abstract class AbstractDataManager implements DataReadyListener {
         listeners.remove(listener);
     }
 
-    // Fonction qui permet de retourner le chemin associé à un groupe de donnée.
-    private String getPath(DataPath dataPath){
+    private static String getPath(DataPath dataPath){
         String path;
 
         switch(dataPath) {
@@ -78,18 +77,29 @@ public abstract class AbstractDataManager implements DataReadyListener {
         return path;
     }
 
-    // Écriture de la donnée à l'endroit indiqué
-    protected void writeData(String path, Object value) {
+    private void writeData(String path, Object value) {
         mRootDbRef.child(path).setValue(value);
     }
 
-    // Écriture de la donnée dont l'endroit est déterminé automatiquement selon le DataPath
+    /**
+     * Ecriture dans la BDD
+     *
+     * @param dataPath Objet DataPath
+     * @param key La cle de l'objet a ecrire
+     * @param value l'objet a ecrire
+     */
     protected void writeData(DataPath dataPath, String key, Object value) {
         String path = getPath(dataPath) + key;
         writeData(path, value);
     }
 
-    // Lecture d'une donnée selon sa clé
+    /**
+     * Lecture des donnees dans la BDD selon une cle
+     *
+     * @param dataPath Objet DataPath
+     * @param key La cle du noeud a lire
+     * @param resultListener Le listener a appeller lorsqu'il y a une erreur ou lorsque les resultats sont prets
+     */
     protected void readDataByKey(DataPath dataPath, String key, final ValueEventListener resultListener) {
 
         mRootDbRef.child(getPath(dataPath)).child(key).addValueEventListener(new ValueEventListener() {
@@ -105,7 +115,14 @@ public abstract class AbstractDataManager implements DataReadyListener {
         });
     }
 
-    // Lecture des données selon un "Range"
+    /**
+     * Lecture des donnees dans la BDD
+     *
+     * @param dataPath Objet DataPath
+     * @param firstKey La cle de debut de filtre
+     * @param lastKey La cle de fin de filtre
+     * @param resultListener Le listener a appeller lorsqu'il y a une erreur ou lorsque les resultats sont prets
+     */
     protected void readDataByRange(DataPath dataPath, String firstKey, String lastKey, final ValueEventListener resultListener) {
 
         mRootDbRef.child(getPath(dataPath)).orderByKey().startAt(firstKey).endAt(lastKey).addValueEventListener(new ValueEventListener() {
@@ -117,8 +134,7 @@ public abstract class AbstractDataManager implements DataReadyListener {
             @Override
             public void onCancelled(DatabaseError firebaseError) {
                 resultListener.onCancelled(firebaseError);
-            }
-        });
+            }        });
     }
 
 }

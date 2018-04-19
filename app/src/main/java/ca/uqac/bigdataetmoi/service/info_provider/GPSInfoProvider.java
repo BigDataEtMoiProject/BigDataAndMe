@@ -13,6 +13,7 @@ import static android.Manifest.permission.*;
 
 /**
  * Created by Patrick Lapointe on 2018-03-13.
+ * Récupération des données du GPS et écriture dans la base de données
  */
 
 public class GPSInfoProvider extends InfoProvider implements LocationListener
@@ -24,6 +25,7 @@ public class GPSInfoProvider extends InfoProvider implements LocationListener
 
     public GPSInfoProvider(Context context)
     {
+        // récupération des
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
         if (PermissionManager.getInstance().isGranted(ACCESS_FINE_LOCATION)){

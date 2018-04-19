@@ -11,8 +11,8 @@ import ca.uqac.bigdataetmoi.database.DataCollection;
 
 /**
  * Created by fs77 on 27/12/2017.
- *
  * Modifié par patrick lapointe le 2018-03-15
+ * Récupération des données du podomètre et écriture dans la base de données
  */
 
 // On utilise le senseur TYPE_STEP_COUNTER de android pour compter les pas.

@@ -1,13 +1,5 @@
 package ca.uqac.bigdataetmoi.activity.contact_sms;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +8,14 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.startup.BaseActivity;

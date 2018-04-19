@@ -11,6 +11,7 @@ import ca.uqac.bigdataetmoi.database.DataCollection;
 
 /**
  * Created by pat on 2018-03-28.
+ * Récupération des données de l'acceleromètre et écriture dans la base de données
  */
 
 public class AccelerometerInfoProvider extends InfoProvider implements SensorEventListener
@@ -24,8 +25,7 @@ public class AccelerometerInfoProvider extends InfoProvider implements SensorEve
     private Handler mHandler;
     private Runnable mRunnable;
 
-    public AccelerometerInfoProvider(Context context)
-    {
+    public AccelerometerInfoProvider(Context context) {
         mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
 
         // Pour l'accéléromètre
@@ -35,6 +35,7 @@ public class AccelerometerInfoProvider extends InfoProvider implements SensorEve
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
+        // Envoi des données dans la bd toutes les TEMPS_ECHANTILLONAGE * 1000 millisecondes
         mHandler = new Handler();
         mRunnable = new Runnable() {
             @Override
@@ -51,6 +52,7 @@ public class AccelerometerInfoProvider extends InfoProvider implements SensorEve
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
+        // Verification si la personne bouge
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float[] gravity = event.values.clone();
             if(checkIfMooving(gravity[0], gravity[1], gravity[2]))
@@ -61,8 +63,9 @@ public class AccelerometerInfoProvider extends InfoProvider implements SensorEve
         }
     }
 
-    private void envoyerDonnees(boolean isMoving)
-    {
+
+    private void envoyerDonnees(boolean isMoving) {
+        // Ecriture dans la BD
         mSensorManager.unregisterListener(this);
         DataCollection collection = new DataCollection();
         collection.isMoving = isMoving;
