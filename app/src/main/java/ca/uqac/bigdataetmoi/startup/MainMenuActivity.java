@@ -105,9 +105,9 @@ public class MainMenuActivity extends BaseActivity {
                         switch (menuItem.getItemId()) {
                             case R.id.nav_accueil :
                                 Log.d("BDEM", "nav_accueil");
-                                Toast.makeText(MainMenuActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(MainMenuActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
                                 // TODO: nav home
-
+                                startActivity(new Intent(MainMenuActivity.this, MainMenuActivity.class));
                                 break;
                             case R.id.nav_profile :
                                 Toast.makeText(MainMenuActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
