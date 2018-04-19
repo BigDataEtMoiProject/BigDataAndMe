@@ -11,10 +11,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
+import ca.uqac.bigdataetmoi.activity.SommeilActivity;
+import ca.uqac.bigdataetmoi.activity.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
 import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
@@ -130,5 +134,20 @@ public class MainMenuActivity extends BaseActivity {
                         return true;
                     }
                 });
+    }
+
+    public void sommeil(View view) {
+        Intent intent = new Intent(this, SommeilActivity.class);
+        startActivity(intent);
+    }
+
+    public void communication(View view) {
+        Intent intent = new Intent(this, TelephoneSmsActivity.class);
+        startActivity(intent);
+    }
+
+    public void nb_pas(View view) {
+        Intent intent = new Intent(this, CompteurDePasActivity.class);
+        startActivity(intent);
     }
 }
