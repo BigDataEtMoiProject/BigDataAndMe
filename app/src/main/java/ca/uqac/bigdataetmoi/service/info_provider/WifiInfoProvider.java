@@ -18,8 +18,8 @@ import static android.Manifest.permission.*;
 
 /**
  * Created by Raph on 21/11/2017.
- *
  * Modifié par Patrick lapointe le 2018-03-13
+ * Récupération des données du Wifi et écriture dans la base de données
  */
 
 public class WifiInfoProvider extends InfoProvider

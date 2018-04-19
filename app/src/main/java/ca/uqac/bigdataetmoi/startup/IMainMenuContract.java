@@ -16,7 +16,7 @@ public interface IMainMenuContract {
         //Le presenter se chargera de verifier que le ID existe
         void ouvrirDetailsEndroit(String idLocation);
         void ouvrirDetailsApplication(String idApplication);
-        void fetchEndroits();
+        void fetchEndroits(String dateBeginning, String dateEnd);
         void fetchApplication();
     }
 }
