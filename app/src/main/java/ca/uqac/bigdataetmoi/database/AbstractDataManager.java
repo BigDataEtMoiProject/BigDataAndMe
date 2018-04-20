@@ -23,13 +23,11 @@ import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 
 public abstract class AbstractDataManager implements DataReadyListener {
 
-    protected enum DataPath {SENSOR_DATA, CALCULATION_DATA};
     private static DatabaseReference mRootDbRef;
-    private static String mCurrentIdentification;
     private ArrayList<DataReadyListener> listeners;
 
     public AbstractDataManager() {
-        if(mRootDbRef == null || mCurrentIdentification == null)
+        if(mRootDbRef == null)
             setRef();
 
         listeners = new ArrayList<DataReadyListener>();
@@ -37,8 +35,8 @@ public abstract class AbstractDataManager implements DataReadyListener {
 
     private static void setRef()
     {
-        mCurrentIdentification = ActivityFetcherActivity.getUserId();
-        mRootDbRef = FirebaseDatabase.getInstance().getReference();
+        mRootDbRef = FirebaseDatabase.getInstance().
+                getReference().child(ActivityFetcherActivity.getUserId()).child("data");
     }
 
     @Override
@@ -60,49 +58,29 @@ public abstract class AbstractDataManager implements DataReadyListener {
         listeners.remove(listener);
     }
 
-    private static String getPath(DataPath dataPath){
-        String path;
-
-        switch(dataPath) {
-            case SENSOR_DATA:
-                path = "sensordata/" + mCurrentIdentification;
-                break;
-            case CALCULATION_DATA:
-                path = "calculationdata/" + mCurrentIdentification;
-                break;
-            default:
-                path = "";
-        }
-
-        return path;
-    }
-
-    private void writeData(String path, Object value) {
-        mRootDbRef.child(path).setValue(value);
-    }
+    private void writeData(Object value) { mRootDbRef.setValue(value); }
 
     /**
      * Ecriture dans la BDD
      *
-     * @param dataPath Objet DataPath
-     * @param key La cle de l'objet a ecrire
+     * @param dataType le nom du sous-arbre contenant la donnée (exemple : location)
+     * @param key La cle de l'objet a ecrire (exemple : un timestamp)
      * @param value l'objet a ecrire
      */
-    protected void writeData(DataPath dataPath, String key, Object value) {
-        String path = getPath(dataPath) + key;
-        writeData(path, value);
+    protected void writeData(String dataType, String key, Object value) {
+        mRootDbRef.child(dataType).child(key).setValue(value);
     }
 
     /**
      * Lecture des donnees dans la BDD selon une cle
      *
-     * @param dataPath Objet DataPath
+     * @param dataType le nom du sous-arbre contenant la donnée (exemple : location)
      * @param key La cle du noeud a lire
      * @param resultListener Le listener a appeller lorsqu'il y a une erreur ou lorsque les resultats sont prets
      */
-    protected void readDataByKey(DataPath dataPath, String key, final ValueEventListener resultListener) {
+    protected void readDataByKey(String dataType, String key, final ValueEventListener resultListener) {
 
-        mRootDbRef.child(getPath(dataPath)).child(key).addValueEventListener(new ValueEventListener() {
+        mRootDbRef.child(dataType).child(key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 resultListener.onDataChange(dataSnapshot);
@@ -118,14 +96,14 @@ public abstract class AbstractDataManager implements DataReadyListener {
     /**
      * Lecture des donnees dans la BDD
      *
-     * @param dataPath Objet DataPath
+     * @param dataType le nom du sous-arbre contenant la donnée (exemple : location)
      * @param firstKey La cle de debut de filtre
      * @param lastKey La cle de fin de filtre
      * @param resultListener Le listener a appeller lorsqu'il y a une erreur ou lorsque les resultats sont prets
      */
-    protected void readDataByRange(DataPath dataPath, String firstKey, String lastKey, final ValueEventListener resultListener) {
+    protected void readDataByRange(String dataType, String firstKey, String lastKey, final ValueEventListener resultListener) {
 
-        mRootDbRef.child(getPath(dataPath)).orderByKey().startAt(firstKey).endAt(lastKey).addValueEventListener(new ValueEventListener() {
+        mRootDbRef.child(dataType).orderByChild("timestamp").startAt(firstKey).endAt(lastKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 resultListener.onDataChange(dataSnapshot);

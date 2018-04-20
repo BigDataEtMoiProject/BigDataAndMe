@@ -67,7 +67,7 @@ public class LocationData extends AbstractDataManager {
         if(latitude != null)
             return latitude;
 
-        super.readDataByKey(DataPath.SENSOR_DATA, "1522332541058/location/", new ValueEventListener() {
+        super.readDataByKey("location", "1522332541058", new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot location = dataSnapshot.child(key_lat);
@@ -97,7 +97,7 @@ public class LocationData extends AbstractDataManager {
         if(longitude != null)
             return longitude;
 
-        super.readDataByKey(DataPath.SENSOR_DATA, "1522332541058/location/", new ValueEventListener() {
+        super.readDataByKey("location", "1522332541058", new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot location = dataSnapshot.child(key_long);
