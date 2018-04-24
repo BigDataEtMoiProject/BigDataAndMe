@@ -1,7 +1,5 @@
 package ca.uqac.bigdataetmoi.authentification;
 
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -22,8 +20,7 @@ import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
 public class SignupActivity extends BaseActivity {
 
-    private EditText field_Email, field_Password;
-    private Button btn_Register;
+    private EditText fieldEmail, fieldPassword;
     private FirebaseAuth auth;
     private TextView goToLogin;
 
@@ -34,52 +31,47 @@ public class SignupActivity extends BaseActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        field_Email = findViewById(R.id.signup_field_email);
-        field_Password = findViewById(R.id.signup_field_password);
-        btn_Register = findViewById(R.id.signup_btn_register);
+        fieldEmail = findViewById(R.id.signup_field_email);
+        fieldPassword = findViewById(R.id.signup_field_password);
         goToLogin = findViewById((R.id.signup_text_go_to_login));
+        final Button btn_Register = findViewById(R.id.signup_btn_register);
 
         btn_Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                String email = field_Email.getText().toString().trim();
-                String password = field_Password.getText().toString().trim();
+                final String email = fieldEmail.getText().toString(),
+                    password = fieldPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.signup_error_empty_email), Toast.LENGTH_SHORT).show();
-                    return;
+                    fieldEmail.setError(getString(R.string.error_empty_email));
+                } else if (TextUtils.isEmpty(password)) {
+                    fieldPassword.setError(getString(R.string.error_empty_password));
+                } else if (password.length() < 6) {
+                    fieldPassword.setError(getString(R.string.signup_error_password_too_short));
+                } else {
+                    auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), "createUserWithEmail:success", Toast.LENGTH_SHORT).show();
+                                        Log.d("BDEM-SIGNUP", "createUserWithEmail:success");
+                                        //redirect to login page
+                                        finish();
+                                    } else {
+                                        Log.w("BDEM-SIGNUP", "createUserWithEmail:failure", task.getException());
+                                        Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.signin_error_authentication_failed), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                 }
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.signup_error_empty_password), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (password.length() < 6) {
-                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.signup_error_password_too_short), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "createUserWithEmail:success", Toast.LENGTH_SHORT).show();
-                                Log.d("BDEM-SIGNUP", "createUserWithEmail:success");
-                                //redirect to login page
-                                launchLoginActivity(view);
-                            } else {
-                                Log.w("BDEM-SIGNUP", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.signup_error_authentication_failed), Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
             }
         });
     }
 
-    public void launchLoginActivity(View v) {
-        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+    public void launchLoginActivity(View view) {
+        // Assuming last activity is LoginActivity
         finish();
     }
 }

@@ -3,7 +3,6 @@ package ca.uqac.bigdataetmoi.startup;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
-import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 /**

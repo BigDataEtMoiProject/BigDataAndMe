@@ -39,6 +39,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".authentification.LoginActivity" />
+        <activity android:name=".activity.contact_sms.TelephoneSmsActivity"/>
         <activity android:name=".authentification.SignupActivity" />
         <activity android:name=".activity.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
