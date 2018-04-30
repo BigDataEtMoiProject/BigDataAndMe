@@ -104,10 +104,8 @@ public class MainMenuActivity extends BaseActivity {
                         // For example, swap UI fragments here
                         switch (menuItem.getItemId()) {
                             case R.id.nav_accueil :
-                                Log.d("BDEM", "nav_accueil");
-                               // Toast.makeText(MainMenuActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
-                                // TODO: nav home
-                                startActivity(new Intent(MainMenuActivity.this, MainMenuActivity.class));
+                                // Don't start MainMenuActivity if we already are in
+                                // startActivity(new Intent(MainMenuActivity.this, MainMenuActivity.class));
                                 break;
                             case R.id.nav_profile :
                                 Toast.makeText(MainMenuActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
@@ -126,7 +124,6 @@ public class MainMenuActivity extends BaseActivity {
                                 startActivity(new Intent(MainMenuActivity.this, AboutActivity.class));
                                 break;
                             case R.id.nav_deconnection :
-                                Log.d("BDEM", "nav_deconnection");
                                 ActivityFetcherActivity.setUserID(null);
                                 startActivity(new Intent(MainMenuActivity.this, LoginActivity.class));
                                 break;
@@ -136,18 +133,15 @@ public class MainMenuActivity extends BaseActivity {
                 });
     }
 
-    public void sommeil(View view) {
-        Intent intent = new Intent(this, SommeilActivity.class);
-        startActivity(intent);
+    public void launchSleepActivity(View view) {
+        startActivity(new Intent(this, SommeilActivity.class));
     }
 
-    public void communication(View view) {
-        Intent intent = new Intent(this, TelephoneSmsActivity.class);
-        startActivity(intent);
+    public void launchCommunicationActivity(View view) {
+        startActivity(new Intent(this, TelephoneSmsActivity.class));
     }
 
-    public void nb_pas(View view) {
-        Intent intent = new Intent(this, CompteurDePasActivity.class);
-        startActivity(intent);
+    public void launchStepsActivity(View view) {
+        startActivity(new Intent(this, CompteurDePasActivity.class));
     }
 }

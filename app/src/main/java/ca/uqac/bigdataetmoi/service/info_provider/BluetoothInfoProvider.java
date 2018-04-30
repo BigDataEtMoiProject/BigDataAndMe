@@ -40,6 +40,9 @@ public class BluetoothInfoProvider extends InfoProvider
             // Activation du Bluetooth
             if (mBTAdapter != null && !mBTAdapter.isEnabled())
             {
+                // TODO: Must ask for turning on Bluetooth by using :
+                // startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_CODE);
+                // as per https://developer.android.com/guide/topics/connectivity/bluetooth.html#SettingUp
                 mBTAdapter.enable();
             }
 
