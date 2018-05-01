@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import ca.uqac.bigdataetmoi.database.data.UsageAppData;
+
 /**
  * Created by Joshua on 18/04/2018
  * recuperation des données d'utilisation des applications du telephone
@@ -20,8 +22,8 @@ import java.util.List;
 public class UsagePresenter {
     private UsageStatsManager statsManager;
     private PackageManager pm;
-    private List<UsageApp> usageApps;
-    private List<UsageApp> mostUseApps;
+    private List<UsageAppData> usageApps;
+    private List<UsageAppData> mostUseApps;
 
     public UsagePresenter(UsageStatsManager statsManager, PackageManager pm) {
         this.statsManager = statsManager;
@@ -44,7 +46,7 @@ public class UsagePresenter {
         usageApps = new ArrayList<>();
 
         for (UsageStats usage : queryUsageStats) {
-            UsageApp tmpUsageApp = new UsageApp(usage.getPackageName());
+            UsageAppData tmpUsageApp = new UsageAppData(usage.getPackageName());
             tmpUsageApp.setLastTimeUse(usage.getLastTimeUsed());
             tmpUsageApp.setTimeTotal(usage.getTotalTimeInForeground());
             usageApps.add(tmpUsageApp);
@@ -63,7 +65,7 @@ public class UsagePresenter {
             }
             //Sinon c'est une application de l'utilisateur
             else {
-                for (UsageApp usage : usageApps) {
+                for (UsageAppData usage : usageApps) {
                     if (usage.getPackageName().equals(app.packageName)) {
                         try {
                             usage.setName(pm.getApplicationLabel(app).toString());
@@ -85,7 +87,7 @@ public class UsagePresenter {
     public void getMostUseApps(){
         mostUseApps = usageApps.subList(usageApps.size() - 3, usageApps.size());
 
-        for(UsageApp usageApp : usageApps){
+        for(UsageAppData usageApp : usageApps){
             if(usageApp.getName() == null){
                 usageApp.setName(usageApp.getPackageName());
             }
@@ -93,10 +95,10 @@ public class UsagePresenter {
         }
     }
 
-    public List<UsageApp> sort(List<UsageApp> list){
-        List<UsageApp> tmpList = list;
+    public List<UsageAppData> sort(List<UsageAppData> list){
+        List<UsageAppData> tmpList = list;
 
-        UsageApp tmp;
+        UsageAppData tmp;
         int i, j;
         for(i = 1; i < tmpList.size(); i++){
             tmp = tmpList.get(i);

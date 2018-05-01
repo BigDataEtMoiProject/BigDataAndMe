@@ -34,7 +34,7 @@ import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
 
 public class BigDataService extends Service implements DataReadyListener
 {
-    private final static int REPETITION_DELAY = 5; // Mise à jour des données au x minutes
+    private final static int REPETITION_DELAY = 1; // Mise à jour des données au x minutes
     private final static int MAXIMUM_WAITING_TIME = 45; // On arrête le service si nous avons attendu plus de x secondes
 
     private List<InfoProvider> mProviders = new ArrayList<>();
@@ -115,8 +115,6 @@ public class BigDataService extends Service implements DataReadyListener
             }
         };
         mHandler.postDelayed(mRunnable, MAXIMUM_WAITING_TIME * 1000);
-
-
 
         // On vérifie que les calculs du temps de sommeil pour la journée précédente ont été fait.
         // Si c'est pas le cas, on effectue le calcul. (cela se fait à l'interne de la classe)

@@ -49,7 +49,7 @@ public class MainMenuPresenter implements IMainMenuContract.Presenter, DataReady
 
             mapHelper.fetchAllLocations(this, beginning.getTime(), end.getTime());
         }catch (ParseException e) {
-            Log.d("BDEM EXCEP", e.getMessage());
+            Log.d("BDEM_ERROR", e.getMessage());
         }
     }
 

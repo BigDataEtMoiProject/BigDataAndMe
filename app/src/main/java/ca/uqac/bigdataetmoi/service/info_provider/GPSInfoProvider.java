@@ -5,8 +5,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.database.data.LocationData;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.Manifest.permission.*;
@@ -39,11 +41,12 @@ public class GPSInfoProvider extends InfoProvider implements LocationListener
 
     @Override
     public void onLocationChanged(Location location) {
-        mLocationManager.removeUpdates(this);
-        DataCollection collection = new DataCollection();
-        collection.latitude = location.getLatitude();
-        collection.longitude = location.getLongitude();
-        generateDataReadyEvent(collection);
+        LocationData data = new LocationData(null, location.getLatitude(), location.getLatitude());
+        try {
+            data.checkForWriting();
+        } catch (Exception e) {
+            Log.d("BDEM_ERROR", e.getMessage());
+        }
     }
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {}

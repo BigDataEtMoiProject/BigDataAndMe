@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.application_usage;
+package ca.uqac.bigdataetmoi.database.data;
 
 import android.graphics.drawable.Drawable;
 
@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
  * Classe metier pour l'utilisation des interfaces
  */
 
-public class UsageApp {
+public class UsageAppData {
     //Nom
     private String name;
 
@@ -35,7 +35,7 @@ public class UsageApp {
 
 
 
-    public UsageApp(String packageName){
+    public UsageAppData(String packageName){
         this.packageName = packageName;
     }
 
