@@ -9,21 +9,19 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
-import ca.uqac.bigdataetmoi.service.data_interpretation.SommeilInfo;
-import ca.uqac.bigdataetmoi.service.info_provider.AccelerometerInfoProvider;
-import ca.uqac.bigdataetmoi.service.info_provider.ScreenStateInfoProvider;
+import ca.uqac.bigdataetmoi.database.data.BluetoothData;
+import ca.uqac.bigdataetmoi.database.data.LocationData;
+import ca.uqac.bigdataetmoi.database.data.NoiseData;
+import ca.uqac.bigdataetmoi.database.data.PodometerData;
+import ca.uqac.bigdataetmoi.database.data.SommeilData;
+import ca.uqac.bigdataetmoi.database.data.WifiData;
+import ca.uqac.bigdataetmoi.service.info_provider.SommeilInfoProvider;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
-import java.util.ArrayList;
-import java.util.List;
 
-import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.DataCollection;
-import ca.uqac.bigdataetmoi.service.info_provider.BasicSensorInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.BluetoothInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
 import ca.uqac.bigdataetmoi.service.info_provider.GPSInfoProvider;
-import ca.uqac.bigdataetmoi.service.info_provider.InfoProvider;
-import ca.uqac.bigdataetmoi.service.info_provider.MicroInfoProvider;
+import ca.uqac.bigdataetmoi.service.info_provider.NoiseInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.PodometerInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
 
@@ -32,15 +30,18 @@ import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
 * Service qui récupère les infos des différents capteurs et qui envoie les données à la base de donnée.
 */
 
-public class BigDataService extends Service implements DataReadyListener
+public class BigDataService extends Service
 {
     private final static int REPETITION_DELAY = 1; // Mise à jour des données au x minutes
-    private final static int MAXIMUM_WAITING_TIME = 45; // On arrête le service si nous avons attendu plus de x secondes
 
-    private List<InfoProvider> mProviders = new ArrayList<>();
-    private DataCollection mDataCollection;
-    Handler mHandler;
-    Runnable mRunnable;
+    Context mContext;
+    boolean mOnCreateFinished;
+    NoiseInfoProvider mNoiseInfoProvider;
+    SommeilInfoProvider mSommeilInfoProvider;
+    PodometerInfoProvider mPodometerInfoProvider;
+    GPSInfoProvider mGPSInfoProvider;
+    WifiInfoProvider mWifiInfoProvider;
+    BluetoothInfoProvider mBluetoothInfoProvider;
 
     // Le service va rouler à une intervalle donnée. Le but est de récupérer les données voulues puis
     // s'arrête de lui-même.
@@ -60,8 +61,6 @@ public class BigDataService extends Service implements DataReadyListener
     @Override
     public void onCreate()
     {
-        mDataCollection = new DataCollection();
-
         // On met l'identifieur du téléphone dans la classe ActivityFetcherActivity
         ActivityFetcherActivity.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
@@ -73,69 +72,120 @@ public class BigDataService extends Service implements DataReadyListener
     {
         Log.w("BigDataService", "BigDataService service has started");
 
-        BasicSensorInfoProvider basicSensorProvider = new BasicSensorInfoProvider(this);
-        basicSensorProvider.addDataReadyListener(this);
-        mProviders.add(basicSensorProvider);
+        mContext = this;
+        mOnCreateFinished = false;
 
-        AccelerometerInfoProvider accelerometerInfoProvider = new AccelerometerInfoProvider(this);
-        accelerometerInfoProvider.addDataReadyListener(this);
-        mProviders.add(accelerometerInfoProvider);
-
-        ScreenStateInfoProvider screenStateInfoProvider = new ScreenStateInfoProvider(this);
-        screenStateInfoProvider.addDataReadyListener(this);
-        mProviders.add(screenStateInfoProvider);
-
-        PodometerInfoProvider podometerInfoProvider = new PodometerInfoProvider(this);
-        podometerInfoProvider.addDataReadyListener(this);
-        mProviders.add(podometerInfoProvider);
-
-        GPSInfoProvider GPSInfoProvider = new GPSInfoProvider(this);
-        GPSInfoProvider.addDataReadyListener(this);
-        mProviders.add(GPSInfoProvider);
-
-        WifiInfoProvider wifiInfoProvider = new WifiInfoProvider(this);
-        wifiInfoProvider.addDataReadyListener(this);
-        mProviders.add(wifiInfoProvider);
-
-        BluetoothInfoProvider bluetoothInfoProvider = new BluetoothInfoProvider(this);
-        bluetoothInfoProvider.addDataReadyListener(this);
-        mProviders.add(bluetoothInfoProvider);
-
-        MicroInfoProvider microInfoProvider = new MicroInfoProvider();
-        microInfoProvider.addDataReadyListener(this);
-        mProviders.add(microInfoProvider);
-
-        // On n'attends pas nécéssairement d'avoir toutes les données,
-        // on écris dans la bd après un délais prédéterminé.
-        mHandler = new Handler();
-        mRunnable = new Runnable() {
+        mNoiseInfoProvider = new NoiseInfoProvider(new DataReadyListener() {
             @Override
-            public void run() {
-                writeData();
-            }
-        };
-        mHandler.postDelayed(mRunnable, MAXIMUM_WAITING_TIME * 1000);
+            public void dataReady(Object data) {
+                if(data != null) {
+                    NoiseData noiseData = (NoiseData) data;
 
-        // On vérifie que les calculs du temps de sommeil pour la journée précédente ont été fait.
-        // Si c'est pas le cas, on effectue le calcul. (cela se fait à l'interne de la classe)
-        new SommeilInfo();
+                    // On demande les infos de sommeil si on a l'info du micro.
+                    mSommeilInfoProvider = new SommeilInfoProvider(mContext, noiseData.getSoundLevel(), new DataReadyListener() {
+                        @Override
+                        public void dataReady(Object data) {
+                            if(data != null) {
+                                SommeilData sommeilData = (SommeilData) data;
+
+                                // Écriture des infos de sommeil
+                                try {
+                                    sommeilData.checkForWriting();
+                                } catch (Exception e) {
+                                    Log.d("BDEM_ERROR", e.getMessage());
+                                }
+                            }
+                            mSommeilInfoProvider = null;
+                            checkAllReceived();
+                        }
+                    });
+
+                    // Écriture des infos de bruit
+                    try {
+                        noiseData.checkForWriting();
+                    } catch (Exception e) {
+                        Log.d("BDEM_ERROR", e.getMessage());
+                    }
+                }
+                mNoiseInfoProvider = null;
+                checkAllReceived();
+            }
+        });
+
+        mPodometerInfoProvider = new PodometerInfoProvider(mContext, new DataReadyListener() {
+            @Override
+            public void dataReady(Object data) {
+                if(data != null) {
+                    PodometerData podometerData = (PodometerData) data;
+                    try {
+                        podometerData.checkForWriting();
+                    } catch (Exception e) {
+                        Log.d("BDEM_ERROR", e.getMessage());
+                    }
+                }
+                mPodometerInfoProvider = null;
+                checkAllReceived();
+            }
+        });
+
+        mGPSInfoProvider = new GPSInfoProvider(mContext, new DataReadyListener() {
+            @Override
+            public void dataReady(Object data) {
+                if(data != null) {
+                    LocationData locationData = (LocationData) data;
+                    try {
+                        locationData.checkForWriting();
+                    } catch (Exception e) {
+                        Log.d("BDEM_ERROR", e.getMessage());
+                    }
+                }
+                mGPSInfoProvider = null;
+                checkAllReceived();
+            }
+        });
+
+        mWifiInfoProvider = new WifiInfoProvider(mContext, new DataReadyListener() {
+            @Override
+            public void dataReady(Object data) {
+                if(data != null) {
+                    WifiData wifiData = (WifiData) data;
+                    try {
+                        wifiData.checkForWriting();
+                    } catch (Exception e) {
+                        Log.d("BDEM_ERROR", e.getMessage());
+                    }
+                }
+                mWifiInfoProvider = null;
+                checkAllReceived();
+            }
+        });
+
+        mBluetoothInfoProvider = new BluetoothInfoProvider(mContext, new DataReadyListener() {
+            @Override
+            public void dataReady(Object data) {
+                if(data != null) {
+                    BluetoothData bluetoothData = (BluetoothData) data;
+                    try {
+                        bluetoothData.checkForWriting();
+                    } catch (Exception e) {
+                        Log.d("BDEM_ERROR", e.getMessage());
+                    }
+                }
+                mBluetoothInfoProvider = null;
+                checkAllReceived();
+            }
+        });
+
+        mOnCreateFinished = true;
 
         return Service.START_STICKY;
     }
 
-    @Override
-    public void dataReady(Object data) {
-        // Stocker les données dans le SensorDataCollection
-        if(data.getClass() == DataCollection.class)
-            mDataCollection.receiveData((DataCollection)data);
-        else
-            return;
-
-        // Si on a stocké tous les données, il est temps d'enregistrer le tout dans la bd
-        if(mDataCollection.allDataReceived())
-        {
-            mHandler.removeCallbacks(mRunnable);
-            writeData();
+    private void checkAllReceived() {
+        if(mNoiseInfoProvider == null && mSommeilInfoProvider == null && mPodometerInfoProvider == null
+                && mGPSInfoProvider == null && mWifiInfoProvider == null && mBluetoothInfoProvider == null
+                && mOnCreateFinished) {
+            stopSelf();
         }
     }
 
@@ -147,16 +197,6 @@ public class BigDataService extends Service implements DataReadyListener
 
     @Override
     public void onDestroy() {
-        for (InfoProvider provider : mProviders)
-            provider.unregisterDataReadyListener(this);
-
         Log.i("BigDataService", "Service onDestroy");
-    }
-
-    private void writeData() {
-        // Stockage dans la bd
-        DatabaseManager.getInstance().storeSensorDataCollection(mDataCollection);
-        // On arrête le service
-        stopSelf();
     }
 }

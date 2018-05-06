@@ -2,10 +2,12 @@ package ca.uqac.bigdataetmoi.service.info_provider;
 
 import android.media.MediaRecorder;
 import android.os.Handler;
+import android.util.Log;
 
 import java.io.IOException;
 
 import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.database.data.NoiseData;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.Manifest.permission.*;
@@ -16,8 +18,10 @@ import static android.Manifest.permission.*;
  * Récupération des données du micro et écriture dans la base de données
  */
 
-public class MicroInfoProvider extends InfoProvider implements MediaRecorder.OnInfoListener
+public class NoiseInfoProvider implements MediaRecorder.OnInfoListener
 {
+    private DataReadyListener mListener;
+
     // Détermination de l'échantillonage
     private static final int NBR_ECHANTILLONAGE = 5; // Nombre d'échantillonage à faire
     private static final int DELAI_ECHANTILLONAGE = 2; // Nombre de secondes entre les échentillonages
@@ -30,8 +34,10 @@ public class MicroInfoProvider extends InfoProvider implements MediaRecorder.OnI
     private double[] mAmplitudes;
     private int mNbrEchantillonageFait;
 
-    public MicroInfoProvider()
+    public NoiseInfoProvider(DataReadyListener listener)
     {
+        mListener = listener;
+
         if(PermissionManager.getInstance().isGranted(RECORD_AUDIO))
         {
             // Initialisation du mMediaRecorder
@@ -60,18 +66,20 @@ public class MicroInfoProvider extends InfoProvider implements MediaRecorder.OnI
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mAmplitudes[mNbrEchantillonageFait] = mMediaRecorder.getMaxAmplitude();
-                        mNbrEchantillonageFait++;
+                    mAmplitudes[mNbrEchantillonageFait] = mMediaRecorder.getMaxAmplitude();
+                    mNbrEchantillonageFait++;
 
-                        if(mNbrEchantillonageFait == NBR_ECHANTILLONAGE)
-                            finEchantillonage();
-                        else
-                            mHandler.postDelayed(this, DELAI_ECHANTILLONAGE * 1000);
+                    if(mNbrEchantillonageFait == NBR_ECHANTILLONAGE)
+                        finEchantillonage();
+                    else
+                        mHandler.postDelayed(this, DELAI_ECHANTILLONAGE * 1000);
                     }
                 }, DELAI_ECHANTILLONAGE * 1000);
 
             } catch (IOException e) {}
         }
+        else
+            mListener.dataReady(null); // On envoie null pour indiquer que l'on ne peut pas récupérer la donnée
     }
 
     private void finEchantillonage()
@@ -84,11 +92,11 @@ public class MicroInfoProvider extends InfoProvider implements MediaRecorder.OnI
 
         averageAmp /= mAmplitudes.length;
 
-        // Fin de la ceuillette d'information
+        // Fin de la ceuillette d'information, on écris le résultat dans la bd
         mMediaRecorder.stop();
-        DataCollection collection = new DataCollection();
-        collection.soundLevel = averageAmp;
-        generateDataReadyEvent(collection);
+
+        NoiseData data = new NoiseData(null, averageAmp);
+        mListener.dataReady(data);
     }
 
     @Override

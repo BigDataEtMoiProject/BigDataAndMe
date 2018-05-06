@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.database.data.WifiData;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.content.Context.WIFI_SERVICE;
@@ -22,15 +24,19 @@ import static android.Manifest.permission.*;
  * Récupération des données du Wifi et écriture dans la base de données
  */
 
-public class WifiInfoProvider extends InfoProvider
+public class WifiInfoProvider
 {
+    private DataReadyListener mListener;
+
     private WifiManager mWifiManager;
     private List<String> mWifiSSID;
 
     private BroadcastReceiver mBroadCastReceiver;
 
-    public WifiInfoProvider(Context context)
+    public WifiInfoProvider(Context context, DataReadyListener listener)
     {
+        mListener = listener;
+
         if(PermissionManager.getInstance().isGranted(ACCESS_WIFI_STATE))
         {
             mWifiSSID = new ArrayList<>();
@@ -43,9 +49,9 @@ public class WifiInfoProvider extends InfoProvider
                         mWifiSSID.add(resultsWifiScan.get(i).SSID);
 
                     context.unregisterReceiver(this);
-                    DataCollection collection = new DataCollection();
-                    collection.wifiSSID = mWifiSSID;
-                    generateDataReadyEvent(collection);
+
+                    WifiData data = new WifiData(null, mWifiSSID);
+                    mListener.dataReady(data);
                 }
             };
 
@@ -60,5 +66,7 @@ public class WifiInfoProvider extends InfoProvider
                 mWifiManager.startScan();
             }
         }
+        else
+            mListener.dataReady(null);
     }
 }
