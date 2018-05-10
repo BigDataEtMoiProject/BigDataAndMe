@@ -20,7 +20,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.List;
+
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.database.data.LocationData;
 
 public class MainMenuFragment extends Fragment implements IMainMenuContract.View {
 
@@ -28,6 +31,7 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
     private MapView map;
     FusedLocationProviderClient location;
     GoogleMap googleMap;
+    boolean mapReady = false;
 
     public MainMenuFragment() { }
 
@@ -50,6 +54,7 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
             @Override
             public void onMapReady(GoogleMap _googleMap) {
                 googleMap = _googleMap;
+                mapReady = true;
                 //Activation de la fonctionalite de googleMap pour le bouton de zoom sur la position actuelle
                 try {
                     googleMap.setMyLocationEnabled(true);
@@ -73,6 +78,8 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
                                     }
                                 }
                             });
+
+                    presenter.start();
                 } catch (SecurityException e) {
                     Log.d("BDEM", e.getMessage());
                 }
@@ -86,7 +93,7 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
     @Override
     public void onResume() {
         super.onResume();
-        if(presenter != null)
+        if(presenter != null && mapReady)
             presenter.start();
     }
 
@@ -106,8 +113,11 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
     }
 
     @Override
-    public void afficherEndroits() {
-
+    public void afficherEndroits(List<LocationData> locations) {
+        for(LocationData loc : locations) {
+            //TODO:Markers aren't displaying :(
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())));
+        }
     }
 
     @Override

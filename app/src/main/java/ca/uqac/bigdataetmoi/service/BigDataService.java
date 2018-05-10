@@ -78,7 +78,7 @@ public class BigDataService extends Service
         mNoiseInfoProvider = new NoiseInfoProvider(new DataReadyListener() {
             @Override
             public void dataReady(Object data) {
-                if(data != null) {
+                if(data != null && data.getClass() == NoiseData.class) {
                     NoiseData noiseData = (NoiseData) data;
 
                     // On demande les infos de sommeil si on a l'info du micro.
@@ -115,7 +115,7 @@ public class BigDataService extends Service
         mPodometerInfoProvider = new PodometerInfoProvider(mContext, new DataReadyListener() {
             @Override
             public void dataReady(Object data) {
-                if(data != null) {
+                if(data != null && data.getClass() == PodometerData.class) {
                     PodometerData podometerData = (PodometerData) data;
                     try {
                         podometerData.checkForWriting();
@@ -131,7 +131,7 @@ public class BigDataService extends Service
         mGPSInfoProvider = new GPSInfoProvider(mContext, new DataReadyListener() {
             @Override
             public void dataReady(Object data) {
-                if(data != null) {
+                if(data != null && data.getClass() == LocationData.class) {
                     LocationData locationData = (LocationData) data;
                     try {
                         locationData.checkForWriting();
@@ -147,7 +147,7 @@ public class BigDataService extends Service
         mWifiInfoProvider = new WifiInfoProvider(mContext, new DataReadyListener() {
             @Override
             public void dataReady(Object data) {
-                if(data != null) {
+                if(data != null && data.getClass() == WifiData.class) {
                     WifiData wifiData = (WifiData) data;
                     try {
                         wifiData.checkForWriting();
@@ -163,7 +163,7 @@ public class BigDataService extends Service
         mBluetoothInfoProvider = new BluetoothInfoProvider(mContext, new DataReadyListener() {
             @Override
             public void dataReady(Object data) {
-                if(data != null) {
+                if(data != null && data.getClass() == BluetoothData.class) {
                     BluetoothData bluetoothData = (BluetoothData) data;
                     try {
                         bluetoothData.checkForWriting();

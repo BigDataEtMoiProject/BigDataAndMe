@@ -13,7 +13,7 @@ import java.lang.annotation.IncompleteAnnotationException;
 import ca.uqac.bigdataetmoi.database.AbstractDataManager;
 import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
 
-public class LocationData extends AbstractDataManager implements ValueEventListener {
+public class LocationData extends AbstractDataManager {
     private Double latitude = null, longitude = null;
     private DataReadyListener listener;
     private boolean fetchingData = false;
@@ -51,6 +51,11 @@ public class LocationData extends AbstractDataManager implements ValueEventListe
         super.addDataReadyListener(this.listener);
     }
 
+    /**
+     * Utiliser par Firebase pour de-marshaliser les objets dans la BDD
+     */
+    private LocationData() {};
+
     @Override
     protected void finalize() throws Throwable {
         super.removeDataReadyListener(this.listener);
@@ -76,37 +81,10 @@ public class LocationData extends AbstractDataManager implements ValueEventListe
     }
 
     public Double getLatitude() {
-        if(latitude == null && !fetchingData) {
-            fetchingData = true;
-            super.readLastData(ref, this);
-            return null;
-        } else if(latitude == null) {
-            return null;
-        }
         return latitude;
     }
 
     public Double getLongitude() {
-        if(longitude == null && !fetchingData) {
-            fetchingData = true;
-            super.readLastData(ref,this);
-        }else if(longitude == null) {
-            return null;
-        }
         return longitude;
-    }
-
-
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        LocationData data = dataSnapshot.getValue(LocationData.class);
-        this.setLongitude(data.longitude);
-        this.setLatitude(data.latitude);
-        this.fetchingData = false;
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-        Log.d("BDEM_ERROR", String.format("onCancelled():LocationData()%n%1$", databaseError.getMessage()));
     }
 }
