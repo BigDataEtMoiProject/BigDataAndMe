@@ -91,7 +91,6 @@ public class CompteurDePasActivity extends BaseActivity {
         });
     }
 
-
     /*
         Patrick lapointe
         Ancienne lecture de la bd, j'ai laissé le code pour ceux qui voudraient faire re-marcher la grille

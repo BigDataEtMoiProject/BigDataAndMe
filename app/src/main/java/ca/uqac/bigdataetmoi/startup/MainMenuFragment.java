@@ -17,6 +17,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -114,10 +115,13 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
 
     @Override
     public void afficherEndroits(List<LocationData> locations) {
+        Marker last = null;
         for(LocationData loc : locations) {
             //TODO:Markers aren't displaying :(
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())));
+            last = googleMap.addMarker(new MarkerOptions().position(new LatLng(loc.getLatitude(), loc.getLongitude())));
         }
+        if(last != null)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(last.getPosition(), 10));
     }
 
     @Override

@@ -1,7 +1,6 @@
 package ca.uqac.bigdataetmoi.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import ca.uqac.bigdataetmoi.R;
