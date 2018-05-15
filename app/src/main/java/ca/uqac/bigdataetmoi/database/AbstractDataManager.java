@@ -102,7 +102,7 @@ public abstract class AbstractDataManager implements DataReadyListener {
      */
     protected void readDataByRange(DatabaseReference ref, String firstKey, String lastKey, final ValueEventListener resultListener) {
 
-        ref.orderByChild("timestamp").startAt(firstKey).endAt(lastKey).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.orderByKey().startAt(firstKey).endAt(lastKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 resultListener.onDataChange(dataSnapshot);
@@ -115,7 +115,7 @@ public abstract class AbstractDataManager implements DataReadyListener {
     }
 
     protected void readLastData(DatabaseReference ref, final ValueEventListener listener) {
-        ref.orderByChild("timestamp").limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.orderByKey().limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listener.onDataChange(dataSnapshot);

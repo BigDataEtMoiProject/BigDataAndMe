@@ -1,5 +1,9 @@
 package ca.uqac.bigdataetmoi.startup;
 
+import java.util.Date;
+import java.util.List;
+
+import ca.uqac.bigdataetmoi.database.data.LocationData;
 import ca.uqac.bigdataetmoi.utility.IBasePresenter;
 import ca.uqac.bigdataetmoi.utility.IBaseView;
 
@@ -8,7 +12,7 @@ public interface IMainMenuContract {
         //La view se chargera d'appeller l'activite de detail
         void ouvrirDetailsEndroit(String idLocation);
         void ouvrirDetailsApplication(String idApplication);
-        void afficherEndroits();
+        void afficherEndroits(List<LocationData> loc);
         void afficherApplication();
     }
 
@@ -16,7 +20,7 @@ public interface IMainMenuContract {
         //Le presenter se chargera de verifier que le ID existe
         void ouvrirDetailsEndroit(String idLocation);
         void ouvrirDetailsApplication(String idApplication);
-        void fetchEndroits(String dateBeginning, String dateEnd);
+        void fetchEndroits(Date dateBeginning, Date dateEnd);
         void fetchApplication();
     }
 }
