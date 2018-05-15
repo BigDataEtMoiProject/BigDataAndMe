@@ -1,125 +1,112 @@
 package ca.uqac.bigdataetmoi.database.data;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+
+import java.lang.annotation.IncompleteAnnotationException;
 
 import ca.uqac.bigdataetmoi.database.AbstractDataManager;
 import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
 
-/**
- * TODO: Centraliser les donnees dans firebase pour eviter de faire 2 lectures asynchrones
- */
-public class LocationData extends AbstractDataManager {
+public class LocationData extends AbstractDataManager implements ValueEventListener {
     private Double latitude = null, longitude = null;
-    private final String key_lat = "latitude";
-    private final String key_long = "longitude";
-    private Boolean complete = false;
     private DataReadyListener listener;
+    private boolean fetchingData = false;
+
+    protected static DatabaseReference ref = mRootDbRef.child("location");
 
     /**
-     * Lors de la construction de l'objet, les methodes getLatitude() et getLongitude()
+     * Lors de la construction de l'objet, les methodes {@link #setLatitude(Double)}) et {@link #setLongitude(Double)}
      * seront automatiquement appeller.
      *
      * @param listener Doit s'abonner a l'evenement 'DataReady()' car la lecture dans la BDD est asynchrone.
      *                 Avant de travailler avec l'objet, il faut d'assurer que l'objet est complete.
+     * @param latitude la latitude de la position
+     * @param longitude la longitude de la position
+     */
+    public LocationData(DataReadyListener listener, Double latitude, Double longitude)
+    {
+        this(listener);
+        setLatitude(latitude);
+        setLongitude(longitude);
+
+    }
+
+    /**
+     * Construit un objet LocationData sans latitude ni longitude de predefini
+     *
+     * Lors de l'appel aux methodes {@link #getLatitude()} et {@link #getLongitude()},
+     * l'objet appelera la methode {@link #writeData()}
+     *
+     * @param listener l'objet qui recevera les donnees
      */
     public LocationData(DataReadyListener listener)
     {
         this.listener = listener;
         super.addDataReadyListener(this.listener);
-        getLatitude();
-        getLongitude();
     }
 
     @Override
     protected void finalize() throws Throwable {
         super.removeDataReadyListener(this.listener);
-
         super.finalize();
     }
 
-    private void setLatitude(Double latitude)
-    {
+    protected void writeData() {
+        super.writeData(ref, this);
+    }
+
+    public void checkForWriting() throws Exception {
+        if(longitude == null || latitude == null)
+            throw new Exception("Object LocationData incomplete");
+        writeData();
+    }
+
+    private void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    private void setLongitude(Double longitude)
-    {
-        this. longitude = longitude;
+    private void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
-    private void checkComplete()
-    {
-        if(latitude != null && longitude != null)
-            complete = true;
-    }
-
-    /**
-     * Sert a construire l'objet a partir de la base de donnee.
-     * Si on a deja la donnee, on la retourne. Sinon, on la li
-     * dans la BDD
-     *
-     * @return La latitude si elle a deja ete lu dans la base de donnee, sinon null
-     */
     public Double getLatitude() {
-        if(latitude != null)
-            return latitude;
-
-        super.readDataByKey("location", "1522332541058", new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot location = dataSnapshot.child(key_lat);
-                latitude = (Double) location.getValue();
-                setLatitude(latitude);
-                checkComplete();
-                dataReady(complete);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                latitude = 0.0;
-            }
-        });
-
+        if(latitude == null && !fetchingData) {
+            fetchingData = true;
+            super.readLastData(ref, this);
+            return null;
+        } else if(latitude == null) {
+            return null;
+        }
         return latitude;
     }
 
-    /**
-     * Sert a construire l'objet a partir de la base de donnee.
-     * Si on a deja la donnee, on la retourne. Sinon, on la li
-     * dans la BDD
-     *
-     * @return La latitude si elle a deja ete lu dans la base de donnee, sinon null
-     */
     public Double getLongitude() {
-        if(longitude != null)
-            return longitude;
-
-        super.readDataByKey("location", "1522332541058", new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot location = dataSnapshot.child(key_long);
-                longitude = (Double) location.getValue();
-                setLongitude(longitude);
-                checkComplete();
-                dataReady(complete);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                longitude = null;
-            }
-        });
-
+        if(longitude == null && !fetchingData) {
+            fetchingData = true;
+            super.readLastData(ref,this);
+        }else if(longitude == null) {
+            return null;
+        }
         return longitude;
     }
 
-    /**
-     * @return True si toutes les donnees ont ete lu dans la BDD, sinon False
-     */
-    public Boolean isComplete() {
-        return complete;
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        LocationData data = dataSnapshot.getValue(LocationData.class);
+        this.setLongitude(data.longitude);
+        this.setLatitude(data.latitude);
+        this.fetchingData = false;
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.d("BDEM_ERROR", String.format("onCancelled():LocationData()%n%1$", databaseError.getMessage()));
     }
 }
