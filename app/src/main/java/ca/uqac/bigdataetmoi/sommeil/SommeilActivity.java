@@ -1,27 +1,38 @@
-package ca.uqac.bigdataetmoi.activity;
+package ca.uqac.bigdataetmoi.sommeil;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.widget.TextView;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.DataCollection;
-import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.service.data_interpretation.SommeilInfo;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
+
+public class SommeilActivity extends BaseActivity {
+    private SommeilPresenter sommeilPresenter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sommeil);
+
+        // On assigne l'activite courante dans le Fetcher
+        ActivityFetcherActivity.setCurrentActivity(this);
+        
+        SommeilFragment frag = (SommeilFragment) getFragmentManager().findFragmentById(R.layout.fragment_sommeil);
+        if (frag == null) {
+            frag = new SommeilFragment();
+            // On l'ajoute a l'activite a l'aide des FragmentTransactions
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.sommeil_frame, frag);
+            transaction.commit();
+        }
+
+        sommeilPresenter = new SommeilPresenter(frag);
+    }
+}
+
+/*
 public class SommeilActivity extends BaseActivity {
 
     private TextView mLuxTextView, mInterLuxTextView, mAccelTextView, mProximiTextView;
@@ -31,12 +42,7 @@ public class SommeilActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sommeil);
-
-        //ajouter des valeurs en manuel
-        /*DatabaseManager dbManager;
-        dbManager = DatabaseManager.getInstance();
-        dbManager.storeSommeilCalculationData(130);*/
+        setContentView(R.layout.fragment_sommeil);
 
         //Récupération des views
         mLuxTextView = findViewById(R.id.luxTextView);
@@ -137,4 +143,4 @@ public class SommeilActivity extends BaseActivity {
 
     }
 }
-
+*/
