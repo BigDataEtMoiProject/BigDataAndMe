@@ -5,9 +5,11 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.database.data.PodometerData;
 
 /**
  * Created by fs77 on 27/12/2017.
@@ -20,12 +22,16 @@ import ca.uqac.bigdataetmoi.database.DataCollection;
 // Pour le moment, on fait juste stocker ces données, nous pourrions interpréter ces données plus tard
 // afin de déterminer le nombre de pas pour un interval donné.
 
-public class PodometerInfoProvider extends InfoProvider implements SensorEventListener
+public class PodometerInfoProvider implements SensorEventListener
 {
+    private DataReadyListener mListener;
+
     private SensorManager mSensorManager;
 
-    public PodometerInfoProvider(Context context)
+    public PodometerInfoProvider(Context context, DataReadyListener listener)
     {
+        mListener = listener;
+
         mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         Sensor podoSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         mSensorManager.registerListener(this, podoSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -36,10 +42,8 @@ public class PodometerInfoProvider extends InfoProvider implements SensorEventLi
     {
         mSensorManager.unregisterListener(this);
 
-        DataCollection collection = new DataCollection();
-        collection.steps = sensorEvent.values[0];
-
-        generateDataReadyEvent(collection);
+        PodometerData data = new PodometerData(null, sensorEvent.values[0]);
+        mListener.dataReady(data);
     }
 
     @Override

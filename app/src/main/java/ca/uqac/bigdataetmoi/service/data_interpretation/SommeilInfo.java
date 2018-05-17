@@ -1,24 +1,16 @@
 package ca.uqac.bigdataetmoi.service.data_interpretation;
 
-import android.media.MediaRecorder;
-import android.os.Handler;
-import android.text.format.DateFormat;
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.database.DataCollection;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.service.info_provider.InfoProvider;
 
 /**
  * Created by Leonie on 20/03/2018.
@@ -27,7 +19,7 @@ import ca.uqac.bigdataetmoi.service.info_provider.InfoProvider;
  * du capteur de lumière et de l'ouverure/fermeture de l'écran afin d'approximer le temps de sommeil
  */
 
-public class SommeilInfo extends InfoProvider {
+public class SommeilInfo {
 
     private static final long MILLIS_ONE_DAY = 86400000;
 

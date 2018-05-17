@@ -20,13 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import ca.uqac.bigdataetmoi.startup.BaseActivity;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
-import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 import ca.uqac.bigdataetmoi.R;
 
 public class LoginActivity extends BaseActivity {
 
-    private EditText field_Email, field_Password;
-    private Button btn_Login;
+    private EditText fieldEmail, fieldPassword;
     private FirebaseAuth auth;
 
     @Override
@@ -36,58 +34,49 @@ public class LoginActivity extends BaseActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        field_Email = findViewById(R.id.signin_field_email);
-        field_Password = findViewById(R.id.signin_field_password);
-        btn_Login = findViewById(R.id.signin_btn_login);
+        fieldEmail = findViewById(R.id.signin_field_email);
+        fieldPassword = findViewById(R.id.signin_field_password);
+        final Button btnLogin = findViewById(R.id.signin_btn_login);
 
-        btn_Login.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String email = field_Email.getText().toString().trim();
-                String password = field_Password.getText().toString().trim();
+                final String email = fieldEmail.getText().toString(),
+                    password = fieldPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.signin_error_empty_email), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.signin_error_empty_password), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                auth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, getString(R.string.signin_error_wrong_email_or_password), Toast.LENGTH_LONG).show();
-                                } else {
-                                    ActivityFetcherActivity.user = auth.getCurrentUser();
-                                    Log.e("LOGIN", ActivityFetcherActivity.user.getUid());
-                                    launchMainActivity();
+                    fieldEmail.setError(getString(R.string.error_empty_email));
+                } else if (TextUtils.isEmpty(password)) {
+                    fieldPassword.setError(getString(R.string.error_empty_password));
+                } else if (password.length() < 6) {
+                    fieldPassword.setError(getString(R.string.signup_error_password_too_short));
+                } else {
+                    auth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        Toast.makeText(LoginActivity.this, getString(R.string.signin_error_authentication_failed), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        ActivityFetcherActivity.user = auth.getCurrentUser();
+                                        Log.e("LOGIN", ActivityFetcherActivity.user.getUid());
+                                        finish();
+                                    }
                                 }
-                            }
-                        });
-
+                            });
+                }
             }
         });
 
-        WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if (wifi.isWifiEnabled() == false)
-        {
-            Toast.makeText(getApplicationContext(), "Activation de la mWifiManager", Toast.LENGTH_LONG).show();
+        final WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (wifi != null && !wifi.isWifiEnabled()) {
+            Toast.makeText(getApplicationContext(), "Activation de la Wifi", Toast.LENGTH_LONG).show();
             wifi.setWifiEnabled(true);
         }
     }
 
-    public void launchMainActivity(){
-        startActivity(new Intent(LoginActivity.this, MainMenuActivity.class));
-        finish();
-    }
-
     public void launchSignupActivity(View v){
         startActivity(new Intent(LoginActivity.this, SignupActivity.class));
-        finish();
     }
 }

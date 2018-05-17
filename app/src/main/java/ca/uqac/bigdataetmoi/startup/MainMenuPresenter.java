@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,17 +41,9 @@ public class MainMenuPresenter implements IMainMenuContract.Presenter, DataReady
     }
 
     @Override
-    public void fetchEndroits(String dateBeginning, String dateEnd) {
+    public void fetchEndroits(Date beginning, Date end) {
         MapDataHelper mapHelper = new MapDataHelper();
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-            Date beginning = formatter.parse(dateBeginning);
-            Date end = formatter.parse(dateEnd);
-
-            mapHelper.fetchAllLocations(this, beginning.getTime(), end.getTime());
-        }catch (ParseException e) {
-            Log.d("BDEM EXCEP", e.getMessage());
-        }
+        mapHelper.fetchAllLocations(this, beginning.getTime(), end.getTime());
     }
 
     @Override
@@ -60,22 +53,33 @@ public class MainMenuPresenter implements IMainMenuContract.Presenter, DataReady
 
     @Override
     public void start() {
-        fetchEndroits("01-04-2018", "18-04-2018");
+        Calendar cal = Calendar.getInstance();
+
+        Date today = cal.getTime();
+        cal.add(Calendar.DATE, -10);
+        //TODO:Change last week to yesterday --> Debug only
+        Date lastWeek = cal.getTime();
+
+        fetchEndroits(lastWeek, today);
     }
 
     @Override
     public void dataReady(Object o) {
         if(o.getClass() == DataSnapshot.class) {
-            DataSnapshot data = (DataSnapshot)o;
-            //TODO: Reinitialiser la base de donnee pour supprimer les valeurs non conforme (location --> latitude, longitude)
-            for(DataSnapshot childData : data.getChildren()) {
-                System.out.println(childData.getKey());
-                for(DataSnapshot child_childData : childData.getChildren()) {
-                    System.out.println("-->"+child_childData.getKey());
-                }
+            DataSnapshot data = (DataSnapshot) o;
+
+            if(!data.hasChildren())
+                return;
+
+            for(DataSnapshot child : data.getChildren()) {
+                locations.add(child.getValue(LocationData.class));
+            }
+
+            if(locations.size() > 0) {
+                view.afficherEndroits(locations);
             }
         } else if (o.getClass() == Exception.class) {
-            Log.d("BDEM EXCEP", ((Exception)o).getMessage());
+            Log.d("BDEM_ERROR", ((Exception)o).getMessage());
         }
     }
 }

@@ -6,6 +6,11 @@
 
 package ca.uqac.bigdataetmoi.database;
 
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,13 +28,12 @@ import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 
 public abstract class AbstractDataManager implements DataReadyListener {
 
-    protected enum DataPath {SENSOR_DATA, CALCULATION_DATA};
-    private static DatabaseReference mRootDbRef;
-    private static String mCurrentIdentification;
+    protected static DatabaseReference mRootDbRef;
+    protected static long currentTimeMillis = System.currentTimeMillis();
     private ArrayList<DataReadyListener> listeners;
 
     public AbstractDataManager() {
-        if(mRootDbRef == null || mCurrentIdentification == null)
+        if(mRootDbRef == null)
             setRef();
 
         listeners = new ArrayList<DataReadyListener>();
@@ -37,8 +41,8 @@ public abstract class AbstractDataManager implements DataReadyListener {
 
     private static void setRef()
     {
-        mCurrentIdentification = ActivityFetcherActivity.getUserId();
-        mRootDbRef = FirebaseDatabase.getInstance().getReference();
+        mRootDbRef = FirebaseDatabase.getInstance().
+                getReference().child("data");
     }
 
     @Override
@@ -60,49 +64,22 @@ public abstract class AbstractDataManager implements DataReadyListener {
         listeners.remove(listener);
     }
 
-    private static String getPath(DataPath dataPath){
-        String path;
-
-        switch(dataPath) {
-            case SENSOR_DATA:
-                path = "sensordata/" + mCurrentIdentification;
-                break;
-            case CALCULATION_DATA:
-                path = "calculationdata/" + mCurrentIdentification;
-                break;
-            default:
-                path = "";
-        }
-
-        return path;
-    }
-
-    private void writeData(String path, Object value) {
-        mRootDbRef.child(path).setValue(value);
-    }
-
     /**
-     * Ecriture dans la BDD
-     *
-     * @param dataPath Objet DataPath
-     * @param key La cle de l'objet a ecrire
-     * @param value l'objet a ecrire
+     * Ecriture dans la BDD du temps actuel
      */
-    protected void writeData(DataPath dataPath, String key, Object value) {
-        String path = getPath(dataPath) + key;
-        writeData(path, value);
+    protected void writeData(DatabaseReference ref, Object c) {
+        ref.child(Long.toString(System.currentTimeMillis())).setValue(c);
     }
 
     /**
      * Lecture des donnees dans la BDD selon une cle
      *
-     * @param dataPath Objet DataPath
+     * @param ref la reference au sous-arbre contenant la donnée (exemple : location)
      * @param key La cle du noeud a lire
      * @param resultListener Le listener a appeller lorsqu'il y a une erreur ou lorsque les resultats sont prets
      */
-    protected void readDataByKey(DataPath dataPath, String key, final ValueEventListener resultListener) {
-
-        mRootDbRef.child(getPath(dataPath)).child(key).addValueEventListener(new ValueEventListener() {
+    protected void readDataByKey(DatabaseReference ref, String key, final ValueEventListener resultListener) {
+        ref.child(key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 resultListener.onDataChange(dataSnapshot);
@@ -118,14 +95,14 @@ public abstract class AbstractDataManager implements DataReadyListener {
     /**
      * Lecture des donnees dans la BDD
      *
-     * @param dataPath Objet DataPath
+     * @param ref la reference au sous-arbre contenant la donnée (exemple : location)
      * @param firstKey La cle de debut de filtre
      * @param lastKey La cle de fin de filtre
      * @param resultListener Le listener a appeller lorsqu'il y a une erreur ou lorsque les resultats sont prets
      */
-    protected void readDataByRange(DataPath dataPath, String firstKey, String lastKey, final ValueEventListener resultListener) {
+    protected void readDataByRange(DatabaseReference ref, String firstKey, String lastKey, final ValueEventListener resultListener) {
 
-        mRootDbRef.child(getPath(dataPath)).orderByKey().startAt(firstKey).endAt(lastKey).addValueEventListener(new ValueEventListener() {
+        ref.orderByKey().startAt(firstKey).endAt(lastKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 resultListener.onDataChange(dataSnapshot);
@@ -137,6 +114,19 @@ public abstract class AbstractDataManager implements DataReadyListener {
             }        });
     }
 
+    protected void readLastData(DatabaseReference ref, final ValueEventListener listener) {
+        ref.orderByKey().limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.onDataChange(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onCancelled(databaseError);
+            }
+        });
+    }
 }
 
 

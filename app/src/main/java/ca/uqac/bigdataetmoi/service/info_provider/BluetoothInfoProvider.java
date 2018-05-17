@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.uqac.bigdataetmoi.database.DataCollection;
+import ca.uqac.bigdataetmoi.database.data.BluetoothData;
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
 import static android.Manifest.permission.*;
@@ -22,16 +24,20 @@ import static android.Manifest.permission.*;
  * Récupération des données du bluetooth et écriture dans la base de données
  */
 
-public class BluetoothInfoProvider extends InfoProvider
+public class BluetoothInfoProvider
 {
     private final static int SEARCH_SECONDS = 20;
+
+    private DataReadyListener mListener;
 
     private BluetoothAdapter mBTAdapter;
     private BroadcastReceiver mBroadCastReceiver;
     private List<String> mBluetoothSSID;
 
-    public BluetoothInfoProvider(final Context context)
+    public BluetoothInfoProvider(final Context context, DataReadyListener listener)
     {
+        mListener = listener;
+
         if(PermissionManager.getInstance().isGranted(BLUETOOTH_ADMIN))
         {
             mBluetoothSSID = new ArrayList<>();
@@ -40,6 +46,9 @@ public class BluetoothInfoProvider extends InfoProvider
             // Activation du Bluetooth
             if (mBTAdapter != null && !mBTAdapter.isEnabled())
             {
+                // TODO: Must ask for turning on Bluetooth by using :
+                // startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_CODE);
+                // as per https://developer.android.com/guide/topics/connectivity/bluetooth.html#SettingUp
                 mBTAdapter.enable();
             }
 
@@ -48,11 +57,11 @@ public class BluetoothInfoProvider extends InfoProvider
             {
                 mBroadCastReceiver = new BroadcastReceiver() {
                     public void onReceive(Context context, Intent intent) {
-                        String action = intent.getAction();
-                        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                            mBluetoothSSID.add(device.getName());
-                        }
+                    String action = intent.getAction();
+                    if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                        mBluetoothSSID.add(device.getName());
+                    }
                     }
                 };
 
@@ -65,15 +74,18 @@ public class BluetoothInfoProvider extends InfoProvider
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mBTAdapter.cancelDiscovery();
-                        context.unregisterReceiver(mBroadCastReceiver);
+                    mBTAdapter.cancelDiscovery();
+                    context.unregisterReceiver(mBroadCastReceiver);
 
-                        DataCollection collection = new DataCollection();
-                        collection.bluetoothSSID = mBluetoothSSID;
-                        generateDataReadyEvent(collection);
+                    // Écriture des ssid lues dans la bd
+                    BluetoothData data = new BluetoothData(null, mBluetoothSSID);
+                    mListener.dataReady(data);
+
                     }
                 }, SEARCH_SECONDS * 1000);
             }
         }
+        else
+            mListener.dataReady(null);
     }
 }

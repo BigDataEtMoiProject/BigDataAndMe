@@ -4,6 +4,7 @@ import android.provider.ContactsContract;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class MapDataHelper extends AbstractDataManager implements ValueEventList
 
     private List<LocationData> locations;
     private List<DataReadyListener> listeners;
+    private DatabaseReference ref = mRootDbRef.child("location");
 
     public MapDataHelper() {
         locations = new ArrayList<LocationData>();
@@ -46,7 +48,7 @@ public class MapDataHelper extends AbstractDataManager implements ValueEventList
     public void fetchAllLocations(DataReadyListener listener, long beginning, long end)
     {
         listeners.add(listener);
-        readDataByRange(AbstractDataManager.DataPath.SENSOR_DATA,
+        readDataByRange(ref,
                 Long.toString(beginning),
                 Long.toString(end),
                 this);

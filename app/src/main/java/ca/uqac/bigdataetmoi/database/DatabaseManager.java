@@ -12,6 +12,8 @@ import java.util.Date;
 /**
  * Created by Patrick Lapointe on 2017-11-16.
  * Cette classe à pour but de gérer la base de données, c'est à dire son initialisation et la communication.
+ *
+ * ATTENTION : CECI NE DEVRAIT PLUS ÊTRE UTILISÉ, IL FAUT PASSER PAR LE ABSTRACTDATAMANAGER À LA PLACE.
  */
 
 public class DatabaseManager
