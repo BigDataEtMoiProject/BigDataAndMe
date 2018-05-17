@@ -54,8 +54,8 @@ public class CompteurDePasActivity extends BaseActivity {
         yValues = new ArrayList<>();
 
         //Ajouté
-        affichage_nbpas_moyenne = (TextView) findViewById(R.id.moyenne_pas);
-        nb_pas_veille = (TextView) findViewById(R.id.nb_pas_veille);
+        affichage_nbpas_moyenne =  findViewById(R.id.moyenne_pas);
+        nb_pas_veille = findViewById(R.id.nb_pas_veille);
         nb_pas_veille.setText("");
         affichage_nbpas_moyenne.setText("");
     }
@@ -82,7 +82,7 @@ public class CompteurDePasActivity extends BaseActivity {
                     String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
 
                     // On rempli les champs de l'écran
-                    textView.setText("      COMPTEUR DE PAS\n\n      Nb de pas aujourd'hui : " + Float.toString(data.steps) + "pas");
+                    textView.setText("      COMPTEUR DE PAS\n\n      Nb de pas aujourd'hui : " + Float.toString(data.steps) + " pas");
                 }
             }
 
