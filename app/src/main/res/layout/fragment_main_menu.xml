@@ -7,8 +7,8 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/layout_main_btn"/>
+        android:layout_above="@+id/layout_main_btn"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:id="@+id/layout_main_btn"
@@ -18,6 +18,14 @@
         android:weightSum="3"
         android:layout_alignParentBottom="true"
         android:padding="8dp">
+
+        <Button
+            android:id="@+id/btn_main_application"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="launchApplicationDetailsActivity"
+            android:text="@string/btn_main_application" />
 
         <Button
             android:id="@+id/btn_main_sleep"

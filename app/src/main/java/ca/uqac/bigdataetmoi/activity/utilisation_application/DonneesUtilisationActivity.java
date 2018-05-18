@@ -54,7 +54,7 @@ public class DonneesUtilisationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         if(Build.VERSION.SDK_INT >= 21) {
-            setContentView(R.layout.activity_donnees_utilisation);
+            setContentView(R.layout.fragment_donnees_utilisation);
 
             //Initialiser et afficher les layouts, donnnées , etc.
             setLayoutAndData();

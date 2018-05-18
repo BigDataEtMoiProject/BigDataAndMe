@@ -43,7 +43,7 @@
         <activity android:name=".authentification.SignupActivity" />
         <activity android:name=".sommeil.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
-        <activity android:name=".activity.utilisation_application.DonneesUtilisationActivity" />
+        <activity android:name=".application_usage.UsageActivity" />
 
         <receiver
             android:name=".service.BroadcastOnBoot"

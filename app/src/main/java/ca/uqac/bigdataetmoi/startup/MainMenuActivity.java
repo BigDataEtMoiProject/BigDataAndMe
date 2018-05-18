@@ -16,6 +16,7 @@ import android.widget.Toast;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
+import ca.uqac.bigdataetmoi.application_usage.UsageActivity;
 import ca.uqac.bigdataetmoi.sommeil.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
@@ -142,5 +143,9 @@ public class MainMenuActivity extends BaseActivity {
 
     public void launchStepsActivity(View view) {
         startActivity(new Intent(this, CompteurDePasActivity.class));
+    }
+
+    public void launchApplicationDetailsActivity(View view) {
+        startActivity(new Intent(this, UsageActivity.class));
     }
 }

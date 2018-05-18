@@ -64,7 +64,7 @@ public class UsageTimelineActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_usage_timeline);
+        setContentView(R.layout.fragment_usage_timeline);
         setTitle("Timeline");
         initializeLayoutAndData();
     }

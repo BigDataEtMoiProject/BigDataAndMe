@@ -67,5 +67,6 @@
     <string name="about_description">Cette application fut réalisée par des étudiants de l\'UQAC en informatique et des étudiants de l\'IUT d\'Orsay.
         Ce fut un projet de conception d\'une application pour sensibiliser les personnes sur les différentes informations que leur téléphone peut
         récupérer sans qu\'ils le sachent. \n\nRéalisé par : </string>
+    <string name="btn_main_application">Application Details</string>
 
 </resources>
