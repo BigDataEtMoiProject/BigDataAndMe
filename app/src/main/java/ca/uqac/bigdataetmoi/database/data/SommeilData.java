@@ -17,6 +17,8 @@ public class SommeilData extends AbstractDataManager implements ValueEventListen
 
     protected static DatabaseReference ref = mRootDbRef.child("sommeil");
 
+    public SommeilData() {}
+
     /**
      * @param listener Doit s'abonner a l'evenement 'DataReady()' car la lecture dans la BDD est asynchrone.
      *                 Avant de travailler avec l'objet, il faut d'assurer que l'objet est complete.
