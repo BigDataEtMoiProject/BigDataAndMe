@@ -38,46 +38,37 @@
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:columnCount="3"
-            android:rowCount="1"
+            android:orientation="horizontal"
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
+            android:rowCount="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:layout_editor_absoluteY="87dp">
 
 
-            <ImageView
-                android:id="@+id/imageView"
+            <ImageButton
+                android:id="@+id/imageButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnSpan="1"
-                android:layout_rowSpan="1"
-                android:layout_gravity="left"
-                app:srcCompat="@mipmap/ic_launcher"
-                android:contentDescription="Application 1" />
+                android:onClick="click"
+                app:srcCompat="@mipmap/ic_launcher" />
 
-            <ImageView
-                android:id="@+id/imageView3"
+            <ImageButton
+                android:id="@+id/imageButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnSpan="1"
-                android:layout_rowSpan="1"
-                android:layout_gravity="center"
-                app:srcCompat="@mipmap/ic_launcher_round"
-                android:contentDescription="Application 2" />
+                android:onClick="click"
+                app:srcCompat="@mipmap/ic_launcher" />
 
-            <ImageView
-                android:id="@+id/imageView4"
+            <ImageButton
+                android:id="@+id/imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnSpan="1"
-                android:layout_rowSpan="1"
-                app:srcCompat="@mipmap/ic_launcher_round"
-                android:contentDescription="Application 3" />
-
+                android:onClick="click"
+                app:srcCompat="@mipmap/ic_launcher" />
         </GridLayout>
 
     </LinearLayout>

@@ -2,16 +2,22 @@ package ca.uqac.bigdataetmoi.application_usage;
 
 import android.app.FragmentTransaction;
 import android.app.usage.UsageStatsManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.application_usage_details.ApplicationUsageDetailsActivity;
+import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
 import ca.uqac.bigdataetmoi.startup.BaseActivity;
+import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 
 /**
  * Created by Joshua on 18/04/2018
@@ -62,6 +68,10 @@ public class UsageActivity extends BaseActivity{
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void click(View view){
+        startActivity(new Intent(this, ApplicationUsageDetailsActivity.class));
     }
 }
 

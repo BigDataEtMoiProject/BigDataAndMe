@@ -44,6 +44,7 @@
         <activity android:name=".sommeil.SommeilActivity" />
         <activity android:name=".activity.CompteurDePasActivity" />
         <activity android:name=".application_usage.UsageActivity" />
+        <activity android:name=".application_usage_details.ApplicationUsageDetailsActivity" />
 
         <receiver
             android:name=".service.BroadcastOnBoot"
