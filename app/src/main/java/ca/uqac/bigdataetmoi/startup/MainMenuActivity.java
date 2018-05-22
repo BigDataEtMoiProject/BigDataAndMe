@@ -50,6 +50,7 @@ public class MainMenuActivity extends BaseActivity {
         // On met l'identifieur du téléphone dans la classe ActivityFetcherActivity
         ActivityFetcherActivity.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
+        // L'activity créer le gfragment et le lie avece le presenter
         MainMenuFragment frag = (MainMenuFragment) getFragmentManager().findFragmentById(R.layout.fragment_main_menu);
         if (frag == null) {
             frag = new MainMenuFragment();
