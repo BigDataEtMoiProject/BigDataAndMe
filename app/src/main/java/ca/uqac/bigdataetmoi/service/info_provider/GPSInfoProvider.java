@@ -20,8 +20,8 @@ import static android.Manifest.permission.*;
 
 public class GPSInfoProvider implements LocationListener
 {
-    final int LOC_UPDATE_MIN_TIME = 0; //in ms
-    final int LOC_UPDATE_MIN_DISTANCE = 0; //in sec
+    final long LOC_UPDATE_MIN_TIME = 500; //in ms
+    final float LOC_UPDATE_MIN_DISTANCE = 20; //in meters
 
     DataReadyListener mListener;
 
@@ -43,7 +43,7 @@ public class GPSInfoProvider implements LocationListener
 
     @Override
     public void onLocationChanged(Location location) {
-        LocationData data = new LocationData(null, location.getLatitude(), location.getLatitude());
+        LocationData data = new LocationData(null, location.getLatitude(), location.getLongitude());
         mListener.dataReady(data);
     }
     @Override

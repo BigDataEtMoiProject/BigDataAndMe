@@ -4,6 +4,7 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
@@ -11,7 +12,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import ca.uqac.bigdataetmoi.database.data.LocationData;
 import ca.uqac.bigdataetmoi.database.data.UsageAppData;
+import ca.uqac.bigdataetmoi.startup.IMainMenuContract;
 
 /**
  * Created by Joshua on 18/04/2018
@@ -19,11 +22,13 @@ import ca.uqac.bigdataetmoi.database.data.UsageAppData;
  */
 
 @RequiresApi(21)
-public class UsagePresenter {
+public class UsagePresenter implements IUsageContract.Presenter {
     private UsageStatsManager statsManager;
     private PackageManager pm;
     private List<UsageAppData> usageApps;
     private List<UsageAppData> mostUseApps;
+
+    private IUsageContract.View view;
 
     public UsagePresenter(UsageStatsManager statsManager, PackageManager pm) {
         this.statsManager = statsManager;
@@ -32,9 +37,15 @@ public class UsagePresenter {
         getUsageApps();
         completeInfoUsageApps();
         getMostUseApps();
-
     }
 
+    public  UsagePresenter(@NonNull IUsageContract.View view) {
+        if(view != null) {
+            this.view = view;
+            view.setPresenter(this);
+        }
+        usageApps = new ArrayList<UsageAppData>();
+    }
 
     public void getUsageApps(){
         //Période sur un an
@@ -112,6 +123,11 @@ public class UsagePresenter {
         }
 
         return tmpList;
+    }
+
+    @Override
+    public void start() {
+
     }
 }
 
