@@ -18,6 +18,7 @@ import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.application_usage.UsageActivity;
 import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
 import ca.uqac.bigdataetmoi.sommeil.SommeilActivity;
+//import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
 import ca.uqac.bigdataetmoi.menu.AboutActivity;
@@ -50,6 +51,7 @@ public class MainMenuActivity extends BaseActivity {
         // On met l'identifieur du téléphone dans la classe ActivityFetcherActivity
         ActivityFetcherActivity.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
+        // L'activity créer le gfragment et le lie avece le presenter
         MainMenuFragment frag = (MainMenuFragment) getFragmentManager().findFragmentById(R.layout.fragment_main_menu);
         if (frag == null) {
             frag = new MainMenuFragment();
