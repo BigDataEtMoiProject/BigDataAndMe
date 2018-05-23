@@ -48,6 +48,7 @@
     <string name="permission_manager_contacts">Accès aux contacts de l\'appareil</string>
     <string name="permission_manager_bluetooth">Accès au Bluetooth de l\'appareil</string>
     <string name="permission_manager_wifi">Accès au Wi-Fi de l\'appareil</string>
+    <string name="permission_manager_usage">Accès aux données d\'utilisation</string>
     <string name="title_activity_permission_settings">Permissions des capteurs</string>
 
     <!-- Endroits bruyants -->

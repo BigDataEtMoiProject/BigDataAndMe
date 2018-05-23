@@ -27,7 +27,6 @@ import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 @RequiresApi(22)
 public class UsageActivity extends BaseActivity{
 
-    private UsageStatsManager statsManager;
     private UsagePresenter up;
     private DrawerLayout mDrawerLayout;
 
@@ -35,7 +34,6 @@ public class UsageActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donnees_utilisation);
-        setupActionBar();
 
         mDrawerLayout = findViewById(R.id.drawer_layout2);
 
@@ -48,16 +46,6 @@ public class UsageActivity extends BaseActivity{
             transaction.commit();
         }
         up = new UsagePresenter(frag);
-
-        BigDataService.startRecurrence(getApplicationContext());
-    }
-
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
     }
 
     @Override

@@ -14,6 +14,7 @@ import ca.uqac.bigdataetmoi.R;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_WIFI_STATE;
 import static android.Manifest.permission.BLUETOOTH_ADMIN;
+import static android.Manifest.permission.PACKAGE_USAGE_STATS;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_SMS;
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -23,7 +24,7 @@ public class PermissionFragment extends Fragment implements IPermissionContract.
     private IPermissionContract.Presenter presenter;
 
     private Switch switchLocation, switchMicrophone,
-            switchSMS, switchContacts, switchBluetooth, switchWifi;
+            switchSMS, switchContacts, switchBluetooth, switchWifi, switchUsage;
 
     public PermissionFragment() { }
 
@@ -37,6 +38,7 @@ public class PermissionFragment extends Fragment implements IPermissionContract.
         switchContacts = rootView.findViewById(R.id.switch_contacts);
         switchBluetooth = rootView.findViewById(R.id.switch_bluetooth);
         switchWifi = rootView.findViewById(R.id.switch_wifi);
+        switchUsage = rootView.findViewById(R.id.switch_usage);
 
         return rootView;
     }
@@ -85,6 +87,13 @@ public class PermissionFragment extends Fragment implements IPermissionContract.
                 presenter.setPermissionGranted(ACCESS_WIFI_STATE, checked);
             }
         });
+
+        switchUsage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                presenter.setPermissionGranted(PACKAGE_USAGE_STATS, checked);
+            }
+        });
     }
 
     @Override
@@ -115,6 +124,11 @@ public class PermissionFragment extends Fragment implements IPermissionContract.
     @Override
     public void setWifiChecked(boolean checked) {
         switchWifi.setChecked(checked);
+    }
+
+    @Override
+    public void setUsageChecked(boolean checked) {
+        switchUsage.setChecked(checked);
     }
 
     @Override

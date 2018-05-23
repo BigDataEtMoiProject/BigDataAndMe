@@ -1,12 +1,14 @@
 package ca.uqac.bigdataetmoi.application_usage;
 
+import java.util.List;
+
+import ca.uqac.bigdataetmoi.database.data.UsageAppData;
 import ca.uqac.bigdataetmoi.utility.IBasePresenter;
 import ca.uqac.bigdataetmoi.utility.IBaseView;
 
 public interface IUsageContract {
-    interface View extends IBaseView<Presenter> {
-        //La view se chargera d'appeller l'activite de detail
-
+    interface View extends IBaseView<IUsageContract.Presenter> {
+        void displayLastWeekUsage(List<UsageAppData> usageData);
     }
 
     interface Presenter extends IBasePresenter {

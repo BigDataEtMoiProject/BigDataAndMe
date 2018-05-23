@@ -7,6 +7,7 @@ import ca.uqac.bigdataetmoi.utility.PermissionManager;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_WIFI_STATE;
 import static android.Manifest.permission.BLUETOOTH_ADMIN;
+import static android.Manifest.permission.PACKAGE_USAGE_STATS;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_SMS;
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -46,5 +47,6 @@ public class PermissionPresenter implements IPermissionContract.Presenter {
         view.setContactsChecked(permissionManager.isGranted(READ_CONTACTS));
         view.setBluetoothChecked(permissionManager.isGranted(BLUETOOTH_ADMIN));
         view.setWifiChecked(permissionManager.isGranted(ACCESS_WIFI_STATE));
+        view.setUsageChecked(permissionManager.isGranted(PACKAGE_USAGE_STATS));
     }
 }

@@ -1,7 +1,9 @@
 package ca.uqac.bigdataetmoi.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -16,6 +18,8 @@ import java.util.Map;
 
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
+
+import static android.Manifest.permission.PACKAGE_USAGE_STATS;
 
 /**
  * Created by Patrick Lapointe on 2018-02-14.
@@ -77,6 +81,9 @@ public class PermissionManager
 
     // Demande la permission à l'utilisateur (pour android version 6 et plus)
     private void requestPermission(String permission) {
+        if(permission.equals(PACKAGE_USAGE_STATS))
+            ActivityFetcherActivity.getCurrentActivity().startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        else
             ActivityCompat.requestPermissions(ActivityFetcherActivity.getCurrentActivity(), new String[]{permission}, 0);
     }
 

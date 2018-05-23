@@ -20,7 +20,6 @@ public class ApplicationUsageDetailsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temps_utilisation_details);
-        setupActionBar();
 
         mDrawerLayout = findViewById(R.id.drawer_layout3);
 
@@ -33,15 +32,6 @@ public class ApplicationUsageDetailsActivity extends BaseActivity {
             transaction.commit();
         }
         up = new ApplicationUsageDetailsPresenter(frag);
-
-        BigDataService.startRecurrence(getApplicationContext());
     }
 
-    private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
 }

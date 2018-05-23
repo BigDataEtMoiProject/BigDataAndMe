@@ -12,6 +12,7 @@ public interface IPermissionContract {
         void setContactsChecked(boolean checked);
         void setBluetoothChecked(boolean checked);
         void setWifiChecked(boolean checked);
+        void setUsageChecked(boolean checked);
     }
 
     interface Presenter extends IBasePresenter {

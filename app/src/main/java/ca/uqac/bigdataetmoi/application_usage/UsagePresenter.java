@@ -2,6 +2,7 @@ package ca.uqac.bigdataetmoi.application_usage;
 
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -12,9 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import ca.uqac.bigdataetmoi.database.data.LocationData;
 import ca.uqac.bigdataetmoi.database.data.UsageAppData;
-import ca.uqac.bigdataetmoi.startup.IMainMenuContract;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 
 /**
  * Created by Joshua on 18/04/2018
@@ -24,36 +24,38 @@ import ca.uqac.bigdataetmoi.startup.IMainMenuContract;
 @RequiresApi(21)
 public class UsagePresenter implements IUsageContract.Presenter {
     private UsageStatsManager statsManager;
-    private PackageManager pm;
+    private PackageManager packageManager;
     private List<UsageAppData> usageApps;
     private List<UsageAppData> mostUseApps;
 
     private IUsageContract.View view;
-
-    public UsagePresenter(UsageStatsManager statsManager, PackageManager pm) {
-        this.statsManager = statsManager;
-        this.pm = pm;
-
-        getUsageApps();
-        completeInfoUsageApps();
-        getMostUseApps();
-    }
 
     public  UsagePresenter(@NonNull IUsageContract.View view) {
         if(view != null) {
             this.view = view;
             view.setPresenter(this);
         }
-        usageApps = new ArrayList<UsageAppData>();
+        packageManager = ActivityFetcherActivity.getCurrentActivity().getPackageManager();
+        statsManager = (UsageStatsManager) ActivityFetcherActivity.getCurrentActivity().getSystemService(Context.USAGE_STATS_SERVICE);
     }
 
-    public void getUsageApps(){
+    @Override
+    public void start() {
+        getUsageApps();
+
+        if(usageApps.size() > 0)
+            completeInfoUsageApps();
+    }
+
+    public void getUsageApps() {
         //Période sur un an
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, -1);
+        cal.add(Calendar.DAY_OF_WEEK, -1);
 
         //Récupérer les UsageStats sur un an
-        final List<UsageStats> queryUsageStats = new ArrayList(statsManager.queryAndAggregateUsageStats(cal.getTimeInMillis(), System.currentTimeMillis()).values());
+        long beginMillis = cal.getTimeInMillis();
+        long endMillis = System.currentTimeMillis();
+        final List<UsageStats> queryUsageStats = new ArrayList<>(statsManager.queryAndAggregateUsageStats(beginMillis, endMillis).values());
         usageApps = new ArrayList<>();
 
         for (UsageStats usage : queryUsageStats) {
@@ -66,7 +68,8 @@ public class UsagePresenter implements IUsageContract.Presenter {
 
     public void completeInfoUsageApps(){
         //Récupérer la liste des informations sur les applications installées
-        List<ApplicationInfo> apps = pm.getInstalledApplications(0);
+        List<ApplicationInfo> apps = packageManager.getInstalledApplications(0);
+        List<UsageAppData> usageResult = new ArrayList<>();
 
         for (ApplicationInfo app : apps) {
 
@@ -79,8 +82,9 @@ public class UsagePresenter implements IUsageContract.Presenter {
                 for (UsageAppData usage : usageApps) {
                     if (usage.getPackageName().equals(app.packageName)) {
                         try {
-                            usage.setName(pm.getApplicationLabel(app).toString());
-                            usage.setLogo(pm.getApplicationLogo(app.packageName));
+                            usage.setName(packageManager.getApplicationLabel(app).toString());
+                            usage.setLogo(packageManager.getApplicationLogo(app.packageName));
+                            usageResult.add(usage);
                         } catch (PackageManager.NameNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -93,18 +97,11 @@ public class UsagePresenter implements IUsageContract.Presenter {
 
         //Triage
         usageApps = sort(usageApps);
+
+        // Envoie du résultat
+        view.displayLastWeekUsage(usageResult);
     }
 
-    public void getMostUseApps(){
-        mostUseApps = usageApps.subList(usageApps.size() - 3, usageApps.size());
-
-        for(UsageAppData usageApp : usageApps){
-            if(usageApp.getName() == null){
-                usageApp.setName(usageApp.getPackageName());
-            }
-            Log.d("usageApps", String.format("App : %s, Time total : %s", usageApp.getName(), usageApp.getTimeTotalInHour()));
-        }
-    }
 
     public List<UsageAppData> sort(List<UsageAppData> list){
         List<UsageAppData> tmpList = list;
@@ -125,9 +122,6 @@ public class UsagePresenter implements IUsageContract.Presenter {
         return tmpList;
     }
 
-    @Override
-    public void start() {
 
-    }
 }
 
