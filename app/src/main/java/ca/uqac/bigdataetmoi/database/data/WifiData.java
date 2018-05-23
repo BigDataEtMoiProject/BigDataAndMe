@@ -17,7 +17,7 @@ public class WifiData extends AbstractDataManager implements ValueEventListener 
     private DataReadyListener listener;
     private boolean fetchingData = false;
 
-    protected static DatabaseReference ref = mRootDbRef.child("wifi");
+    protected static DatabaseReference ref = getRef().child("wifi");
 
     /**
      * @param listener Doit s'abonner a l'evenement 'DataReady()' car la lecture dans la BDD est asynchrone.

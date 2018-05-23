@@ -18,7 +18,7 @@ public class LocationData extends AbstractDataManager {
     private DataReadyListener listener;
     private boolean fetchingData = false;
 
-    protected static DatabaseReference ref = mRootDbRef.child("location");
+    protected static DatabaseReference ref = getRef().child("location");
 
     /**
      * Lors de la construction de l'objet, les methodes {@link #setLatitude(Double)}) et {@link #setLongitude(Double)}

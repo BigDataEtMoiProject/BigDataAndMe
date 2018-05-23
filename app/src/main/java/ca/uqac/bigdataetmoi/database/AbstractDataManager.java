@@ -41,7 +41,12 @@ public abstract class AbstractDataManager implements DataReadyListener {
 
     private static void setRef()
     {
-        mRootDbRef = FirebaseDatabase.getInstance().
+        mRootDbRef = getRef();
+    }
+
+    protected static DatabaseReference getRef()
+    {
+        return FirebaseDatabase.getInstance().
                 getReference().child("data");
     }
 
