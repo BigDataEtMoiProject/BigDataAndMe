@@ -16,7 +16,7 @@ public class SommeilDataHelper extends AbstractDataManager implements ValueEvent
 
     private List<SommeilData> sommeilData;
     private List<DataReadyListener> listeners;
-    private DatabaseReference ref = mRootDbRef.child("sommeil");
+    private DatabaseReference ref = getRef().child("sommeil");
 
     public SommeilDataHelper() {
         sommeilData = new ArrayList<SommeilData>();

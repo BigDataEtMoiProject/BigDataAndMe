@@ -119,7 +119,7 @@ public abstract class AbstractDataManager implements DataReadyListener {
             }        });
     }
 
-    protected void readLastData(DatabaseReference ref, final ValueEventListener listener) {
+    protected static void readLastData(DatabaseReference ref, final ValueEventListener listener) {
         ref.orderByKey().limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

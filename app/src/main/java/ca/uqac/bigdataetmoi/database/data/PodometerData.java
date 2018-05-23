@@ -45,6 +45,10 @@ public class PodometerData extends AbstractDataManager implements ValueEventList
         super.finalize();
     }
 
+    public static void readLastData(final ValueEventListener listener) {
+        AbstractDataManager.readLastData(ref, listener);
+    }
+
     protected void writeData() {
         super.writeData(ref, this);
     }
