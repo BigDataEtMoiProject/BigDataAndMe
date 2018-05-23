@@ -27,7 +27,6 @@ public class SommeilActivity extends BaseActivity {
             transaction.replace(R.id.sommeil_frame, frag);
             transaction.commit();
         }
-
         sommeilPresenter = new SommeilPresenter(frag);
     }
 }
