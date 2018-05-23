@@ -18,6 +18,7 @@ import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
 import ca.uqac.bigdataetmoi.application_usage.UsageActivity;
 import ca.uqac.bigdataetmoi.sommeil.SommeilActivity;
+//import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.activity.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
 import ca.uqac.bigdataetmoi.menu.AboutActivity;

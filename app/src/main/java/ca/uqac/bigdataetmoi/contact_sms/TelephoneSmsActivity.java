@@ -43,35 +43,34 @@ public class TelephoneSmsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_telephone_sms);
 
-        TelephoneSmsFragment frag = (TelephoneSmsFragment) getFragmentManager().findFragmentById()
-//        // Initialisation
-//        listInfo = new ArrayList<String>();
-//        listView = findViewById(R.id.contactList);
-//        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listInfo);
-//        sms_list = new ArrayList<SmsData>();
-//        permissionManager = PermissionManager.getInstance();
-//
-//        // On verifie si la permission est OK
-//        if (permissionManager.isGranted(READ_SMS) && permissionManager.isGranted(READ_CONTACTS)) {
-//
-//            // * Permission ok on affiche les infos *
-//            contact_list = getPhoneContacts();
-//            getPhoneSMS();
-//            while (!contact_list.isEmpty()) {
-//                ContactData temp = contact_list.remove(0);
-//                String tempInfo = temp.getNom() + " -- " + temp.getNumero() + " -- SMS " + temp.getNbrSMSEnvoye();
-//                listInfo.add(tempInfo);
-//                listView.setAdapter(adapter);
-//            }
-//
-//        } else {
-//
-//            // * Permission non ok on affiche une boite de dialogue *
-//            builder = new AlertDialog.Builder(this);
-//            builder.setMessage("Permission READ_SMS et READ_CONTACTS non accordée.");
-//            builder.create().show();
-//
-//        }
+        // Initialisation
+        listInfo = new ArrayList<String>();
+        listView = findViewById(R.id.contactList);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listInfo);
+        sms_list = new ArrayList<SmsData>();
+        permissionManager = PermissionManager.getInstance();
+
+        // On verifie si la permission est OK
+        if (permissionManager.isGranted(READ_SMS) && permissionManager.isGranted(READ_CONTACTS)) {
+
+            // * Permission ok on affiche les infos *
+            contact_list = getPhoneContacts();
+            getPhoneSMS();
+            while (!contact_list.isEmpty()) {
+                ContactData temp = contact_list.remove(0);
+                String tempInfo = temp.getNom() + " -- " + temp.getNumero() + " -- SMS " + temp.getNbrSMSEnvoye();
+                listInfo.add(tempInfo);
+                listView.setAdapter(adapter);
+            }
+
+        } else {
+
+            // * Permission non ok on affiche une boite de dialogue *
+            builder = new AlertDialog.Builder(this);
+            builder.setMessage("Permission READ_SMS et READ_CONTACTS non accordée.");
+            builder.create().show();
+
+        }
     }
 
     protected void onStart() {
@@ -113,7 +112,7 @@ public class TelephoneSmsActivity extends BaseActivity {
             Log.i("INFO : ", contact_phone_number);
 
             // Ajout du contact dans la liste des contacts
-            contact_list.add(new ContactDatacontact_id, contact_name, contact_phone_number));
+            contact_list.add(new ContactData(contact_id, contact_name, contact_phone_number));
 
         }
 

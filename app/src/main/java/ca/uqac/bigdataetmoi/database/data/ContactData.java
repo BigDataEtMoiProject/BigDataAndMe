@@ -7,25 +7,35 @@ import java.util.List;
  * Created by Michael on 2018-03-13.
  */
 public class ContactData {
+    private String id;
     private String nom;
     private String numero;
     private List<SmsData> listeSMSEnvoye;
-    private int nbrSMSEnvoye;
 
-    public ContactData(String _nom, String _numero)
-    {
+    public ContactData(String _id, String _nom, String _numero) {
+        id = _id;
         nom = _nom;
         numero = _numero;
-        nbrSMSEnvoye = 0;
         listeSMSEnvoye = new ArrayList<SmsData>();
     }
 
-    public String getNom()
-    {return nom;}
-    public String getNumero()
-    {return numero;}
-    public void addSMSEnvoye(SmsData sms)
-    {listeSMSEnvoye.add(sms); nbrSMSEnvoye++;}
-    public int getNbrSMSEnvoye()
-    {return nbrSMSEnvoye;}
+    String getId() {
+        return id;
+    }
+
+    public String getNom() {
+        return this.nom;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    void addSMSEnvoye(SmsData sms) {
+        listeSMSEnvoye.add(sms);
+    }
+
+    public int getNbrSMSEnvoye() {
+        return listeSMSEnvoye.size();
+    }
 }

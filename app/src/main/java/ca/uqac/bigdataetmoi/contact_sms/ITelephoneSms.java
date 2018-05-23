@@ -11,7 +11,7 @@ import ca.uqac.bigdataetmoi.utility.IBaseView;
 
 public interface ITelephoneSms
 {
-    interface View extends IBaseView<IMainMenuContract.Presenter>
+    interface View extends IBaseView<Presenter>
     {
 
     }
