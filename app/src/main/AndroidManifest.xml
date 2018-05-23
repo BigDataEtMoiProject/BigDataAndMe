@@ -75,14 +75,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activity.utilisation_application.UsageTimelineActivity" />
         <activity android:name=".permission_manager.PermissionActivity" />
         <activity
             android:name=".menu.AboutActivity"
             android:label="@string/about_title" />
-        <activity android:name=".activity.utilisation_application.TempsUtilisationDetailsActivity" />
-        <activity android:name=".activity.NoisyPlacesActivity"
-            android:label="@string/noisy_places_title"/>
     </application>
 
 </manifest>

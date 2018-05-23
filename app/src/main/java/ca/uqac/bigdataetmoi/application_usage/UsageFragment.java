@@ -25,14 +25,13 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.activity.utilisation_application.DonneesUtilisationActivity;
 import ca.uqac.bigdataetmoi.database.DatabaseManager;
 import ca.uqac.bigdataetmoi.database.data.UsageData;
 
 @RequiresApi(22)
 public class UsageFragment extends Fragment implements IUsageContract.View {
 
-    private static final String TAG = DonneesUtilisationActivity.class.getSimpleName();
+    private static final String TAG = UsageActivity.class.getSimpleName();
 
     private static final long INIT_TIME_PERIOD = 1000 * 30;     //30 secondes
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA_FRENCH);
