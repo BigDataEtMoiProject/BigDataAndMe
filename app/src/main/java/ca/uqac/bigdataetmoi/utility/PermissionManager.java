@@ -97,12 +97,12 @@ public class PermissionManager
     }
 
     // Met à jour la permission dans la bd selon si oui ou non on veut qu'elle soit activée.
-    public void setPermissionGranted(String permission, boolean granted, Context context) {  // Fix temporaire (context)
+    public void setPermissionGranted(String permission, boolean granted) {
         // Dans un premier temps, il faut s'assurer de demander la permission à l'usager
         // Via le popup de permission android si nous somme dans la version android 6.0 et plus
         // Si l'usager accepte d'accorder la permission, cette fonction sera appelé une deuxième fois,
         // mais le traitement sera différent vue que la permission sera accordée.
-        if(granted && ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED)
+        if(granted && ContextCompat.checkSelfPermission(ActivityFetcherActivity.getCurrentActivity().getApplicationContext(), permission) == PackageManager.PERMISSION_DENIED)
             requestPermission(permission);
         else {
             dbManager.getPermissionDbRef().child(permission.replace('.', '-')).setValue(granted);
@@ -119,7 +119,7 @@ public class PermissionManager
         for(int i = 0 ; i < grantResults.length ; i++)
         {
             if(grantResults[i] == PackageManager.PERMISSION_GRANTED)
-                setPermissionGranted(permissions[i], true, ActivityFetcherActivity.getContext());
+                setPermissionGranted(permissions[i], true);
         }
     }
 }

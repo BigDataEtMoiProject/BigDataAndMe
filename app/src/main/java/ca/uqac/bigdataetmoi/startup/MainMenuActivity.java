@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
-import ca.uqac.bigdataetmoi.activity.PermissionManagerActivity;
 import ca.uqac.bigdataetmoi.application_usage.UsageActivity;
+import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
 import ca.uqac.bigdataetmoi.sommeil.SommeilActivity;
 import ca.uqac.bigdataetmoi.activity.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
@@ -118,7 +118,7 @@ public class MainMenuActivity extends BaseActivity {
                                 }
                                 break;
                             case R.id.nav_parametre :
-                                startActivity(new Intent(MainMenuActivity.this, PermissionManagerActivity.class));
+                                startActivity(new Intent(MainMenuActivity.this, PermissionActivity.class));
                                 break;
                             case R.id.nav_propos :
                                 startActivity(new Intent(MainMenuActivity.this, AboutActivity.class));
