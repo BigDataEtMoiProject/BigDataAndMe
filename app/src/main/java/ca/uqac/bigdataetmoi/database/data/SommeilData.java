@@ -15,7 +15,7 @@ public class SommeilData extends AbstractDataManager implements ValueEventListen
     private DataReadyListener listener;
     private boolean fetchingData = false;
 
-    protected static DatabaseReference ref = mRootDbRef.child("sommeil");
+    protected static DatabaseReference ref = getRef().child("sommeil");
 
     public SommeilData() {}
 

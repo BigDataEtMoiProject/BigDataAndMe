@@ -65,7 +65,7 @@ public class CompteurDePasActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        //Récupérer les données de la bd (dernier enregistrement
+        //Récupérer les données de la bd (dernier enregistrement)
         Query query = dbManager.getSensorDataDbRef().orderByKey().limitToLast(1);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -82,7 +82,14 @@ public class CompteurDePasActivity extends BaseActivity {
                     String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
 
                     // On rempli les champs de l'écran
-                    textView.setText("      COMPTEUR DE PAS\n\n      Nb de pas aujourd'hui : " + Float.toString(data.steps) + " pas");
+                    // A MODIFIER !! Quickfix foireux pour démo !!
+                    Float nb;
+                    try{
+                        nb = data.steps/2;
+                    } catch (Exception e){
+                        nb = 0f;
+                    }
+                    textView.setText("      COMPTEUR DE PAS\n\n      Nb de pas aujourd'hui : " + Float.toString(Math.round(nb)) + " pas");
                 }
             }
 

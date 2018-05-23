@@ -15,7 +15,7 @@ public class PodometerData extends AbstractDataManager implements ValueEventList
     private DataReadyListener listener;
     private boolean fetchingData = false;
 
-    protected static DatabaseReference ref = mRootDbRef.child("podometer");
+    protected static DatabaseReference ref = getRef().child("podometer");
 
     /**
      * @param listener Doit s'abonner a l'evenement 'DataReady()' car la lecture dans la BDD est asynchrone.

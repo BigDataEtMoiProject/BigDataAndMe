@@ -41,42 +41,42 @@ public class PermissionManagerActivity extends BaseActivity {
         switchLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                permissionManager.setPermissionGranted(ACCESS_FINE_LOCATION, b);
+                permissionManager.setPermissionGranted(ACCESS_FINE_LOCATION, b, PermissionManagerActivity.super.getApplicationContext());
             }
         });
 
         switchMicrophone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                permissionManager.setPermissionGranted(RECORD_AUDIO, b);
+                permissionManager.setPermissionGranted(RECORD_AUDIO, b, PermissionManagerActivity.super.getApplicationContext());
             }
         });
 
         switchSMS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                permissionManager.setPermissionGranted(READ_SMS, b);
+                permissionManager.setPermissionGranted(READ_SMS, b,PermissionManagerActivity.super.getApplicationContext());
             }
         });
 
         switchContacts.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                permissionManager.setPermissionGranted(READ_CONTACTS, b);
+                permissionManager.setPermissionGranted(READ_CONTACTS, b, PermissionManagerActivity.super.getApplicationContext());
             }
         });
 
         switchBluetooth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                permissionManager.setPermissionGranted(BLUETOOTH_ADMIN, b);
+                permissionManager.setPermissionGranted(BLUETOOTH_ADMIN, b, PermissionManagerActivity.super.getApplicationContext());
             }
         });
 
         switchWifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                permissionManager.setPermissionGranted(ACCESS_WIFI_STATE, b);
+                permissionManager.setPermissionGranted(ACCESS_WIFI_STATE, b, PermissionManagerActivity.super.getApplicationContext());
             }
         });
     }

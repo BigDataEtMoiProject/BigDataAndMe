@@ -17,7 +17,7 @@ public class BluetoothData extends AbstractDataManager implements ValueEventList
     private DataReadyListener listener;
     private boolean fetchingData = false;
 
-    protected static DatabaseReference ref = mRootDbRef.child("bluetooth");
+    protected static DatabaseReference ref = getRef().child("bluetooth");
 
     /**
      * @param listener Doit s'abonner a l'evenement 'DataReady()' car la lecture dans la BDD est asynchrone.
