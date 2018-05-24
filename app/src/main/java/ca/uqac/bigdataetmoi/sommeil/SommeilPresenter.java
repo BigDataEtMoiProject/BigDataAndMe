@@ -111,15 +111,15 @@ public class SommeilPresenter implements ISommeilContract.Presenter, DataReadyLi
         // Affichage des résultats
         double moyenneMois = 0;
         if(nbEntreesMois > 0)
-            moyenneMois = (totalMois / nbEntreesMois) / 60.0;
+            moyenneMois = totalMois;
 
         double moyenneSemaine = 0;
         if(nbEntreesSemaine > 0)
-            moyenneSemaine = (totalSemaine / nbEntreesSemaine) / 60.0;
+            moyenneSemaine = totalSemaine;
 
         view.afficherMoyenneMoisDernier(moyenneMois);
         view.afficherMoyenneSemaineDern(moyenneSemaine);
-        view.afficherTempsHier(totalHier / 60.0);
+        view.afficherTempsHier(totalHier);
     }
 
 
