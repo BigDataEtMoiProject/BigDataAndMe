@@ -15,9 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3"
+        android:weightSum="4"
         android:layout_alignParentBottom="true"
         android:padding="8dp">
+
+        <Button
+            android:id="@+id/btn_main_application"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            android:onClick="launchApplicationDetailsActivity"
+            android:text="@string/btn_main_application" />
 
         <Button
             android:id="@+id/btn_main_sleep"
@@ -33,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             style="?android:attr/borderlessButtonStyle"
             android:onClick="launchCommunicationActivity"
             android:text="@string/btn_main_communication"/>
