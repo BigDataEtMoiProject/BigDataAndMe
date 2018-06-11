@@ -1,7 +1,10 @@
 package ca.uqac.bigdataetmoi.startup;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import ca.uqac.bigdataetmoi.utility.PermissionManager;
 
@@ -14,6 +17,19 @@ import ca.uqac.bigdataetmoi.utility.PermissionManager;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

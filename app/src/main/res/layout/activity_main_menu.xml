@@ -29,7 +29,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@color/darkGreen"
+        android:background="@color/lightGreen"
+        app:itemTextColor="@color/white"
         app:menu="@menu/main_menu"
         app:itemBackground="@color/lightGreen" />
 

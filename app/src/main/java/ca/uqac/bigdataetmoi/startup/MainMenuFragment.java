@@ -68,6 +68,7 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
                         2. L'appareil a ete formate
                         3. Google play service a ete restarte
                      */
+
                     location.getLastLocation()
                             .addOnSuccessListener(new OnSuccessListener<Location>() {
                                 @Override
