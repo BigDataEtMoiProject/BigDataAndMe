@@ -66,8 +66,8 @@
     
     <!-- About Activity -->
     <string name="about_title">A propos</string>
-    <string name="about_subtitle1">Big Data et Moi, qu\'est-ce que c\'est ?</string>
-    <string name="about_description">C\'est une application réalisée par des étudiants en informatique de l\'UQAC et de l\'IUT d\'Orsaydans le but de sensibiliser
+    <string name="about_subtitle1">Big Data et moi, qu\'est-ce que c\'est ?</string>
+    <string name="about_description">C\'est une application réalisée par des étudiants en informatique de l\'UQAC et de l\'IUT d\'Orsay dans le but de sensibiliser
         les utilisateurs de smartphones Android sur les différentes informations que leurs applications peuvent récupérer sans qu\'ils ne le sachent.</string>
     <string name="about_subtitle2">L\'équipe de développement</string>
     <string name="group1">Groupe 1 : Interface</string>
