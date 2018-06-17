@@ -25,7 +25,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="launchApplicationDetailsActivity"
-            android:text="@string/btn_main_application" />
+            android:text="@string/btn_main_application"
+            android:textColor="@color/white"
+            android:background="@color/lightGreen"
+            android:layout_marginBottom="5dp"/>
 
         <Button
             android:id="@+id/btn_main_sleep"
@@ -33,7 +36,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="launchSleepActivity"
-            android:text="@string/btn_main_sleep"/>
+            android:text="@string/btn_main_sleep"
+            android:textColor="@color/white"
+            android:background="@color/lightGreen"
+            android:layout_marginBottom="5dp"/>
 
         <Button
             android:id="@+id/btn_main_communication"
@@ -41,7 +47,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="launchCommunicationActivity"
-            android:text="@string/btn_main_communication"/>
+            android:text="@string/btn_main_communication"
+            android:textColor="@color/white"
+            android:background="@color/lightGreen"
+            android:layout_marginBottom="5dp"/>
 
         <Button
             android:id="@+id/btn_main_steps"
@@ -49,7 +58,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="launchStepsActivity"
-            android:text="@string/btn_main_steps"/>
+            android:text="@string/btn_main_steps"
+            android:textColor="@color/white"
+            android:background="@color/lightGreen"/>
     </LinearLayout>
 
 </RelativeLayout>

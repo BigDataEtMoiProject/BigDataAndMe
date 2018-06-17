@@ -16,6 +16,7 @@ import android.widget.Toast;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.application_usage.UsageActivity;
+import ca.uqac.bigdataetmoi.menu.ProfileActivity;
 import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
 import ca.uqac.bigdataetmoi.sommeil.SommeilActivity;
 import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsActivity;
@@ -109,13 +110,8 @@ public class MainMenuActivity extends BaseActivity {
                                 // startActivity(new Intent(MainMenuActivity.this, MainMenuActivity.class));
                                 break;
                             case R.id.nav_profile :
-                                Toast.makeText(MainMenuActivity.this, "Not yet implemented", Toast.LENGTH_SHORT).show();
-                                // TODO: nav profile
-
                                 if (ActivityFetcherActivity.getUserId() != null) {
-                                    /*
-                                        Afficher le profil utilisateur?
-                                     */
+                                    startActivity(new Intent(MainMenuActivity.this, ProfileActivity.class));
                                 }
                                 break;
                             case R.id.nav_parametre :

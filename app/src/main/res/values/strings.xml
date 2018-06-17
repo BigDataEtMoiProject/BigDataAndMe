@@ -66,8 +66,35 @@
     
     <!-- About Activity -->
     <string name="about_title">A propos</string>
-    <string name="about_description">Cette application fut réalisée par des étudiants de l\'UQAC en informatique et des étudiants de l\'IUT d\'Orsay.
-        Ce fut un projet de conception d\'une application pour sensibiliser les personnes sur les différentes informations que leur téléphone peut
-        récupérer sans qu\'ils le sachent. \n\nRéalisé par : </string>
+    <string name="about_subtitle1">Big Data et Moi, qu\'est-ce que c\'est ?</string>
+    <string name="about_description">C\'est une application réalisée par des étudiants en informatique de l\'UQAC et de l\'IUT d\'Orsaydans le but de sensibiliser
+        les utilisateurs de smartphones Android sur les différentes informations que leurs applications peuvent récupérer sans qu\'ils ne le sachent.</string>
+    <string name="about_subtitle2">L\'équipe de développement</string>
+    <string name="group1">Groupe 1 : Interface</string>
+    <string name="member1.1">Erwan (UQAC)</string>
+    <string name="member1.2">Michael LIZOTTE-GAGNON (UQAC)</string>
+    <string name="member1.3">Ludovic ROUSSARD (UPSUD)</string>
+    <string name="member1.4">Oscar LEFEVRE (UPSUD)</string>
+    <string name="member1.5">Diego DANINTHE-LOPEZ (UPSUD)</string>
+    <string name="group2">Groupe 2 : Base de données</string>
+    <string name="member2.1">Sébastien (UQAC)</string>
+    <string name="member2.2">Pierre (UQAC)</string>
+    <string name="member2.3">Vincent SCHLOSSER (UPSUD)</string>
+    <string name="member2.4">Léonie BOULLIER (UPSUD)</string>
+    <string name="member2.5">Joshua-Hugo VALMY (UPSUD)</string>
+    <string name="group3">Groupe 3 : Fonctionnalités</string>
+    <string name="member3.1">Patrick LAPOINTE (UQAC)</string>
+    <string name="member3.2">Emmanuel (UQAC)</string>
+    <string name="member3.3">Kévin LONGUET (UPSUD)</string>
+    <string name="member3.4">Lancelot DEMAY (UPSUD)</string>
+    <string name="member3.5">Maxime AUBLET (UPSUD)</string>
+
+    <!-- Profile Activity -->
+    <string name="profile_title">Mon profil</string>
+    <string name="profile_name">Prénom</string>
+    <string name="profile_lastname">Nom</string>
+    <string name="profile_email">Adresse mail</string>
+    <string name="profile_password">Mot de passe</string>
+    <string name="profile_validate">Valider</string>
 
 </resources>
