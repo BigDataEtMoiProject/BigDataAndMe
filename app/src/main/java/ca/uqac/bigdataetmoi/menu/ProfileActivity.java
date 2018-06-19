@@ -57,21 +57,21 @@ public class ProfileActivity extends AppCompatActivity {
         String passwordStr = mPrefs.getString("password", "");
 
         //IF VALUE EXISTS, PUT IT IN TEXTFIELD
-        if(avatarStr != "" && avatarStr != null){
+        if(!avatarStr.equals("")){
             byte[] b = Base64.decode(avatarStr, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
             avatar.setImageBitmap(getCircularBitmap(bitmap));
         }
-        if(nameStr != "" && nameStr != null){
+        if(!nameStr.equals("")){
             name.setText(nameStr);
         }
-        if(lastnameStr != "" && lastnameStr != null){
+        if(!lastnameStr.equals("")){
             lastname.setText(lastnameStr);
         }
-        if(emailStr != "" && emailStr != null){
+        if(!emailStr.equals("")){
             email.setText(emailStr);
         }
-        if(passwordStr != "" && passwordStr != null){
+        if(!passwordStr.equals("")){
             password.setText(passwordStr);
         }
 
@@ -91,20 +91,30 @@ public class ProfileActivity extends AppCompatActivity {
                 String emailStr2 = email.getText().toString();
                 String passwordStr2 = password.getText().toString();
 
-                if(nameStr2 != "" && nameStr2 != null){
+                boolean hasError = false;
+                if(nameStr2.trim().equals("")){
+                    hasError = true;
+                    name.setError(getResources().getString(R.string.profile_error_name));
+                }
+                if(lastnameStr2.trim().equals("")){
+                    hasError = true;
+                    lastname.setError(getResources().getString(R.string.profile_error_lastname));
+                }
+                if(emailStr2.trim().equals("")){
+                    hasError = true;
+                    email.setError(getResources().getString(R.string.profile_error_email));
+                }
+                if(passwordStr2.trim().equals("")){
+                    hasError = true;
+                    password.setError(getResources().getString(R.string.profile_error_password));
+                }
+                if(!hasError){
                     mEditor.putString("name", nameStr2).commit();
-                }
-                if(lastnameStr2 != "" && lastnameStr2 != null){
                     mEditor.putString("lastname", lastnameStr2).commit();
-                }
-                if(emailStr2 != "" && emailStr2 != null){
                     mEditor.putString("email", emailStr2).commit();
-                }
-                if(passwordStr2 != "" && passwordStr2 != null){
                     mEditor.putString("password",passwordStr2).commit();
+                    onBackPressed();
                 }
-
-                onBackPressed();
             }
         });
     }
@@ -150,6 +160,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
             else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+                error.printStackTrace();
             }
         }
     }
