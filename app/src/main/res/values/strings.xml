@@ -97,4 +97,10 @@
     <string name="profile_password">Mot de passe</string>
     <string name="profile_validate">Valider</string>
 
+    <!-- Profil Erreur -->
+    <string name="profile_error_name">Vous devez renseigner un prénom.</string>
+    <string name="profile_error_lastname">Vous devez renseigner un nom.</string>
+    <string name="profile_error_email">Vous devez renseigner une adresse mail.</string>
+    <string name="profile_error_password">Vous devez renseigner un mot de passe.</string>
+    
 </resources>
