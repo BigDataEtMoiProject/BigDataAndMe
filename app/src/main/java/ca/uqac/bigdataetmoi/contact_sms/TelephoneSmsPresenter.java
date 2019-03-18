@@ -161,9 +161,14 @@ public class TelephoneSmsPresenter implements ITelephoneSmsContract.Presenter {
         );
 
         // On recupere le premier numéro celui inscrit sur le téléphone ( hors application tiers )
-        phone_numbers.moveToFirst();
-        phone_number = phone_numbers.getString(phone_numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-        phone_numbers.close();
+
+        if (phone_numbers != null && phone_numbers.moveToFirst()) {
+            int index = phone_numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            phone_number = phone_numbers.getString(index);
+            phone_numbers.close();
+        } else {
+            phone_number = "";
+        }
 
         return phone_number;
     }
