@@ -121,6 +121,8 @@ public class MainMenuActivity extends BaseActivity {
                             case R.id.nav_deconnection :
                                 ActivityFetcherActivity.setUserID(null);
                                 startActivity(new Intent(MainMenuActivity.this, LoginActivity.class));
+                                overridePendingTransition(R.anim.slide_from_left, R.anim.fade_scale_out);
+                                finish();
                                 break;
                         }
                         return true;
