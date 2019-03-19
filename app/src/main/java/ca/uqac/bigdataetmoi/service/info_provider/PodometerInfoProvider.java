@@ -7,7 +7,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-import ca.uqac.bigdataetmoi.activity.CompteurDePasActivity;
 import ca.uqac.bigdataetmoi.database.DataCollection;
 import ca.uqac.bigdataetmoi.database.data.PodometerData;
 

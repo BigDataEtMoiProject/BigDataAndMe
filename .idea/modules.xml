@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/BigDataAndMe.iml" filepath="$PROJECT_DIR$/BigDataAndMe.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/big-data.iml" filepath="$PROJECT_DIR$/big-data.iml" />
     </modules>
   </component>
 </project>
