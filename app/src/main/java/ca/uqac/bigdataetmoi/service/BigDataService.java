@@ -1,29 +1,23 @@
 package ca.uqac.bigdataetmoi.service;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
 import ca.uqac.bigdataetmoi.database.data.BluetoothData;
 import ca.uqac.bigdataetmoi.database.data.LocationData;
-import ca.uqac.bigdataetmoi.database.data.NoiseData;
-import ca.uqac.bigdataetmoi.database.data.PodometerData;
-import ca.uqac.bigdataetmoi.database.data.SommeilData;
 import ca.uqac.bigdataetmoi.database.data.WifiData;
-import ca.uqac.bigdataetmoi.service.info_provider.SommeilInfoProvider;
-import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
-
 import ca.uqac.bigdataetmoi.service.info_provider.BluetoothInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.DataReadyListener;
 import ca.uqac.bigdataetmoi.service.info_provider.GPSInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.NoiseInfoProvider;
-import ca.uqac.bigdataetmoi.service.info_provider.PodometerInfoProvider;
 import ca.uqac.bigdataetmoi.service.info_provider.WifiInfoProvider;
+import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 
 /**
 * Créé le 2017-11-16 par Patrick Lapointe
@@ -37,8 +31,6 @@ public class BigDataService extends Service
     Context mContext;
     boolean mOnCreateFinished;
     NoiseInfoProvider mNoiseInfoProvider;
-    SommeilInfoProvider mSommeilInfoProvider;
-    PodometerInfoProvider mPodometerInfoProvider;
     GPSInfoProvider mGPSInfoProvider;
     WifiInfoProvider mWifiInfoProvider;
     BluetoothInfoProvider mBluetoothInfoProvider;
@@ -74,59 +66,6 @@ public class BigDataService extends Service
 
         mContext = this;
         mOnCreateFinished = false;
-
-        mNoiseInfoProvider = new NoiseInfoProvider(new DataReadyListener() {
-            @Override
-            public void dataReady(Object data) {
-                if(data != null && data.getClass() == NoiseData.class) {
-                    NoiseData noiseData = (NoiseData) data;
-
-                    // On demande les infos de sommeil si on a l'info du micro.
-                    mSommeilInfoProvider = new SommeilInfoProvider(mContext, noiseData.getSoundLevel(), new DataReadyListener() {
-                        @Override
-                        public void dataReady(Object data) {
-                            if(data != null) {
-                                SommeilData sommeilData = (SommeilData) data;
-
-                                // Écriture des infos de sommeil
-                                try {
-                                    sommeilData.checkForWriting();
-                                } catch (Exception e) {
-                                    Log.d("BDEM_ERROR", e.getMessage());
-                                }
-                            }
-                            mSommeilInfoProvider = null;
-                            checkAllReceived();
-                        }
-                    });
-
-                    // Écriture des infos de bruit
-                    try {
-                        noiseData.checkForWriting();
-                    } catch (Exception e) {
-                        Log.d("BDEM_ERROR", e.getMessage());
-                    }
-                }
-                mNoiseInfoProvider = null;
-                checkAllReceived();
-            }
-        });
-
-        mPodometerInfoProvider = new PodometerInfoProvider(mContext, new DataReadyListener() {
-            @Override
-            public void dataReady(Object data) {
-                if(data != null && data.getClass() == PodometerData.class) {
-                    PodometerData podometerData = (PodometerData) data;
-                    try {
-                        podometerData.checkForWriting();
-                    } catch (Exception e) {
-                        Log.d("BDEM_ERROR", e.getMessage());
-                    }
-                }
-                mPodometerInfoProvider = null;
-                checkAllReceived();
-            }
-        });
 
         mGPSInfoProvider = new GPSInfoProvider(mContext, new DataReadyListener() {
             @Override
@@ -182,9 +121,13 @@ public class BigDataService extends Service
     }
 
     private void checkAllReceived() {
-        if(mNoiseInfoProvider == null && mSommeilInfoProvider == null && mPodometerInfoProvider == null
-                && mGPSInfoProvider == null && mWifiInfoProvider == null && mBluetoothInfoProvider == null
-                && mOnCreateFinished) {
+        if (
+            mNoiseInfoProvider == null &&
+            mGPSInfoProvider == null &&
+            mWifiInfoProvider == null &&
+            mBluetoothInfoProvider == null &&
+            mOnCreateFinished
+        ) {
             stopSelf();
         }
     }
