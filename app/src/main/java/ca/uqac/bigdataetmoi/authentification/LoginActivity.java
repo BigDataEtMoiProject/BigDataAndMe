@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import ca.uqac.bigdataetmoi.startup.BaseActivity;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 
 public class LoginActivity extends BaseActivity {
 
@@ -38,6 +39,7 @@ public class LoginActivity extends BaseActivity {
         fieldEmail = findViewById(R.id.signin_field_email);
         fieldPassword = findViewById(R.id.signin_field_password);
         final Button btnLogin = findViewById(R.id.signin_btn_login);
+        final Context self = this;
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +63,7 @@ public class LoginActivity extends BaseActivity {
                                         Toast.makeText(LoginActivity.this, getString(R.string.signin_error_authentication_failed), Toast.LENGTH_LONG).show();
                                     } else {
                                         ActivityFetcherActivity.user = auth.getCurrentUser();
-                                        Log.e("LOGIN", ActivityFetcherActivity.user.getUid());
+                                        startActivity(new Intent(self, MainMenuActivity.class));
                                         finish();
                                     }
                                 }

@@ -9,4 +9,8 @@
         <item name="android:listPreferredItemHeightSmall">85dp</item>
     </style>
 
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fontFamily">@font/circular_medium</item>
+    </style>
+
 </resources>

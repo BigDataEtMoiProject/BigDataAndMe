@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -35,16 +35,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".startup.MainMenuActivity">
+        <activity android:name=".WelcomeActivity" android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".startup.MainMenuActivity" />
         <activity android:name=".authentification.LoginActivity" />
-        <activity android:name=".contact_sms.TelephoneSmsActivity"/>
+        <activity android:name=".contact_sms.TelephoneSmsActivity" />
         <activity android:name=".authentification.SignupActivity" />
         <activity android:name=".application_usage.UsageActivity" />
         <activity android:name=".application_usage_details.ApplicationUsageDetailsActivity" />
@@ -61,7 +61,6 @@
             android:name=".service.BigDataService"
             android:enabled="true"
             android:exported="false" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -70,7 +69,6 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -85,10 +83,9 @@
         <activity
             android:name=".menu.ProfileActivity"
             android:label="@string/profile_title" />
-
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

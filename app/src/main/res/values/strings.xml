@@ -50,7 +50,7 @@
     <string name="green_meaning">Bruit moyen</string>
     <string name="blue_meaning">Bruit faible</string>
     <string name="yellow_meaning">Aucun bruit</string>
-    
+
     <!-- About Activity -->
     <string name="about_title">A propos</string>
     <string name="about_subtitle1">Big Data et moi, qu\'est-ce que c\'est ?</string>
@@ -89,5 +89,10 @@
     <string name="profile_error_lastname">Vous devez renseigner un nom.</string>
     <string name="profile_error_email">Vous devez renseigner une adresse mail.</string>
     <string name="profile_error_password">Vous devez renseigner un mot de passe.</string>
-    
+
+    <string name="welcome_title">Apprenez-en plus sur les autorisations que vous accordez à vos applications.</string>
+    <string name="welcome_continue">Continuer</string>
+    <string name="welcome_display">Ne plus afficher cette page</string>
+
+
 </resources>
