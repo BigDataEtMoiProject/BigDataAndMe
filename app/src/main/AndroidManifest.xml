@@ -46,8 +46,6 @@
         <activity android:name=".authentification.LoginActivity" />
         <activity android:name=".contact_sms.TelephoneSmsActivity"/>
         <activity android:name=".authentification.SignupActivity" />
-        <activity android:name=".sommeil.SommeilActivity" />
-        <activity android:name=".activity.CompteurDePasActivity" />
         <activity android:name=".application_usage.UsageActivity" />
         <activity android:name=".application_usage_details.ApplicationUsageDetailsActivity" />
 

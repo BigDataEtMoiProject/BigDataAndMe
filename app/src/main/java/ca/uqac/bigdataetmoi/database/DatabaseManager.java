@@ -34,23 +34,6 @@ public class DatabaseManager
         mDb = FirebaseDatabase.getInstance().getReference();
     }
 
-    public DatabaseReference getDbRef() {
-        return mDb;
-    }
-    public DatabaseReference getSensorDataDbRef() {
-        return mDb.child("sensordata").child(mUserId);
-    }
     public DatabaseReference getPermissionDbRef() { return mDb.child("permission").child(mUserId); }
-    public DatabaseReference getCalculationDbRef() { return mDb.child("calculationdata").child(mUserId); }
-
-    public void storeSensorDataCollection(DataCollection collection) {
-        String timestamp = Long.toString(System.currentTimeMillis());
-        getSensorDataDbRef().child(timestamp).setValue(collection);
-    }
-
-    public void storeSommeilCalculationData(int sleepTime) {
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy MM dd");
-        getCalculationDbRef().child(formatter.format(new Date())).setValue(sleepTime);
-    }
 }
 
