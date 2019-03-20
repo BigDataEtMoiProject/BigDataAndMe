@@ -62,7 +62,7 @@ public class NoiseData extends AbstractDataManager implements ValueEventListener
     public Double getSoundLevel() {
         if(soundLevel == null && !fetchingData) {
             fetchingData = true;
-            super.readLastData(ref, this);
+            readLastData(ref, this);
             return null;
         } else if(soundLevel == null) {
             return null;

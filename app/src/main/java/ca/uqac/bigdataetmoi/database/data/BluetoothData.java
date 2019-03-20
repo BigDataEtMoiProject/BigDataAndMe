@@ -64,7 +64,7 @@ public class BluetoothData extends AbstractDataManager implements ValueEventList
     public List<String> getBluetoothSSID() {
         if(bluetoothSSID == null && !fetchingData) {
             fetchingData = true;
-            super.readLastData(ref, this);
+            readLastData(ref, this);
             return null;
         } else if(bluetoothSSID == null) {
             return null;

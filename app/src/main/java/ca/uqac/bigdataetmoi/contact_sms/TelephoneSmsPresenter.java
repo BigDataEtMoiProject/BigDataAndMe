@@ -123,7 +123,7 @@ public class TelephoneSmsPresenter implements ITelephoneSmsContract.Presenter {
         Date date = null;
 
         try {
-            date = (Date) formatter.parse(date_str);
+            date = formatter.parse(date_str);
         } catch (ParseException e) {
             e.printStackTrace();
         }

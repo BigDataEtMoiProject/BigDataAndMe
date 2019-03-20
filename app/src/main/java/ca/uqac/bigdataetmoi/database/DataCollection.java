@@ -27,12 +27,9 @@ public class DataCollection {
     // Détermine si les données on tous été recues
     public boolean allDataReceived() {
 
-        if(isMoving != null && luxLevel != null && proximityDistance != null
+        return isMoving != null && luxLevel != null && proximityDistance != null
                 && latitude != null && longitude != null && wifiSSID != null && bluetoothSSID != null
-                && steps != null && soundLevel != null && screenState != null)
-            return true;
-        else
-            return false;
+                && steps != null && soundLevel != null && screenState != null;
     }
 
     // Transfert les données non-nuls de l'objet DataCollection en paramètre
