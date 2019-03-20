@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,7 +25,7 @@ import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText fieldEmail, fieldPassword;
     private FirebaseAuth auth;
@@ -32,13 +34,13 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         auth = FirebaseAuth.getInstance();
 
-        fieldEmail = findViewById(R.id.signin_field_email);
-        fieldPassword = findViewById(R.id.signin_field_password);
-        final Button btnLogin = findViewById(R.id.signin_btn_login);
+        fieldEmail = findViewById(R.id.login_input_email);
+        fieldPassword = findViewById(R.id.login_input_password);
+        TextView buttonRegister = findViewById(R.id.login_button_register);
+        final Button btnLogin = findViewById(R.id.login_button_continue);
         final Context self = this;
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -72,14 +74,17 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        buttonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+            }
+        });
+
         final WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifi != null && !wifi.isWifiEnabled()) {
             Toast.makeText(getApplicationContext(), "Activation de la Wifi", Toast.LENGTH_LONG).show();
             wifi.setWifiEnabled(true);
         }
-    }
-
-    public void launchSignupActivity(View v){
-        startActivity(new Intent(LoginActivity.this, SignupActivity.class));
     }
 }

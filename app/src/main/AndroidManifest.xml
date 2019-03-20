@@ -45,9 +45,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".startup.MainMenuActivity" />
-        <activity android:name=".authentification.LoginActivity" />
+        <activity android:name=".authentification.LoginActivity" android:theme="@style/AppThemeNoActionBar"/>
         <activity android:name=".contact_sms.TelephoneSmsActivity" />
-        <activity android:name=".authentification.SignupActivity" />
+        <activity android:name=".authentification.SignupActivity" android:theme="@style/AppThemeNoActionBar"/>
         <activity android:name=".application_usage.UsageActivity" />
         <activity android:name=".application_usage_details.ApplicationUsageDetailsActivity" />
 

@@ -2,6 +2,7 @@ package ca.uqac.bigdataetmoi.authentification;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.startup.BaseActivity;
 
-public class SignupActivity extends BaseActivity {
+public class SignupActivity extends AppCompatActivity {
 
     private EditText fieldEmail, fieldPassword;
     private FirebaseAuth auth;
@@ -28,14 +29,13 @@ public class SignupActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         auth = FirebaseAuth.getInstance();
 
-        fieldEmail = findViewById(R.id.signup_field_email);
-        fieldPassword = findViewById(R.id.signup_field_password);
-        goToLogin = findViewById((R.id.signup_text_go_to_login));
-        final Button btn_Register = findViewById(R.id.signup_btn_register);
+        fieldEmail = findViewById(R.id.register_input_email);
+        fieldPassword = findViewById(R.id.register_input_password);
+        goToLogin = findViewById((R.id.register_button_login));
+        final Button btn_Register = findViewById(R.id.register_button_register);
 
         btn_Register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +55,7 @@ public class SignupActivity extends BaseActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(getApplicationContext(), "createUserWithEmail:success", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Création effectuée avec succès.", Toast.LENGTH_SHORT).show();
                                         Log.d("BDEM-SIGNUP", "createUserWithEmail:success");
                                         //redirect to login page
                                         finish();
@@ -69,10 +69,12 @@ public class SignupActivity extends BaseActivity {
                 }
             }
         });
-    }
 
-    public void launchLoginActivity(View view) {
-        // Assuming last activity is LoginActivity
-        finish();
+        goToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }
