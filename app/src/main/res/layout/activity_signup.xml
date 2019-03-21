@@ -67,7 +67,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/register_input_email" />
 
-        <Button
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
             android:id="@+id/register_button_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,6 +81,8 @@
             android:textColor="@android:color/white"
             android:textAllCaps="false"
             android:textSize="@dimen/font_large"
+            app:spinning_bar_color="@android:color/white"
+            android:onClick="register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/register_input_password" />

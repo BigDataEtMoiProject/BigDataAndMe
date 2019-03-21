@@ -1,15 +1,14 @@
 package ca.uqac.bigdataetmoi;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.CheckBox;
 
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
+import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 import ca.uqac.bigdataetmoi.utils.Constants;
+import ca.uqac.bigdataetmoi.utils.Prefs;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -17,8 +16,14 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (hasCheckedNoLongDisplay()) {
+        if (isAlreadyLogged()) {
+            navigateToMainPage();
+            return;
+        }
+
+        if (hasSeenWelcomePage()) {
             navigateToLoginActivity();
+            return;
         }
 
         setContentView(R.layout.activity_welcome);
@@ -30,22 +35,21 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void navigateToLoginActivity() {
         startActivity(new Intent(this, LoginActivity.class));
-        overridePendingTransition(R.anim.slide_from_right, R.anim.fade_scale_out);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.stationary);
+        Prefs.setBoolean(this, Constants.SHARED_PREFS, Constants.HAS_SEEN_WELCOME_PAGE, true);
         finish();
     }
 
-    public void onNoLongerDisplayThisPageClick(View checkBox) {
-        CheckBox _checkBox = (CheckBox) checkBox;
-
-        SharedPreferences sp = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-
-        editor.putBoolean(Constants.HAS_CHECKED_NO_DISPLAY, _checkBox.isChecked());
-        editor.apply();
+    public void navigateToMainPage() {
+        startActivity(new Intent(this, MainMenuActivity.class));
+        finish();
     }
 
-    private boolean hasCheckedNoLongDisplay() {
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFS, MODE_PRIVATE);
-        return sharedPreferences.getBoolean(Constants.HAS_CHECKED_NO_DISPLAY, false);
+    private Boolean hasSeenWelcomePage() {
+        return Prefs.getBoolean(this, Constants.SHARED_PREFS, Constants.HAS_SEEN_WELCOME_PAGE);
+    }
+
+    private Boolean isAlreadyLogged() {
+        return Prefs.getBoolean(this, Constants.SHARED_PREFS, Constants.IS_LOGGED);
     }
 }

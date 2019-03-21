@@ -91,12 +91,13 @@
     <string name="profile_error_password">Vous devez renseigner un mot de passe.</string>
 
     <string name="welcome_title">Apprenez-en plus sur les autorisations que vous accordez à vos applications.</string>
-    <string name="welcome_login">Se connecter</string>
+    <string name="welcome_continue">Continuer</string>
     <string name="welcome_display">Ne plus afficher cette page</string>
 
     <string name="login_big">Big</string>
     <string name="login_data">Data</string>
     <string name="login_and_me">&amp; Moi</string>
+    <string name="login_login">Se connecter</string>
 
     <string name="register_title">Big Data et Moi permet de visualiser les données que vos applications peuvent collecter sur vous.</string>
 
