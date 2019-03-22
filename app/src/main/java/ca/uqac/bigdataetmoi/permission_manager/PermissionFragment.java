@@ -1,11 +1,14 @@
 package ca.uqac.bigdataetmoi.permission_manager;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -26,6 +29,8 @@ public class PermissionFragment extends Fragment implements IPermissionContract.
     private Switch switchLocation, switchMicrophone,
             switchSMS, switchContacts, switchBluetooth, switchWifi, switchUsage;
 
+    private Button btnPermissionSettings;
+
     public PermissionFragment() { }
 
     @Override
@@ -39,6 +44,8 @@ public class PermissionFragment extends Fragment implements IPermissionContract.
         switchBluetooth = rootView.findViewById(R.id.switch_bluetooth);
         switchWifi = rootView.findViewById(R.id.switch_wifi);
         switchUsage = rootView.findViewById(R.id.switch_usage);
+
+        btnPermissionSettings = rootView.findViewById(R.id.btn_permission_settings);
 
         return rootView;
     }
@@ -92,6 +99,13 @@ public class PermissionFragment extends Fragment implements IPermissionContract.
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 presenter.setPermissionGranted(PACKAGE_USAGE_STATS, checked);
+            }
+        });
+
+        btnPermissionSettings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // On ouvre les paramètres de permissions de l'application du système android
+                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getActivity().getPackageName(), null)));
             }
         });
     }

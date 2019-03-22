@@ -29,6 +29,7 @@
     <string name="heure">Heure: </string>
 
     <!-- Ecran permission -->
+    <string name="permission_manager_description">Activez ou désactivez les permissions qui seront exploitées dans l\'application.</string>
     <string name="permission_manager_title">Permissions des capteurs</string>
     <string name="permission_manager_access_location">Accès à la position de l\'appareil</string>
     <string name="permission_manager_micro">Accès au micro de l\'appareil</string>
@@ -38,6 +39,7 @@
     <string name="permission_manager_wifi">Accès au Wi-Fi de l\'appareil</string>
     <string name="permission_manager_usage">Accès aux données d\'utilisation</string>
     <string name="title_activity_permission_settings">Permissions des capteurs</string>
+    <string name="permission_btn_system_settings">Paramètres de permissions</string>
 
     <!-- Endroits bruyants -->
     <string name="noisy_places_title">Endroits bruyants</string>

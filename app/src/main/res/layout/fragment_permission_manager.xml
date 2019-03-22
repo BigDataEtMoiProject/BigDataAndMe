@@ -8,165 +8,220 @@
     android:padding="5dp"
     tools:context="ca.uqac.bigdataetmoi.permission_manager.PermissionActivity">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/switch_location"
-            android:gravity="center_vertical"
-            android:text="@string/permission_manager_access_location"
-            android:textColor="@color/black"
-            android:textSize="@dimen/permission_manager_text_size" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <Switch
-            android:id="@+id/switch_location"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/permission_manager_description"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_larger"
+                android:gravity="center"
+                android:paddingBottom="@dimen/spacing_normal"/>
 
-    </RelativeLayout>
+            <View android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_normal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/switch_micro"
-            android:gravity="center_vertical"
-            android:text="@string/permission_manager_micro"
-            android:textColor="@color/black"
-            android:textSize="@dimen/permission_manager_text_size" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/switch_location"
+                    android:gravity="center_vertical"
+                    android:text="@string/permission_manager_access_location"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/permission_manager_text_size" />
 
-        <Switch
-            android:id="@+id/switch_micro"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true" />
+                <Switch
+                    android:id="@+id/switch_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true" />
 
-    </RelativeLayout>
+            </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_normal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/switch_sms"
-            android:gravity="center_vertical"
-            android:text="@string/permission_manager_sms"
-            android:textColor="@color/black"
-            android:textSize="@dimen/permission_manager_text_size" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/switch_micro"
+                    android:gravity="center_vertical"
+                    android:text="@string/permission_manager_micro"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/permission_manager_text_size" />
 
-        <Switch
-            android:id="@+id/switch_sms"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true" />
+                <Switch
+                    android:id="@+id/switch_micro"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true" />
 
-    </RelativeLayout>
+            </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_normal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/switch_contacts"
-            android:gravity="center_vertical"
-            android:text="@string/permission_manager_contacts"
-            android:textColor="@color/black"
-            android:textSize="@dimen/permission_manager_text_size" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/switch_sms"
+                    android:gravity="center_vertical"
+                    android:text="@string/permission_manager_sms"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/permission_manager_text_size" />
 
-        <Switch
-            android:id="@+id/switch_contacts"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true" />
+                <Switch
+                    android:id="@+id/switch_sms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true" />
 
-    </RelativeLayout>
+            </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_normal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/switch_bluetooth"
-            android:gravity="center_vertical"
-            android:text="@string/permission_manager_bluetooth"
-            android:textColor="@color/black"
-            android:textSize="@dimen/permission_manager_text_size" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/switch_contacts"
+                    android:gravity="center_vertical"
+                    android:text="@string/permission_manager_contacts"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/permission_manager_text_size" />
 
-        <Switch
-            android:id="@+id/switch_bluetooth"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true" />
+                <Switch
+                    android:id="@+id/switch_contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true" />
 
-    </RelativeLayout>
+            </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_normal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/switch_wifi"
-            android:gravity="center_vertical"
-            android:text="@string/permission_manager_wifi"
-            android:textColor="@color/black"
-            android:textSize="@dimen/permission_manager_text_size" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/switch_bluetooth"
+                    android:gravity="center_vertical"
+                    android:text="@string/permission_manager_bluetooth"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/permission_manager_text_size" />
 
-        <Switch
-            android:id="@+id/switch_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true" />
+                <Switch
+                    android:id="@+id/switch_bluetooth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true" />
 
-    </RelativeLayout>
+            </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_normal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/switch_usage"
-            android:gravity="center_vertical"
-            android:text="@string/permission_manager_usage"
-            android:textColor="@color/black"
-            android:textSize="@dimen/permission_manager_text_size" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/switch_wifi"
+                    android:gravity="center_vertical"
+                    android:text="@string/permission_manager_wifi"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/permission_manager_text_size" />
 
-        <Switch
-            android:id="@+id/switch_usage"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true" />
+                <Switch
+                    android:id="@+id/switch_wifi"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true" />
 
-    </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/spacing_normal"
+                android:paddingBottom="@dimen/spacing_normal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/switch_usage"
+                    android:gravity="center_vertical"
+                    android:text="@string/permission_manager_usage"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/permission_manager_text_size" />
+
+                <Switch
+                    android:id="@+id/switch_usage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true" />
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_permission_settings"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/permission_btn_system_settings"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </LinearLayout>
