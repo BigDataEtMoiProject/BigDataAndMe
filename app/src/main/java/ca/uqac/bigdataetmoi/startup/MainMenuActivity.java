@@ -1,22 +1,27 @@
 package ca.uqac.bigdataetmoi.startup;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.application_usage.UsageActivity;
+import ca.uqac.bigdataetmoi.application_usage.UsageFragment;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
-import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsActivity;
 import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.menu.ProfileActivity;
 import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
@@ -28,6 +33,9 @@ public class MainMenuActivity extends BaseActivity {
 
     private MainMenuPresenter mainMenuPresenter;
     private DrawerLayout mDrawerLayout;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +44,18 @@ public class MainMenuActivity extends BaseActivity {
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
+        viewPager = findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
         // Add the nav drawer button to the Action Bar
         ActionBar actionbar = getSupportActionBar();
         assert actionbar != null;
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
         actionbar.setHomeActionContentDescription("menu");
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 
         // Initialize nav drawer features
         setupNavigationDrawerFeatures();
@@ -53,18 +67,28 @@ public class MainMenuActivity extends BaseActivity {
         ActivityFetcherActivity.setUserID(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
 
         // L'activity créer le gfragment et le lie avece le presenter
-        MainMenuFragment frag = (MainMenuFragment) getFragmentManager().findFragmentById(R.layout.fragment_main_menu);
+        /*MainMenuFragment frag = (MainMenuFragment) getSupportFragmentManager().findFragmentByTag(R.layout.fragment_main_menu);
         if (frag == null) {
             frag = new MainMenuFragment();
             // On l'ajoute a l'activite a l'aide des FragmentTransactions
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.main_menu_frame, frag);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id., frag);
             transaction.commit();
         }
 
         mainMenuPresenter = new MainMenuPresenter(frag);
+        */
 
         BigDataService.startRecurrence(getApplicationContext());
+
+    }
+
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new MainMenuFragment(), "CARTE");
+        adapter.addFrag(new UsageFragment(), "APPS");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -135,15 +159,32 @@ public class MainMenuActivity extends BaseActivity {
                 });
     }
 
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
 
-    public void launchCommunicationActivity(View view) {
-        startActivity(new Intent(this, TelephoneSmsActivity.class));
-    }
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
 
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
 
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
 
-    public void launchApplicationDetailsActivity(View view) {
-        startActivity(new Intent(this, UsageActivity.class));
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }

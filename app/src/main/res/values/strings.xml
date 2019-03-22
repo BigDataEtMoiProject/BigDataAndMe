@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Big Data et moi</string>
+    <string name="app_name">Big Data et Moi</string>
     <string name="action_settings">Settings</string>
 
     <!-- MainMenuFragment -->

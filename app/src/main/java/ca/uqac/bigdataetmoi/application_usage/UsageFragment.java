@@ -1,42 +1,27 @@
 package ca.uqac.bigdataetmoi.application_usage;
 
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.app.usage.UsageEvents;
-import android.app.usage.UsageStatsManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.database.DatabaseManager;
-import ca.uqac.bigdataetmoi.database.data.ContactData;
 import ca.uqac.bigdataetmoi.database.data.UsageAppData;
-import ca.uqac.bigdataetmoi.database.data.UsageData;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 
-@RequiresApi(22)
+@RequiresApi(21)
 public class UsageFragment extends Fragment implements IUsageContract.View {
 
     private IUsageContract.Presenter presenter;
