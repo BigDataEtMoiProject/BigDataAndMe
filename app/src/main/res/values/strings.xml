@@ -94,5 +94,10 @@
     <string name="welcome_continue">Continuer</string>
     <string name="welcome_display">Ne plus afficher cette page</string>
 
+    <string name="login_big_data">Big Data</string>
+    <string name="login_and_me">&amp; Moi</string>
+    <string name="login_login">Se connecter</string>
+
+    <string name="register_title">Big Data et Moi permet de visualiser les données que vos applications peuvent collecter sur vous.</string>
 
 </resources>

@@ -41,11 +41,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
     implementation 'com.airbnb.android:lottie:2.5.0'
+    implementation 'br.com.simplepass:loading-button-android:1.14.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
 }
 
 

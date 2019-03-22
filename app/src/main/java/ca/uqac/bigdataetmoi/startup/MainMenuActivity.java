@@ -1,6 +1,7 @@
 package ca.uqac.bigdataetmoi.startup;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -11,16 +12,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.application_usage.UsageActivity;
+import ca.uqac.bigdataetmoi.authentification.LoginActivity;
+import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsActivity;
+import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.menu.ProfileActivity;
 import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
-import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsActivity;
-import ca.uqac.bigdataetmoi.authentification.LoginActivity;
-import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.service.BigDataService;
+import ca.uqac.bigdataetmoi.utils.Constants;
+import ca.uqac.bigdataetmoi.utils.Prefs;
 
 public class MainMenuActivity extends BaseActivity {
 
@@ -39,6 +41,7 @@ public class MainMenuActivity extends BaseActivity {
         assert actionbar != null;
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        actionbar.setHomeActionContentDescription("menu");
 
         // Initialize nav drawer features
         setupNavigationDrawerFeatures();
@@ -92,6 +95,7 @@ public class MainMenuActivity extends BaseActivity {
 
     // Setup Navigation Drawer features
     private void setupNavigationDrawerFeatures() {
+        final Context self = this;
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -120,8 +124,9 @@ public class MainMenuActivity extends BaseActivity {
                                 break;
                             case R.id.nav_deconnection :
                                 ActivityFetcherActivity.setUserID(null);
+                                Prefs.setBoolean(self, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
                                 startActivity(new Intent(MainMenuActivity.this, LoginActivity.class));
-                                overridePendingTransition(R.anim.slide_from_left, R.anim.fade_scale_out);
+                                overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
                                 finish();
                                 break;
                         }
