@@ -81,7 +81,7 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
                                 }
                             });
 
-                    presenter.start();
+                    if (presenter != null) presenter.start();
                 } catch (SecurityException e) {
                     Log.d("BDEM", e.getMessage());
                 }
