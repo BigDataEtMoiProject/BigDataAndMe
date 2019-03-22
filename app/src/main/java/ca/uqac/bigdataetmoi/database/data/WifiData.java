@@ -64,7 +64,7 @@ public class WifiData extends AbstractDataManager implements ValueEventListener 
     public List<String> getWifiSSID() {
         if(wifiSSID == null && !fetchingData) {
             fetchingData = true;
-            super.readLastData(ref, this);
+            readLastData(ref, this);
             return null;
         } else if(wifiSSID == null) {
             return null;

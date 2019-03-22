@@ -54,7 +54,7 @@ public class LocationData extends AbstractDataManager {
     /**
      * Utiliser par Firebase pour de-marshaliser les objets dans la BDD
      */
-    private LocationData() {};
+    private LocationData() {}
 
     @Override
     protected void finalize() throws Throwable {

@@ -24,7 +24,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
     }
 
-    public void onContinueClick(View _) {
+    public void onContinueClick(View button) {
         navigateToLoginActivity();
     }
 

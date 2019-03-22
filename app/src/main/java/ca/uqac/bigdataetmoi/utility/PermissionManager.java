@@ -1,5 +1,6 @@
 package ca.uqac.bigdataetmoi.utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -92,7 +93,7 @@ public class PermissionManager
     public boolean isGranted(String permission) {
         boolean granted = false;
 
-        if (ContextCompat.checkSelfPermission(ActivityFetcherActivity.getCurrentActivity(), permission) == PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(ActivityFetcherActivity.getContext(), permission) == PackageManager.PERMISSION_GRANTED)
         {
             if (permissionMap.get(permission) == null)
                 granted = DEFAULT_VALUE;
@@ -121,7 +122,7 @@ public class PermissionManager
 
     // Méthode qui récupère le résultat après une demande de permission. (pour android version 6 et plus)
     // Elle est appelé si une activité qui hérite de BaseActivity recoit une réponse.
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         // Si la permission est acceptée, on met à jour les données dans la bd
         for(int i = 0 ; i < grantResults.length ; i++)
         {
