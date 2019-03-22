@@ -21,49 +21,35 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/login_big"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/login_data"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="@font/circular_bold"
-                android:text="@string/login_big"
-                android:textAlignment="center"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/font_enormous"
-                android:layout_centerHorizontal="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="8dp" />
-
-            <TextView
-                android:id="@+id/login_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/circular_bold"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_centerInParent="true"
-                android:text="@string/login_data"
-                android:textAlignment="center"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/font_enormous" />
-
-            <TextView
-                android:id="@+id/login_and_me"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/login_data"
-                android:fontFamily="@font/circular_bold"
-                android:text="@string/login_and_me"
-                android:textAlignment="center"
-                android:layout_centerHorizontal="true"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/font_enormous"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_data" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/login_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/circular_bold"
+                    android:text="@string/login_big_data"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/font_enormous" />
+
+                <TextView
+                    android:id="@+id/login_and_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/circular_bold"
+                    android:layout_gravity="center"
+                    android:text="@string/login_and_me"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/font_enormous"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 

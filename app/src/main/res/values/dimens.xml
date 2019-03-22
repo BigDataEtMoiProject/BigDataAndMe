@@ -7,7 +7,7 @@
     <dimen name="permission_manager_text_size">20sp</dimen>
     <dimen name="design_navigation_separator_vertical_padding">5dp</dimen>
 
-    <dimen name="font_enormous">32sp</dimen>
+    <dimen name="font_enormous">48sp</dimen>
     <dimen name="font_huge">24sp</dimen>
     <dimen name="font_larger">22sp</dimen>
     <dimen name="font_large">18sp</dimen>

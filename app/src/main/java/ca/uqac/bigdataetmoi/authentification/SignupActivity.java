@@ -74,9 +74,12 @@ public class SignupActivity extends AppCompatActivity {
                             } else {
                                 btnRegister.revertAnimation();
                                 btnRegister.setBackground(ContextCompat.getDrawable(self, R.drawable.rounded_button)); // Reapply rounded shape
-                                Log.w("BDEM-SIGNUP", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.signin_error_authentication_failed), Toast.LENGTH_SHORT).show();
-                                Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_LONG).show();
+
+                                if (task.getException() != null) {
+                                    Toast.makeText(getApplicationContext(), "L'adresse e-mail est déjà utilisée par un autre compte.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Une erreur est survenue lors de l'authentification.", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                     });
