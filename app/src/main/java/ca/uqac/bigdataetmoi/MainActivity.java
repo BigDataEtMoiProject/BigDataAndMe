@@ -1,8 +1,8 @@
 package ca.uqac.bigdataetmoi;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,9 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
@@ -23,12 +21,12 @@ import java.util.Objects;
 
 import ca.uqac.bigdataetmoi.application_usage.UsageFragment;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
+import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsFragment;
+import ca.uqac.bigdataetmoi.fragments.MapFragment;
 import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.menu.ProfileActivity;
 import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
-import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
-import ca.uqac.bigdataetmoi.startup.MainMenuFragment;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
 
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    public ViewPager viewPager;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -72,10 +70,24 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void refreshViewPager() {
+        if (viewPager.getAdapter() != null) {
+            viewPager.getAdapter().notifyDataSetChanged();
+        }
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MainMenuFragment(), "Carte");
+        adapter.addFrag(new MapFragment(), "Carte");
         adapter.addFrag(new UsageFragment(), "Applications");
+        adapter.addFrag(new TelephoneSmsFragment(), "Repertoire");
+        // Repertoire téléphonique
+        // SSID
         viewPager.setAdapter(adapter);
     }
 
@@ -127,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return mFragmentList.size();
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return POSITION_NONE; // Permet de pouvoir refresh un fragment (en cas d'autorisation de permission)
         }
 
         public void addFrag(Fragment fragment, String title) {

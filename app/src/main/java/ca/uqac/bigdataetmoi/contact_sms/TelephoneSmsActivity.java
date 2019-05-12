@@ -3,6 +3,7 @@ package ca.uqac.bigdataetmoi.contact_sms;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
@@ -19,15 +20,6 @@ public class TelephoneSmsActivity extends BaseActivity {
         // On assigne l'activite courante dans le Fetcher
         ActivityFetcherActivity.setCurrentActivity(this);
 
-        TelephoneSmsFragment frag = (TelephoneSmsFragment) getFragmentManager().findFragmentById(R.layout.fragment_telephone_sms);
-        if (frag == null) {
-            frag = new TelephoneSmsFragment();
-            // On l'ajoute a l'activite a l'aide des FragmentTransactions
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.telephone_sms_frame, frag);
-            transaction.commit();
-        }
 
-        telephoneSmsPresenter = new TelephoneSmsPresenter(frag);
     }
 }
