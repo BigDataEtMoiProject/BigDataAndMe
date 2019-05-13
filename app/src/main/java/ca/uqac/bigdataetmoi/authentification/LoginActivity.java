@@ -20,6 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
 import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
@@ -88,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 Prefs.setBoolean(self, Constants.SHARED_PREFS, Constants.IS_LOGGED, true);
 
-                                startActivity(new Intent(self, MainMenuActivity.class));
+                                startActivity(new Intent(self, MainActivity.class));
 
                                 finish();
                             }

@@ -41,7 +41,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void navigateToMainPage() {
-        startActivity(new Intent(this, MainMenuActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

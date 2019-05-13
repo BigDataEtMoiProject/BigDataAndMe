@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Big Data et moi</string>
+    <string name="app_name">Big Data et Moi</string>
     <string name="action_settings">Settings</string>
 
     <!-- MainMenuFragment -->
@@ -101,5 +101,10 @@
     <string name="login_login">Se connecter</string>
 
     <string name="register_title">Big Data et Moi permet de visualiser les données que vos applications peuvent collecter sur vous.</string>
+
+    <string name="navigation_app_name">Big Data &amp; Moi</string>
+
+    <string name="permission_location_explanation_title">Activez la localisation</string>
+    <string name="permission_location_explanation">WIP: En activant la localisation, vous permettez à l\'application de savoir où vous vous trouvez, etc.</string>
 
 </resources>
