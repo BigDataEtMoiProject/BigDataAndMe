@@ -54,6 +54,8 @@
         </RelativeLayout>
 
         <EditText
+            android:focusedByDefault="false"
+            android:nextFocusRight="@id/login_input_password"
             android:id="@+id/login_input_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -73,6 +75,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
+            android:focusedByDefault="false"
             android:id="@+id/login_input_password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -114,7 +117,6 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_large"
-            android:onClick="login"
             app:spinning_bar_color="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

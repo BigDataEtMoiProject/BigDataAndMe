@@ -5,26 +5,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
+import ca.uqac.bigdataetmoi.data.services.AuthService;
+import ca.uqac.bigdataetmoi.data.services.HttpClient;
+import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.utils.Constants;
+import ca.uqac.bigdataetmoi.utils.LoginAuthenticationValidator;
 import ca.uqac.bigdataetmoi.utils.Prefs;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,6 +46,13 @@ public class LoginActivity extends AppCompatActivity {
         TextView buttonRegister = findViewById(R.id.login_button_register);
         btnLogin = findViewById(R.id.login_button_continue);
 
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login(v);
+            }
+        });
+
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,40 +69,44 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        final Context self = this;
-        final String email = fieldEmail.getText().toString(),
-                password = fieldPassword.getText().toString();
+        LoginAuthenticationValidator loginValidator = new LoginAuthenticationValidator(fieldEmail, fieldPassword);
 
-        if (TextUtils.isEmpty(email)) {
-            fieldEmail.setError(getString(R.string.error_empty_email));
-        } else if (TextUtils.isEmpty(password)) {
-            fieldPassword.setError(getString(R.string.error_empty_password));
-        } else if (password.length() < 6) {
-            fieldPassword.setError(getString(R.string.signup_error_password_too_short));
+        if (loginValidator.areLoginCredentialsValid()) {
+            sendLoginRequest();
         } else {
-            btnLogin.startAnimation();
-
-            auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                btnLogin.revertAnimation();
-                                btnLogin.setBackground(ContextCompat.getDrawable(self, R.drawable.rounded_button)); // Reapply rounded shape
-                                Toast.makeText(LoginActivity.this, getString(R.string.signin_error_authentication_failed), Toast.LENGTH_LONG).show();
-                            } else {
-                                btnLogin.stopAnimation();
-
-                                ActivityFetcherActivity.user = auth.getCurrentUser();
-
-                                Prefs.setBoolean(self, Constants.SHARED_PREFS, Constants.IS_LOGGED, true);
-
-                                startActivity(new Intent(self, MainActivity.class));
-
-                                finish();
-                            }
-                        }
-                    });
+            loginValidator.displayCredentialsErrorOnEditText();
         }
     }
+
+    private void sendLoginRequest() {
+        Call<User> loginCall = new HttpClient<AuthService>().create(AuthService.class).login();
+        btnLogin.startAnimation();
+
+        loginCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    Prefs.setBoolean(getApplicationContext(), Constants.SHARED_PREFS, Constants.IS_LOGGED, true);
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.signin_error_authentication_failed), Toast.LENGTH_LONG).show();
+                    revertButton();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Erreur lors de la tentative de connexion", Toast.LENGTH_SHORT).show();
+                Timber.e(t);
+                revertButton();
+            }
+        });
+    }
+
+    private void revertButton() {
+        btnLogin.revertAnimation();
+        btnLogin.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button)); // Reapply rounded shape
+    }
+
 }
