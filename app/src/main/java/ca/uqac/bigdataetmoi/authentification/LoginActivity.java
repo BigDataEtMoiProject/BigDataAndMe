@@ -7,6 +7,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.data.services.AuthService;
 import ca.uqac.bigdataetmoi.data.services.HttpClient;
+import ca.uqac.bigdataetmoi.dto.UserLoginDto;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.LoginAuthenticationValidator;
@@ -79,7 +81,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void sendLoginRequest() {
-        Call<User> loginCall = new HttpClient<AuthService>().create(AuthService.class).login();
+        UserLoginDto userLoginDto = new UserLoginDto(fieldEmail.getText().toString(), fieldPassword.getText().toString());
+        Call<User> loginCall = new HttpClient<AuthService>().create(AuthService.class).login(userLoginDto);
         btnLogin.startAnimation();
 
         loginCall.enqueue(new Callback<User>() {
@@ -90,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 } else {
+                    Timber.e(response.toString());
                     Toast.makeText(getApplicationContext(), getString(R.string.signin_error_authentication_failed), Toast.LENGTH_LONG).show();
                     revertButton();
                 }
