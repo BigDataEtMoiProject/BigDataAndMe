@@ -3,14 +3,14 @@ package ca.uqac.bigdataetmoi.utils;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-public class LoginAuthenticationValidator {
+public class AuthenticationValidator {
 
     private EditText emailEditText;
     private EditText passwordEditText;
     private String email;
     private String password;
 
-    public LoginAuthenticationValidator(EditText emailEditText, EditText passwordEditText) {
+    public AuthenticationValidator(EditText emailEditText, EditText passwordEditText) {
         this.emailEditText = emailEditText;
         this.passwordEditText = passwordEditText;
         this.email = emailEditText.getText().toString();

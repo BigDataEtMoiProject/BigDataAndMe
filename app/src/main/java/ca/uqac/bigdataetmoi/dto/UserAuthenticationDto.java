@@ -1,10 +1,10 @@
 package ca.uqac.bigdataetmoi.dto;
 
-public class UserLoginDto {
+public class UserAuthenticationDto {
     private String email;
     private String password;
 
-    public UserLoginDto(String email, String password) {
+    public UserAuthenticationDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
