@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
+import ca.uqac.bigdataetmoi.startup.MainActivity;
 import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
@@ -41,7 +42,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void navigateToMainPage() {
-        startActivity(new Intent(this, MainMenuActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

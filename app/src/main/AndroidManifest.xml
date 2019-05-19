@@ -37,7 +37,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".WelcomeActivity" android:theme="@style/AppThemeNoActionBar">
+        <activity android:name=".InfoActivity"
+            android:theme="@style/AppThemeNoActionBar">
+
+        </activity>
+        <activity
+            android:name=".startup.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,9 +55,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".startup.MainMenuActivity" />
-        <activity android:name=".authentification.LoginActivity" android:theme="@style/AppThemeNoActionBar"/>
+        <activity
+            android:name=".authentification.LoginActivity"
+            android:theme="@style/AppThemeNoActionBar" />
         <activity android:name=".contact_sms.TelephoneSmsActivity" />
-        <activity android:name=".authentification.SignupActivity" android:theme="@style/AppThemeNoActionBar"/>
+        <activity
+            android:name=".authentification.SignupActivity"
+            android:theme="@style/AppThemeNoActionBar" />
         <activity android:name=".application_usage.UsageActivity" />
         <activity android:name=".application_usage_details.ApplicationUsageDetailsActivity" />
 
