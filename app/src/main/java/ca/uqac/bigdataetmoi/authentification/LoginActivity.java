@@ -23,7 +23,6 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.startup.ActivityFetcherActivity;
-import ca.uqac.bigdataetmoi.startup.MainMenuActivity;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
 

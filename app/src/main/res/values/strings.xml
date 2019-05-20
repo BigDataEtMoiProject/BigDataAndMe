@@ -41,6 +41,9 @@
     <string name="title_activity_permission_settings">Permissions des capteurs</string>
     <string name="permission_btn_system_settings">Paramètres de permissions</string>
 
+    <string name="permission_desactivee">Vous avez désactivé la permission</string>
+    <string name="permission_message_information">Ces permissions sont nécessaires pour les fonctionnalités différentes de l\'application</string>
+    
     <!-- Endroits bruyants -->
     <string name="noisy_places_title">Endroits bruyants</string>
     <string name="img_noise_descr">Diagramme circulaire indiquant les endroits visités les plus bruyants</string>
@@ -107,4 +110,9 @@
     <string name="permission_location_explanation_title">Activez la localisation</string>
     <string name="permission_location_explanation">WIP: En activant la localisation, vous permettez à l\'application de savoir où vous vous trouvez, etc.</string>
 
+    
+    <!--Divers-->
+    <string name="parametres">Paramètres</string>
+    <string name="activer">Activer</string>
+    
 </resources>

@@ -1,9 +1,15 @@
 package ca.uqac.bigdataetmoi.startup;
 
+import android.Manifest;
+import android.app.Fragment;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +44,13 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedBundle) {
+
+        // Demandes des permissions
+        requestPermissions(new String[] { Manifest.permission.READ_CONTACTS,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_SMS }, 2);
+
+
         View rootView = inflater.inflate(R.layout.fragment_main_menu, container, false);
         map = rootView.findViewById(R.id.mapView);
         map.onCreate(savedBundle);
@@ -128,5 +141,47 @@ public class MainMenuFragment extends Fragment implements IMainMenuContract.View
     @Override
     public void afficherApplication() {
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == 2){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                System.out.println("####################################################### PERMISSION_GRANTED pour READ_CONTACTS");
+            } else if(shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) == false) { // permissions[0]
+                displayOptions();
+            } else {
+                //expliquer pourquoi nous avons besoin de la permission
+                System.out.println("####################################################### PERMISSION_DENIED pour READ_CONTACTS");
+                explain();
+            }
+        }
+    }
+
+    // TODO mettre les textes dans le fichier strings
+    private void displayOptions() {
+        Snackbar.make(getView(), getString(R.string.permission_desactivee), Snackbar.LENGTH_LONG).setAction(getString(R.string.parametres), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                final Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        }).show();
+    }
+
+    // TODO mettre les textes dans le fichier strings
+    private void explain() {
+        Snackbar.make(getView(), getString(R.string.permission_message_information), Snackbar.LENGTH_LONG).setAction(getString(R.string.activer), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requestPermissions(new String[] { Manifest.permission.READ_CONTACTS,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.READ_SMS }, 2);
+            }
+        }).show();
     }
 }
