@@ -25,7 +25,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import ca.uqac.bigdataetmoi.application_usage.UsageFragment;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
@@ -115,63 +114,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager.setAdapter(adapter);
     }
 
-<<<<<<< master
-    private void setupNavListener() {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        drawerLayout.closeDrawers();
-                        switch (item.getItemId()) {
-                            case R.id.nav_parametre :
-                                startActivity(new Intent(MainActivity.this, PermissionActivity.class));
-                                break;
-                            case R.id.nav_propos :
-                                startActivity(new Intent(MainActivity.this, AboutActivity.class));
-                                break;
-                            case R.id.nav_deconnection :
-                                Prefs.setBoolean(MainActivity.this, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
-                                finish();
-                                break;
-                        }
-                        return true;
-                    }
-=======
-//    private void setupNavListener() {
-//        navigationView.setNavigationItemSelectedListener(
-//                new NavigationView.OnNavigationItemSelectedListener() {
-//                    @Override
-//                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                        drawerLayout.closeDrawers();
-//                        switch (item.getItemId()) {
-//                            case R.id.nav_profile :
-//                                if (ActivityFetcherActivity.getUserId() != null) {
-//                                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-//                                }
-//                                break;
-//                            case R.id.nav_parametre :
-//                                startActivity(new Intent(MainActivity.this, PermissionActivity.class));
-//                                break;
-//                            case R.id.nav_propos :
-//                                startActivity(new Intent(MainActivity.this, AboutActivity.class));
-//                                break;
-//                            case R.id.nav_deconnection :
-//                                ActivityFetcherActivity.setUserID(null);
-//                                Prefs.setBoolean(MainActivity.this, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
-//                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//                                overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
-//                                finish();
-//                                break;
-//                        }
-//                        return true;
-//                    }
-//                }
-//        );
-//    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -182,12 +124,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Don't start MainMenuActivity if we already are in
                 // startActivity(new Intent(MainMenuActivity.this, MainMenuActivity.class));
                 break;
-            case R.id.nav_profile :
-                if (ActivityFetcherActivity.getUserId() != null) {
-                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
->>>>>>> - new MainActivity created with toolbar and info Button, with a navigation drawer (menu hamburger) - Info page created
-                }
-                break;
             case R.id.nav_parametre :
                 startActivity(new Intent(MainActivity.this, PermissionActivity.class));
                 break;
@@ -195,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 break;
             case R.id.nav_deconnection :
-                ActivityFetcherActivity.setUserID(null);
                 Prefs.setBoolean(this, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
