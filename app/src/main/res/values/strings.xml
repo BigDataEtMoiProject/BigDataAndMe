@@ -110,6 +110,23 @@
     <string name="permission_location_explanation_title">Activez la localisation</string>
     <string name="permission_location_explanation">WIP: En activant la localisation, vous permettez à l\'application de savoir où vous vous trouvez, etc.</string>
 
+    <!--InfoActivity-->
+    <string name="btnReturn">Retour</string>
+    <string name="info_text1">Big Date Et Moi est une application qui met en évidence les informations que votre smartphone peut stocker sur vous.</string>
+    <string name="info_text2">Comment ça marche?</string>
+    <string name="info_text3">Quand vous accordez une autorisation à une application, par exemple l\'accès à vos contacts, vos photos ou votre localisation, vous permettez à celle-ci de garder en mémoire des données qui vous concernent.</string>
+    <string name="info_text4">Ces données personnelles peuvent alors être utilisées par les géants du numérique à des fins commerciales.</string>
+    <string name="info_text5">Big Data et Moi vous montre simplement des exemples de données personnelles qui sont mémorisées dans votre appareil lorsque vous accordez certaines permissions.</string>
+    <string name="info_title">Big Data Et Moi</string>
+
+    <!--header-->
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_info">Informations</string>
+
     
     <!--Divers-->
     <string name="parametres">Paramètres</string>
