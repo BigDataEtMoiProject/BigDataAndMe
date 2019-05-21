@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoActivity">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:orientation="vertical">
+
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/welcome_animation"
+                android:layout_width="0dp"
+                android:layout_height="320dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/info_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="welcome_permission.json"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:id="@+id/info_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/info_title"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:fontFamily="@font/circular_bold"
+                android:textColor="@android:color/black"
+                app:layout_constraintBottom_toTopOf="@+id/info_text0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/info_text0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="@font/circular_book"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/welcome_title"
+                android:textAlignment="center"
+                android:textSize="@dimen/font_large"
+                app:layout_constraintBottom_toTopOf="@+id/info_text1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/info_text1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="@font/circular_book"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/info_text1"
+                android:textAlignment="center"
+                android:textSize="@dimen/font_large"
+                app:layout_constraintBottom_toTopOf="@+id/info_text2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/info_text2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="@font/circular_book"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/info_text2"
+                android:textAlignment="center"
+                android:textSize="@dimen/font_large"
+                app:layout_constraintBottom_toTopOf="@+id/info_text3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/info_text3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/circular_book"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/info_text3"
+                android:textAlignment="center"
+                android:textSize="@dimen/font_large"
+                app:layout_constraintBottom_toTopOf="@+id/imgPermission"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/imgPermission"
+                android:layout_width="0dp"
+                android:layout_height="572dp"
+                android:elevation="8dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/info_text4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/permission_android" />
+
+            <TextView
+                android:id="@+id/info_text4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="@font/circular_book"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/info_text4"
+                android:textAlignment="center"
+                android:textSize="@dimen/font_large"
+                app:layout_constraintBottom_toTopOf="@+id/info_text5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/info_text5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="@font/circular_book"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="4sp"
+                android:text="@string/info_text5"
+                android:textAlignment="center"
+                android:textSize="@dimen/font_large"
+                app:layout_constraintBottom_toTopOf="@id/btnReturn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btnReturn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_button"
+                android:layout_marginBottom="64dp"
+                android:onClick="returnToMainActivity"
+                android:paddingStart="@dimen/spacing_huge"
+                android:paddingEnd="@dimen/spacing_huge"
+                android:text="@string/btnReturn"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_large"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="2183dp" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView></android.support.constraint.ConstraintLayout>
