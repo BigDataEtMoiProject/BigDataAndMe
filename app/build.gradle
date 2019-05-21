@@ -14,12 +14,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "API_URL", "\"http://lyberteam.eu:3000/api/\"")
+            buildConfigField("String", "API_URL", "\"https://api-iut.lyberteam.eu/\"")
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "API_URL", "\"http://192.168.0.29:3000/api/\"")
+            buildConfigField("String", "API_URL", "\"https://api-iut.lyberteam.eu/\"")
         }
     }
     lintOptions {
