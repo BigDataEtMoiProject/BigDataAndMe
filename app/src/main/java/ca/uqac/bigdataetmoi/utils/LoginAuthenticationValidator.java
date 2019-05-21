@@ -18,12 +18,14 @@ public class LoginAuthenticationValidator {
     }
 
     public Boolean areLoginCredentialsValid() {
-        return ! TextUtils.isEmpty(email) && ! TextUtils.isEmpty(password);
+        return ! TextUtils.isEmpty(email) && ! TextUtils.isEmpty(password) && isEmail(email);
     }
 
     public void displayCredentialsErrorOnEditText() {
         if (TextUtils.isEmpty(email)) {
             emailEditText.setError("Veuillez entrer une adresse email.");
+        } else if (! isEmail(email)) {
+            emailEditText.setError("Le format de l'adresse email n'est pas correct.");
         }
 
         if (TextUtils.isEmpty(password)) {
@@ -31,5 +33,9 @@ public class LoginAuthenticationValidator {
         } else if (password.length() < 6) {
             passwordEditText.setError("Veuillez entrer un mot de passe d'au moins 6 caractères.");
         }
+    }
+
+    private boolean isEmail(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
