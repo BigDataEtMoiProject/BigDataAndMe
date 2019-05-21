@@ -37,7 +37,7 @@ public class UsagePresenter implements IUsageContract.Presenter {
         }
         packageManager = ActivityFetcherActivity.getCurrentActivity().getPackageManager();
         statsManager = (UsageStatsManager) ActivityFetcherActivity.getCurrentActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-    }
+}
 
     @Override
     public void start() {
