@@ -1,9 +1,7 @@
 package ca.uqac.bigdataetmoi.authentification;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +15,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.data.services.LoginService;
 import ca.uqac.bigdataetmoi.data.services.HttpClient;
+import ca.uqac.bigdataetmoi.data.services.LoginService;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
 import ca.uqac.bigdataetmoi.models.User;
-import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.AuthenticationValidator;
+import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,12 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_from_top, R.anim.stationary);
             }
         });
-
-        final WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if (wifi != null && !wifi.isWifiEnabled()) {
-            Toast.makeText(getApplicationContext(), "Activation de la Wifi", Toast.LENGTH_LONG).show();
-            wifi.setWifiEnabled(true);
-        }
     }
 
     public void login(View view) {
@@ -81,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendLoginRequest() {
         UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto(fieldEmail.getText().toString(), fieldPassword.getText().toString());
-        Call<User> loginCall = new HttpClient<LoginService>().create(LoginService.class).login(userAuthenticationDto);
+        Call<User> loginCall = new HttpClient<LoginService>(LoginActivity.this).create(LoginService.class).login(userAuthenticationDto);
         btnLogin.startAnimation();
 
         loginCall.enqueue(new Callback<User>() {
@@ -105,6 +97,8 @@ public class LoginActivity extends AppCompatActivity {
     private void handleLoginResponse(Response<User> response) {
         if (response.isSuccessful()) {
             Prefs.setBoolean(getApplicationContext(), Constants.SHARED_PREFS, Constants.IS_LOGGED, true);
+            Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_EMAIL, fieldEmail.getText().toString());
+            Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_PASSWORD, fieldPassword.getText().toString());
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         } else {

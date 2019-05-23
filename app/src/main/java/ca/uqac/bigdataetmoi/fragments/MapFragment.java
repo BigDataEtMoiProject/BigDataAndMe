@@ -13,8 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
+import java.util.concurrent.TimeUnit;
+
 import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.workers.LocationWorker;
 
 import static ca.uqac.bigdataetmoi.utils.Constants.LOCATION_PERMISSION_RESULT_CODE;
 
@@ -31,6 +41,8 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (hasAlreadyAcceptedLocationPermission()) {
+            startLocationBackgroundWork();
+
             return inflater.inflate(R.layout.fragment_map, container, false);
         } else {
             return inflater.inflate(R.layout.fragment_location_permission, container, false);
@@ -83,6 +95,26 @@ public class MapFragment extends Fragment {
         if (getActivity() != null) {
             ((MainActivity)getActivity()).refreshViewPager();
         }
+    }
+
+    private void startLocationBackgroundWork() {
+        Constraints workConstraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        PeriodicWorkRequest uploadLocationWorkRequest = new PeriodicWorkRequest
+                .Builder(LocationWorker.class, 15, TimeUnit.MINUTES)
+                .setConstraints(workConstraints)
+                .build();
+
+        WorkManager.getInstance()
+                .enqueueUniquePeriodicWork(
+                        "UPLOAD WORK",
+                        ExistingPeriodicWorkPolicy.KEEP,
+                        uploadLocationWorkRequest
+                );
+
+        
     }
 
 }
