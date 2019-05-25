@@ -9,20 +9,17 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
 
 import ca.uqac.bigdataetmoi.data.services.HttpClient;
 import ca.uqac.bigdataetmoi.data.services.UserService;
 import ca.uqac.bigdataetmoi.dto.CoordinatesDto;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
-import retrofit2.Response;
 import timber.log.Timber;
 
 public class LocationWorker extends Worker {
 
+    public static final String OUTPUT_KEY = "user";
     private Context appContext;
     private WorkerParameters workerParameters;
 

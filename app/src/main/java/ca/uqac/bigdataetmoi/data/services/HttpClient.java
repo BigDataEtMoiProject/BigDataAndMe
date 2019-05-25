@@ -18,6 +18,7 @@ public class HttpClient<T> {
 
     public HttpClient(@NonNull Context context) {
         Context context1 = context.getApplicationContext();
+
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
 

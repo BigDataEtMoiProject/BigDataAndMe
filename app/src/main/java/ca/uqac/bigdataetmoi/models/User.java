@@ -10,4 +10,5 @@ public class User {
     public List<Wifi> wifiList = Collections.emptyList();
     public List<Message> messageList = Collections.emptyList();
     public List<TimeOnApp> timeOnAppList = Collections.emptyList();
+    public List<Coordinate> coordinatesList = Collections.emptyList();
 }
