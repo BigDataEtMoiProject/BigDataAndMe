@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,13 +37,20 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.adapters.MapLocationAdapter;
+import ca.uqac.bigdataetmoi.models.City;
 import ca.uqac.bigdataetmoi.models.Coordinate;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.repositories.UserRepository;
+import ca.uqac.bigdataetmoi.utils.CityClickListener;
 import ca.uqac.bigdataetmoi.workers.LocationWorker;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +63,7 @@ import static ca.uqac.bigdataetmoi.utils.Constants.LOCATION_PERMISSION_RESULT_CO
 public class MapFragment extends Fragment {
 
     MapView map = null;
+    MapLocationAdapter mapLocationAdapter = null;
 
     public MapFragment() {
         // Required empty public constructor
@@ -114,6 +125,19 @@ public class MapFragment extends Fragment {
                 Timber.e(t);
             }
         });
+
+        if (hasAlreadyAcceptedLocationPermission() && getView() != null) {
+            CityClickListener onRecentMovesItemClick = (view, city) ->  {
+                if (map != null) {
+                    GeoPoint point = new GeoPoint(Double.parseDouble(city.latitude), Double.parseDouble(city.longitude));
+                    map.getController().animateTo(point);
+                }
+            };
+            mapLocationAdapter = new MapLocationAdapter(onRecentMovesItemClick);
+            RecyclerView coordinatesRecycler = getView().findViewById(R.id.recent_moves_recycler);
+            coordinatesRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+            coordinatesRecycler.setAdapter(mapLocationAdapter);
+        }
     }
 
     @Override
@@ -194,14 +218,81 @@ public class MapFragment extends Fragment {
         if (response.isSuccessful()) {
             User user = response.body();
 
-            updateMapPins(user);
+            if (user != null) {
+                updateMapPins(user);
+                updateRecentMoves(user);
+                Timber.d("§ handleUserResponse");
+            }
         } else {
             Timber.e(response.toString());
         }
     }
 
+    private void updateRecentMoves(User user) {
+        ArrayList<Coordinate> coordinates = removeUndefinedCityLocation(user);
+        List<City> cityList = new ArrayList<>();
+
+        for (Coordinate coordinate : coordinates) {
+            if (! isCityAlreadyInArray(cityList, coordinate.city)) {
+                int numberOfCoordinates = getNumberOfCoordinatesForGivenCity(coordinates, coordinate.city);
+                City city = new City(coordinate.city, coordinate.longitude, coordinate.latitude, numberOfCoordinates);
+                cityList.add(city);
+            }
+        }
+
+        cityList = sortCityListByNumberOfCoordinates(cityList);
+
+        if (mapLocationAdapter != null) {
+            mapLocationAdapter.submitList(cityList);
+        }
+    }
+
+    private List<City> sortCityListByNumberOfCoordinates(List<City> cityList) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Comparator<City> comparator = Comparator.comparing(City::getNumberOfCoordinatesLogged);
+            Collections.sort(cityList, comparator.reversed());
+        }
+
+        return cityList;
+    }
+
+    private Boolean isCityAlreadyInArray(List<City> cityList, String cityName) {
+        for (City city : cityList) {
+            if (city.name.equals(cityName)) return true;
+        }
+
+        return false;
+    }
+
+    private int getNumberOfCoordinatesForGivenCity(List<Coordinate> coordinates, String cityName) {
+        int numberOfCoordinates = 0;
+
+        for (Coordinate coordinate : coordinates) {
+            if (coordinate.city.equals(cityName)) {
+                numberOfCoordinates++;
+            }
+        }
+
+        return numberOfCoordinates;
+    }
+
+    private ArrayList<Coordinate> removeUndefinedCityLocation(User user) {
+        ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
+
+        for (int i = 0; i < user.coordinatesList.size(); i++) {
+            Coordinate coordinate = user.coordinatesList.get(i);
+
+            if (coordinate.city != null && !coordinate.city.equals("undefined")) {
+                coordinates.add(coordinate);
+            }
+        }
+
+        return coordinates;
+    }
+
+    // TODO: refactor
     private void updateMapPins(User user) {
-        if (user != null && getView() != null && user.coordinatesList.size() > 0 && map != null && getContext() != null) {
+        if (getView() != null && user.coordinatesList.size() > 0 && map != null && getContext() != null) {
 
             ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
 
@@ -227,6 +318,7 @@ public class MapFragment extends Fragment {
                             return false;
                         }
                     }, getContext());
+
             mOverlay.setFocusItemsOnTap(true);
 
             map.getOverlays().add(mOverlay);

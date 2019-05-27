@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 
 import ca.uqac.bigdataetmoi.data.services.HttpClient;
 import ca.uqac.bigdataetmoi.data.services.UserService;
-import ca.uqac.bigdataetmoi.dto.CoordinatesDto;
+import ca.uqac.bigdataetmoi.dto.CoordinateDto;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
 import timber.log.Timber;
@@ -44,8 +44,8 @@ public class LocationWorker extends Worker {
             Timber.d(String.valueOf(latitude));
             Timber.d(String.valueOf(currentTime));
 
-            CoordinatesDto[] coordinatesDtos = { new CoordinatesDto(String.valueOf(longitude), String.valueOf(latitude), currentTime) };
-            Call<User> coordinatesCall = new HttpClient<UserService>(appContext.getApplicationContext()).create(UserService.class).sendCoordinates(coordinatesDtos);
+            CoordinateDto coordinateDtos = new CoordinateDto(String.valueOf(longitude), String.valueOf(latitude), currentTime);
+            Call<User> coordinatesCall = new HttpClient<UserService>(appContext.getApplicationContext()).create(UserService.class).sendCoordinate(coordinateDtos);
 
             coordinatesCall.execute();
 
