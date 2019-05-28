@@ -57,7 +57,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void sendRegisterRequest() {
         UserAuthenticationDto userRegisterDto = new UserAuthenticationDto(fieldEmail.getText().toString(), fieldPassword.getText().toString());
-        Call<User> registerCall = new HttpClient<UserService>().create(UserService.class).register(userRegisterDto);
+        Call<User> registerCall = new HttpClient<UserService>(SignupActivity.this).create(UserService.class).register(userRegisterDto);
         btnRegister.startAnimation();
 
         registerCall.enqueue(new Callback<User>() {

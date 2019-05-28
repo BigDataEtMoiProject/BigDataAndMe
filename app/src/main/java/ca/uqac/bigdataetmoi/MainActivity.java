@@ -132,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_deconnection :
                 Prefs.setBoolean(this, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
+                Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_EMAIL, "");
+                Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_PASSWORD, "");
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
                 finish();
