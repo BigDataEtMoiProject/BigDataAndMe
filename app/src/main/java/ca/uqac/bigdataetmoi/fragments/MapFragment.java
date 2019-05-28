@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.work.Constraints;
@@ -221,10 +222,21 @@ public class MapFragment extends Fragment {
             if (user != null) {
                 updateMapPins(user);
                 updateRecentMoves(user);
+                updateLastUpdateTime(user);
                 Timber.d("§ handleUserResponse");
             }
         } else {
             Timber.e(response.toString());
+        }
+    }
+
+    private void updateLastUpdateTime(User user) {
+        if (getView() != null) {
+            TextView lastKnownTextView = getView().findViewById(R.id.lastKnownUpdate);
+            Coordinate lastCoordinate = user.coordinatesList.get(user.coordinatesList.size() - 1);
+
+            String lastUpdateText = "Dernière mise à jour: " + lastCoordinate.date;
+            lastKnownTextView.setText(lastUpdateText);
         }
     }
 
