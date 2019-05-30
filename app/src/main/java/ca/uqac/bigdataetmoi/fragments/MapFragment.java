@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -100,6 +101,16 @@ public class MapFragment extends Fragment {
                     IMapController mapController = map.getController();
                     mapController.setZoom(14.5);
                     LocationManager lm = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
+                    if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
                     Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     double longitude = location.getLongitude();
                     double latitude = location.getLatitude();
@@ -145,7 +156,7 @@ public class MapFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == LOCATION_PERMISSION_RESULT_CODE) {
             if (hasGrantedLocationPermission(grantResults)) {
-                displayMap();
+                refreshViewPager();
             }
         }
     }
@@ -168,12 +179,7 @@ public class MapFragment extends Fragment {
         Button locationPermissionButton = getView().findViewById(R.id.location_continue);
 
         if (locationPermissionButton != null) {
-            locationPermissionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    askForLocationPermission();
-                }
-            });
+            locationPermissionButton.setOnClickListener(v -> askForLocationPermission());
         }
     }
 
@@ -191,7 +197,7 @@ public class MapFragment extends Fragment {
         return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void displayMap() {
+    private void refreshViewPager() {
         if (getActivity() != null) {
             ((MainActivity) getActivity()).refreshViewPager();
         }
@@ -209,7 +215,7 @@ public class MapFragment extends Fragment {
 
         WorkManager.getInstance()
                 .enqueueUniquePeriodicWork(
-                        "UPLOAD WORK",
+                        "LOCATION WORK",
                         ExistingPeriodicWorkPolicy.KEEP,
                         uploadLocationWorkRequest
                 );
@@ -223,7 +229,6 @@ public class MapFragment extends Fragment {
                 updateMapPins(user);
                 updateRecentMoves(user);
                 updateLastUpdateTime(user);
-                Timber.d("§ handleUserResponse");
             }
         } else {
             Timber.e(response.toString());
@@ -233,10 +238,12 @@ public class MapFragment extends Fragment {
     private void updateLastUpdateTime(User user) {
         if (getView() != null) {
             TextView lastKnownTextView = getView().findViewById(R.id.lastKnownUpdate);
-            Coordinate lastCoordinate = user.coordinatesList.get(user.coordinatesList.size() - 1);
+            if (lastKnownTextView != null && user.coordinatesList.size() > 0) {
+                Coordinate lastCoordinate = user.coordinatesList.get(user.coordinatesList.size() - 1);
 
-            String lastUpdateText = "Dernière mise à jour: " + lastCoordinate.date;
-            lastKnownTextView.setText(lastUpdateText);
+                String lastUpdateText = "Dernière mise à jour: " + lastCoordinate.date;
+                lastKnownTextView.setText(lastUpdateText);
+            }
         }
     }
 

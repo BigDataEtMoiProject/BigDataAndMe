@@ -1,6 +1,7 @@
 package ca.uqac.bigdataetmoi.data.services;
 
 import ca.uqac.bigdataetmoi.dto.CoordinateDto;
+import ca.uqac.bigdataetmoi.dto.PhotoDto;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
@@ -14,6 +15,9 @@ public interface UserService {
 
     @POST("coordinates")
     Call<User> sendCoordinate(@Body CoordinateDto coordinate);
+
+    @POST("photo")
+    Call<User> sendPhoto(@Body PhotoDto photo);
 
     @GET("users/me")
     Call<User> getCurrentUserInformations();
