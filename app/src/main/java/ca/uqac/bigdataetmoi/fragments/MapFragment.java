@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,8 +39,8 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -140,7 +141,7 @@ public class MapFragment extends Fragment {
         });
 
         if (hasAlreadyAcceptedLocationPermission() && getView() != null) {
-            CityClickListener onRecentMovesItemClick = (view, city) ->  {
+            CityClickListener onRecentMovesItemClick = (view, city) -> {
                 if (map != null) {
                     GeoPoint point = new GeoPoint(Double.parseDouble(city.latitude), Double.parseDouble(city.longitude));
                     map.getController().animateTo(point);
@@ -229,21 +230,19 @@ public class MapFragment extends Fragment {
             if (user != null) {
                 updateMapPins(user);
                 updateRecentMoves(user);
-                updateLastUpdateTime(user);
+                updateLastUpdateTime();
             }
         } else {
             Timber.e(response.toString());
         }
     }
 
-    private void updateLastUpdateTime(User user) {
+    private void updateLastUpdateTime() {
         if (getView() != null) {
             TextView lastKnownTextView = getView().findViewById(R.id.lastKnownUpdate);
-            if (lastKnownTextView != null && user.coordinatesList.size() > 0) {
-                Coordinate lastCoordinate = user.coordinatesList.get(user.coordinatesList.size() - 1);
-
-                String lastUpdateText = "Dernière mise à jour: " + lastCoordinate.date;
-                lastKnownTextView.setText(lastUpdateText);
+            if (lastKnownTextView != null) {
+                String currentTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date());
+                lastKnownTextView.setText("Dernière mise à jour: " + currentTime);
             }
         }
     }
@@ -252,15 +251,27 @@ public class MapFragment extends Fragment {
         ArrayList<Coordinate> coordinates = removeUndefinedCityLocation(user);
         List<City> cityList = new ArrayList<>();
 
+        if (getView() != null) {
+            CardView recentMovesCardView = getView().findViewById(R.id.map_recent_moves_card);
+
+            if (recentMovesCardView != null) {
+                if (coordinates.size() == 0) {
+                    recentMovesCardView.setVisibility(View.INVISIBLE);
+                } else {
+                    recentMovesCardView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
         for (Coordinate coordinate : coordinates) {
-            if (! isCityAlreadyInArray(cityList, coordinate.city)) {
+            if (!isCityAlreadyInArray(cityList, coordinate.city)) {
                 int numberOfCoordinates = getNumberOfCoordinatesForGivenCity(coordinates, coordinate.city);
                 City city = new City(coordinate.city, coordinate.longitude, coordinate.latitude, numberOfCoordinates);
                 cityList.add(city);
             }
         }
 
-        cityList = sortCityListByNumberOfCoordinates(cityList);
+        sortCityListByNumberOfCoordinates(cityList);
 
         if (mapLocationAdapter != null) {
             mapLocationAdapter.submitList(cityList);

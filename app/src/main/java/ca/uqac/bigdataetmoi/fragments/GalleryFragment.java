@@ -133,19 +133,21 @@ public class GalleryFragment extends Fragment {
     }
 
     private void updateGalleryView(User user) {
-        TextView galleryCardTitle = getView().findViewById(R.id.gallery_card_title);
-        TextView galleryCardDescription = getView().findViewById(R.id.gallery_card_description);
-        String currentTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date());
+        if (getView() != null) {
+            TextView galleryCardTitle = getView().findViewById(R.id.gallery_card_title);
+            TextView galleryCardDescription = getView().findViewById(R.id.gallery_card_description);
+            String currentTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date());
 
-        if (user.photoList != null && user.photoList.size() > 0) {
-            Collections.reverse(user.photoList);
-            galleryAdapter.submitList(user.photoList);
-            galleryCardTitle.setText(user.photoList.size() + " éléments récupérés");
-        } else {
-            galleryCardTitle.setText("Aucun élément récupéré");
+            if (user.photoList != null && user.photoList.size() > 0) {
+                Collections.reverse(user.photoList);
+                galleryAdapter.submitList(user.photoList);
+                galleryCardTitle.setText(user.photoList.size() + " éléments récupérés");
+            } else {
+                galleryCardTitle.setText("Aucun élément récupéré");
+            }
+
+            galleryCardDescription.setText("Dernière mise à jour: " + currentTime);
         }
-
-        galleryCardDescription.setText("Dernière mise à jour: " + currentTime);
     }
 
     private void addStoragePermissionButtonListener() {
