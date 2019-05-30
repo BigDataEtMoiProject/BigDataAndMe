@@ -8,10 +8,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -19,16 +24,27 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import ca.uqac.bigdataetmoi.MainActivity;
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.adapters.GalleryAdapter;
+import ca.uqac.bigdataetmoi.models.User;
+import ca.uqac.bigdataetmoi.repositories.UserRepository;
 import ca.uqac.bigdataetmoi.workers.PhotoWorker;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 import static ca.uqac.bigdataetmoi.utils.Constants.STORAGE_PERMISSION_RESULT_CODE;
 
 
 public class GalleryFragment extends Fragment {
+
+    GalleryAdapter galleryAdapter = null;
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -51,6 +67,14 @@ public class GalleryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         addStoragePermissionButtonListener();
+
+        if (hasAlreadyAcceptedStoragePermission()) {
+            galleryAdapter = new GalleryAdapter(getContext());
+            RecyclerView galleryRecycler = view.findViewById(R.id.gallery_recycler);
+            galleryRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            galleryRecycler.setAdapter(galleryAdapter);
+            fetchCurrentUserInfo();
+        }
     }
 
     @Override
@@ -78,6 +102,50 @@ public class GalleryFragment extends Fragment {
                         ExistingPeriodicWorkPolicy.KEEP,
                         uploadLocationWorkRequest
                 );
+    }
+
+    // Todo: refactor cause not optimal (called in majority of fragments)
+    private void fetchCurrentUserInfo() {
+        UserRepository.getUserFromApi(getActivity()).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                handleUserResponse(response);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(getActivity(), "Erreur lors de la tentative de connexion", Toast.LENGTH_SHORT).show();
+                Timber.e(t);
+            }
+        });
+    }
+
+    private void handleUserResponse(Response<User> response) {
+        if (response.isSuccessful()) {
+            User user = response.body();
+
+            if (user != null) {
+                updateGalleryView(user);
+            }
+        } else {
+            Timber.e(response.toString());
+        }
+    }
+
+    private void updateGalleryView(User user) {
+        TextView galleryCardTitle = getView().findViewById(R.id.gallery_card_title);
+        TextView galleryCardDescription = getView().findViewById(R.id.gallery_card_description);
+        String currentTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date());
+
+        if (user.photoList != null && user.photoList.size() > 0) {
+            Collections.reverse(user.photoList);
+            galleryAdapter.submitList(user.photoList);
+            galleryCardTitle.setText(user.photoList.size() + " éléments récupérés");
+        } else {
+            galleryCardTitle.setText("Aucun élément récupéré");
+        }
+
+        galleryCardDescription.setText("Dernière mise à jour: " + currentTime);
     }
 
     private void addStoragePermissionButtonListener() {

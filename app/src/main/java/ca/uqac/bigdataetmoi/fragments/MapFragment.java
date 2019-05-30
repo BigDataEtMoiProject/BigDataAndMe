@@ -125,6 +125,7 @@ public class MapFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Todo: refactor cause not optimal (called in majority of fragments)
         UserRepository.getUserFromApi(getActivity()).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
