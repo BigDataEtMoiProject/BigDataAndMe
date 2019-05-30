@@ -39,11 +39,6 @@ public class LocationWorker extends Worker {
             double latitude = location.getLatitude();
             String currentTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date());
 
-            Timber.d("WORKER Coordinates");
-            Timber.d(String.valueOf(longitude));
-            Timber.d(String.valueOf(latitude));
-            Timber.d(String.valueOf(currentTime));
-
             CoordinateDto coordinateDtos = new CoordinateDto(String.valueOf(longitude), String.valueOf(latitude), currentTime);
             Call<User> coordinatesCall = new HttpClient<UserService>(appContext.getApplicationContext()).create(UserService.class).sendCoordinate(coordinateDtos);
 

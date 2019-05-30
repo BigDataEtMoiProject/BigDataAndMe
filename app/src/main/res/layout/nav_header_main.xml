@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@color/common_google_signin_btn_text_dark_pressed"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimaryDark"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -12,27 +13,25 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/nav_header_desc"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/ic_launcher_round" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="@string/nav_header_title"
+        android:text="@string/connect_en_tant_que"
+        android:fontFamily="@font/circular_book"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/black" />
+        android:textColor="#80FFFFFF" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/nav_header_email"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle"
-        android:textColor="@color/black" />
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/font_normal"
+        android:fontFamily="@font/circular_medium"
+        tools:text="pierre.dupont@gmail.com"
+        android:textColor="@color/white" />
 
 </LinearLayout>

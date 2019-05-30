@@ -22,6 +22,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
 import ca.uqac.bigdataetmoi.application_usage.UsageFragment;
 import ca.uqac.bigdataetmoi.authentification.LoginActivity;
 import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsFragment;
+import ca.uqac.bigdataetmoi.fragments.GalleryFragment;
 import ca.uqac.bigdataetmoi.fragments.MapFragment;
 import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
@@ -69,8 +71,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = findViewById(R.id.nav_view);
 
+        String userEmail = Prefs.getString(this, Constants.SHARED_PREFS, Constants.USER_EMAIL);
+
+        if (userEmail != null) {
+            TextView emailTextView  = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
+            emailTextView.setText(userEmail);
+        }
+
         requestPermissions(new String[] { Manifest.permission.READ_CONTACTS,
                 Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.READ_SMS }, 2);
     }
 
@@ -109,8 +119,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.addFrag(new MapFragment(), "Carte");
         adapter.addFrag(new UsageFragment(), "Applications");
         adapter.addFrag(new TelephoneSmsFragment(), "Repertoire");
-        // Repertoire téléphonique
-        // SSID
+        adapter.addFrag(new GalleryFragment(), "Galerie");
+
         viewPager.setAdapter(adapter);
     }
 
@@ -119,25 +129,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.nav_accueil :
-                // Don't start MainMenuActivity if we already are in
-                // startActivity(new Intent(MainMenuActivity.this, MainMenuActivity.class));
-                break;
-            case R.id.nav_parametre :
-                startActivity(new Intent(MainActivity.this, PermissionActivity.class));
-                break;
-            case R.id.nav_propos :
-                startActivity(new Intent(MainActivity.this, AboutActivity.class));
-                break;
-            case R.id.nav_deconnection :
-                Prefs.setBoolean(this, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
-                Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_EMAIL, "");
-                Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_PASSWORD, "");
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
-                finish();
-                break;
+        if (id == R.id.nav_deconnection) {
+            Prefs.setBoolean(this, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
+            Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_EMAIL, "");
+            Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_PASSWORD, "");
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -213,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
                 requestPermissions(new String[] { Manifest.permission.READ_CONTACTS,
                         Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.READ_SMS }, 2);
             }
         }).show();
