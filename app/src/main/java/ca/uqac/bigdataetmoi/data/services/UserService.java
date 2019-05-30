@@ -1,6 +1,7 @@
 package ca.uqac.bigdataetmoi.data.services;
 
 import ca.uqac.bigdataetmoi.dto.CoordinateDto;
+import ca.uqac.bigdataetmoi.dto.MessageDto;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
@@ -17,4 +18,7 @@ public interface UserService {
 
     @GET("users/me")
     Call<User> getCurrentUserInformations();
+
+    @POST("messages")
+    Call<User> sendMessages(@Body MessageDto[]  messageList);
 }

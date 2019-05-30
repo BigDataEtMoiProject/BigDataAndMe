@@ -1,11 +1,11 @@
-package ca.uqac.bigdataetmoi.models;
+package ca.uqac.bigdataetmoi.dto;
 
-public class Message {
+public class MessageDto {
     public String message;
     public String phone;
     public String date;
 
-    public Message(String phone, String date, String message){
+    public MessageDto(String phone, String date, String message){
         this.message = message;
         this.phone = phone;
         this.date = date;
