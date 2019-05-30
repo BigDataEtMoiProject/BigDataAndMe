@@ -29,6 +29,7 @@ import ca.uqac.bigdataetmoi.data.services.HttpClient;
 import ca.uqac.bigdataetmoi.dto.MessageDto;
 import ca.uqac.bigdataetmoi.models.Message;
 import ca.uqac.bigdataetmoi.models.User;
+import ca.uqac.bigdataetmoi.repositories.UserRepository;
 import ca.uqac.bigdataetmoi.workers.LocationWorker;
 import ca.uqac.bigdataetmoi.workers.MessageWorker;
 import retrofit2.Call;
@@ -41,14 +42,11 @@ public class MessagesFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<MessageDto> messages;
-
+    private List<Message> messages;
 
     public MessagesFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,45 +75,25 @@ public class MessagesFragment extends Fragment {
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
         messages = new ArrayList<>();
-        messages.add(new MessageDto("0777777777", "10/04/2019 16:33:54","blablabla blalblabla"));
-        messages.add(new MessageDto("0888888888", "10/04/2019 16:33:54","test" ));
-        messages.add(new MessageDto("0733937393", "07/04/2019 16:33:54","test2"));
-        // todo: call API to get Messages and fill the arrayList
-        // todo: include empty objects in the arrayList which represent headers
-        if(messages.size() > 0) {
-            messages.add(0, new MessageDto("header", messages.get(0).date, ""));
-                for (int i = 1; i < messages.size(); i++) {
-                    // if the message date changes, insert a header message in the arraylist
-                    if (!messages.get(i).date.substring(0, 9).equals(messages.get(i - 1).date.substring(0, 9))) {
-                        messages.add(i, new MessageDto("header", messages.get(i).date, ""));
-                    }
-                }
-        }
+    }
 
-        mAdapter = new MessageAdapter(messages, getContext());
-        recyclerView.setAdapter(mAdapter);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        UserRepository.getUserFromApi(getActivity()).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                handleUserResponse(response);
+            }
 
-//        MessageDto[] messageList = messages.toArray(new MessageDto[messages.size()]);
-//
-//        // Post messages
-//        Call<User> messageCall = new HttpClient<UserService>(getContext()).create(UserService.class).sendMessages(messageList);
-//
-//        messageCall.enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Call<User> call, Response<User> response) {
-////                handleUserResponse(response);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<User> call, Throwable t) {
-//                Toast.makeText(getActivity(), "Erreur lors de la tentative de connexion", Toast.LENGTH_SHORT).show();
-//                Timber.e(t);
-//            }
-//        });
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(getActivity(), "Erreur lors de la tentative de connexion", Toast.LENGTH_SHORT).show();
+                Timber.e(t);
+            }
+        });
     }
 
     @Override
@@ -136,17 +114,49 @@ public class MessagesFragment extends Fragment {
                 .build();
 
         PeriodicWorkRequest uploadMessageWorkRequest = new PeriodicWorkRequest
-                .Builder(MessageWorker.class, 1, TimeUnit.MINUTES)
+                .Builder(MessageWorker.class, 24, TimeUnit.HOURS)
                 .setConstraints(workConstraints)
                 .build();
 
         WorkManager.getInstance()
                 .enqueueUniquePeriodicWork(
-                        "UPLOAD WORK",
+                        "MESSAGE WORK",
                         ExistingPeriodicWorkPolicy.KEEP,
                         uploadMessageWorkRequest
                 );
     }
 
+    private void handleUserResponse(Response<User> response) {
+        if (response.isSuccessful()) {
+            User user = response.body();
 
+            if (user != null) {
+                updateMessages(user);
+//                updateRecentMoves(user);
+//                updateLastUpdateTime(user);
+                Timber.d("§ handleUserResponse");
+            }
+        } else {
+            Timber.e(response.toString());
+        }
+    }
+
+    public void updateMessages(User user){
+        for(int i=0; i<user.messageList.size(); i++){
+            Message message = user.messageList.get(i);
+            messages.add(message);
+        }
+        if(messages.size() > 0) {
+            messages.add(0, new Message("header", messages.get(0).date, ""));
+            for (int i = 1; i < messages.size(); i++) {
+                // if the message date changes, insert a header message in the arraylist
+                if (!messages.get(i).date.substring(0, 9).equals(messages.get(i - 1).date.substring(0, 9))) {
+                    messages.add(i, new Message("header", messages.get(i).date, ""));
+                }
+            }
+        }
+
+        mAdapter = new MessageAdapter(messages, getContext());
+        recyclerView.setAdapter(mAdapter);
+    }
 }

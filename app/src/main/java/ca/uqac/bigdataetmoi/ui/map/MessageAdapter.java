@@ -26,10 +26,10 @@ import ca.uqac.bigdataetmoi.models.Message;
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
-    private List<MessageDto> mMessages;
+    private List<Message> mMessages;
     private Context mContext;
 
-    public MessageAdapter(List<MessageDto> messages, Context mContext) {
+    public MessageAdapter(List<Message> messages, Context mContext) {
         mMessages = messages;
         this.mContext = mContext;
     }
@@ -91,7 +91,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mMessages.get(position).phone.equals("header");
     }
 
-    private MessageDto getItem(int position) {
+    private Message getItem(int position) {
         return mMessages.get(position);
     }
 
