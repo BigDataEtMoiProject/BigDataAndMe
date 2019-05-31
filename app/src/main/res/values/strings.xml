@@ -108,9 +108,10 @@
     <string name="navigation_app_name">Big Data &amp; Moi</string>
 
     <string name="permission_location_explanation_title">Activez la localisation</string>
-    <string name="permission_message_explanation_title">Accédez aux messages</string>
-    <string name="permission_location_explanation">WIP: En activant la localisation, vous permettez à l\'application de savoir où vous vous trouvez, etc.</string>
-    <string name="permission_message_explanation">WIP: En continuant, vous permettez à l\'application d\'accéder au contenu de vos messages.</string>
+    <string name="permission_location_explanation">En autorisant la localisation, vous permettez à l\'application de savoir où vous vous trouvez.</string>
+
+    <string name="permission_storage_explanation_title">Activez l\'accès aux fichiers</string>
+    <string name="permission_storage_explanation">En autorisant l\'accès aux fichiers, vous permettez à l\'application de récupérer tous les fichiers présents sur votre appareil.</string>
 
     <!--InfoActivity-->
     <string name="btnReturn">Retour</string>
@@ -136,5 +137,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="connect_en_tant_que">Connecté en tant que</string>
+    <string name="d_placements_r_cents">Déplacements récents</string>
+    <string name="il_y_a_une_heure">Il y a une heure</string>
 
 </resources>

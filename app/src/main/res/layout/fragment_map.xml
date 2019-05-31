@@ -34,7 +34,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/circular_medium"
-                    android:text="Déplacements récents"
+                    android:text="@string/d_placements_r_cents"
                     android:textColor="#DDFFFFFF"
                     android:textSize="@dimen/font_large"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:fontFamily="@font/circular_book"
-                    android:text="Il y a une heure"
+                    android:text="@string/il_y_a_une_heure"
                     android:textColor="#AAFFFFFF"
                     android:textSize="@dimen/font_normal"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -70,6 +70,8 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/map_recent_moves_card"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

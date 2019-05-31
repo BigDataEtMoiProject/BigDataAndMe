@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,8 +39,8 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -100,6 +102,16 @@ public class MapFragment extends Fragment {
                     IMapController mapController = map.getController();
                     mapController.setZoom(14.5);
                     LocationManager lm = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
+                    if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
                     Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     double longitude = location.getLongitude();
                     double latitude = location.getLatitude();
@@ -114,6 +126,7 @@ public class MapFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Todo: refactor cause not optimal (called in majority of fragments)
         UserRepository.getUserFromApi(getActivity()).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -128,7 +141,7 @@ public class MapFragment extends Fragment {
         });
 
         if (hasAlreadyAcceptedLocationPermission() && getView() != null) {
-            CityClickListener onRecentMovesItemClick = (view, city) ->  {
+            CityClickListener onRecentMovesItemClick = (view, city) -> {
                 if (map != null) {
                     GeoPoint point = new GeoPoint(Double.parseDouble(city.latitude), Double.parseDouble(city.longitude));
                     map.getController().animateTo(point);
@@ -145,7 +158,7 @@ public class MapFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == LOCATION_PERMISSION_RESULT_CODE) {
             if (hasGrantedLocationPermission(grantResults)) {
-                displayMap();
+                refreshViewPager();
             }
         }
     }
@@ -168,12 +181,7 @@ public class MapFragment extends Fragment {
         Button locationPermissionButton = getView().findViewById(R.id.location_continue);
 
         if (locationPermissionButton != null) {
-            locationPermissionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    askForLocationPermission();
-                }
-            });
+            locationPermissionButton.setOnClickListener(v -> askForLocationPermission());
         }
     }
 
@@ -191,7 +199,7 @@ public class MapFragment extends Fragment {
         return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void displayMap() {
+    private void refreshViewPager() {
         if (getActivity() != null) {
             ((MainActivity) getActivity()).refreshViewPager();
         }
@@ -209,7 +217,7 @@ public class MapFragment extends Fragment {
 
         WorkManager.getInstance()
                 .enqueueUniquePeriodicWork(
-                        "UPLOAD WORK",
+                        "LOCATION WORK",
                         ExistingPeriodicWorkPolicy.KEEP,
                         uploadLocationWorkRequest
                 );
@@ -222,21 +230,20 @@ public class MapFragment extends Fragment {
             if (user != null) {
                 updateMapPins(user);
                 updateRecentMoves(user);
-                updateLastUpdateTime(user);
-                Timber.d("§ handleUserResponse");
+                updateLastUpdateTime();
             }
         } else {
             Timber.e(response.toString());
         }
     }
 
-    private void updateLastUpdateTime(User user) {
+    private void updateLastUpdateTime() {
         if (getView() != null) {
             TextView lastKnownTextView = getView().findViewById(R.id.lastKnownUpdate);
-            Coordinate lastCoordinate = user.coordinatesList.get(user.coordinatesList.size() - 1);
-
-            String lastUpdateText = "Dernière mise à jour: " + lastCoordinate.date;
-//            lastKnownTextView.setText(lastUpdateText);
+            if (lastKnownTextView != null) {
+                String currentTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date());
+                lastKnownTextView.setText("Dernière mise à jour: " + currentTime);
+            }
         }
     }
 
@@ -244,15 +251,27 @@ public class MapFragment extends Fragment {
         ArrayList<Coordinate> coordinates = removeUndefinedCityLocation(user);
         List<City> cityList = new ArrayList<>();
 
+        if (getView() != null) {
+            CardView recentMovesCardView = getView().findViewById(R.id.map_recent_moves_card);
+
+            if (recentMovesCardView != null) {
+                if (coordinates.size() == 0) {
+                    recentMovesCardView.setVisibility(View.INVISIBLE);
+                } else {
+                    recentMovesCardView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
         for (Coordinate coordinate : coordinates) {
-            if (! isCityAlreadyInArray(cityList, coordinate.city)) {
+            if (!isCityAlreadyInArray(cityList, coordinate.city)) {
                 int numberOfCoordinates = getNumberOfCoordinatesForGivenCity(coordinates, coordinate.city);
                 City city = new City(coordinate.city, coordinate.longitude, coordinate.latitude, numberOfCoordinates);
                 cityList.add(city);
             }
         }
 
-        cityList = sortCityListByNumberOfCoordinates(cityList);
+        sortCityListByNumberOfCoordinates(cityList);
 
         if (mapLocationAdapter != null) {
             mapLocationAdapter.submitList(cityList);
