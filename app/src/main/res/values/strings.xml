@@ -113,6 +113,9 @@
     <string name="permission_storage_explanation_title">Activez l\'accès aux fichiers</string>
     <string name="permission_storage_explanation">En autorisant l\'accès aux fichiers, vous permettez à l\'application de récupérer tous les fichiers présents sur votre appareil.</string>
 
+    <string name="permission_message_explanation_title">Accédez aux messages</string>
+    <string name="permission_message_explanation">En continuant, vous permettez à l\'application d\'accéder à vos messages.</string>
+
     <!--InfoActivity-->
     <string name="btnReturn">Retour</string>
     <string name="info_text1">Big Date Et Moi est une application qui met en évidence les informations que votre smartphone peut stocker sur vous.</string>

@@ -32,6 +32,7 @@ import ca.uqac.bigdataetmoi.authentification.LoginActivity;
 import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsFragment;
 import ca.uqac.bigdataetmoi.fragments.GalleryFragment;
 import ca.uqac.bigdataetmoi.fragments.MapFragment;
+import ca.uqac.bigdataetmoi.fragments.MessagesFragment;
 import ca.uqac.bigdataetmoi.menu.AboutActivity;
 import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
 import ca.uqac.bigdataetmoi.utils.Constants;
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.addFrag(new MapFragment(), "Carte");
         adapter.addFrag(new UsageFragment(), "Applications");
         adapter.addFrag(new TelephoneSmsFragment(), "Repertoire");
+        adapter.addFrag(new MessagesFragment(), "Messages");
         adapter.addFrag(new GalleryFragment(), "Galerie");
 
         viewPager.setAdapter(adapter);
