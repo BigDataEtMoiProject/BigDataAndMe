@@ -236,7 +236,7 @@ public class MapFragment extends Fragment {
             Coordinate lastCoordinate = user.coordinatesList.get(user.coordinatesList.size() - 1);
 
             String lastUpdateText = "Dernière mise à jour: " + lastCoordinate.date;
-            lastKnownTextView.setText(lastUpdateText);
+//            lastKnownTextView.setText(lastUpdateText);
         }
     }
 

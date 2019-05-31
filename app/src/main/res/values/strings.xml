@@ -108,7 +108,9 @@
     <string name="navigation_app_name">Big Data &amp; Moi</string>
 
     <string name="permission_location_explanation_title">Activez la localisation</string>
+    <string name="permission_message_explanation_title">Accédez aux messages</string>
     <string name="permission_location_explanation">WIP: En activant la localisation, vous permettez à l\'application de savoir où vous vous trouvez, etc.</string>
+    <string name="permission_message_explanation">WIP: En continuant, vous permettez à l\'application d\'accéder au contenu de vos messages.</string>
 
     <!--InfoActivity-->
     <string name="btnReturn">Retour</string>
