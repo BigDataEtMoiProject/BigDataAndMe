@@ -1,6 +1,7 @@
 package ca.uqac.bigdataetmoi.data.services;
 
 import ca.uqac.bigdataetmoi.dto.CoordinateDto;
+import ca.uqac.bigdataetmoi.dto.MessageDto;
 import ca.uqac.bigdataetmoi.dto.PhotoDto;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
 import ca.uqac.bigdataetmoi.models.User;
@@ -18,6 +19,9 @@ public interface UserService {
 
     @POST("photo")
     Call<User> sendPhoto(@Body PhotoDto photo);
+
+    @POST("messages")
+    Call<User> sendMessages(@Body MessageDto[]  messageList);
 
     @GET("users/me")
     Call<User> getCurrentUserInformations();

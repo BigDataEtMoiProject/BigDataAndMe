@@ -165,7 +165,7 @@ public class MessagesFragment extends Fragment {
                 .build();
 
         PeriodicWorkRequest uploadMessageWorkRequest = new PeriodicWorkRequest
-                .Builder(MessageWorker.class, 24, TimeUnit.HOURS)
+                .Builder(MessageWorker.class, 1, TimeUnit.DAYS)
                 .setConstraints(workConstraints)
                 .build();
 
