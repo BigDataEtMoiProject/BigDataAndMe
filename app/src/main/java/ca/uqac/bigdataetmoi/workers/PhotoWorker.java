@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import ca.uqac.bigdataetmoi.data.services.HttpClient;
-import ca.uqac.bigdataetmoi.data.services.UserService;
+import ca.uqac.bigdataetmoi.services.HttpClient;
+import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.dto.PhotoDto;
 import ca.uqac.bigdataetmoi.models.Photo;
 import ca.uqac.bigdataetmoi.models.User;

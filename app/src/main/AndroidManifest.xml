@@ -37,11 +37,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".ui.welcome.WelcomeActivity"
             android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,57 +51,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InfoActivity"
+
+        <activity android:name=".ui.info.InfoActivity"
             android:theme="@style/AppThemeNoActionBar">
-
         </activity>
-        <activity android:name=".startup.MainMenuActivity" />
+
         <activity
-            android:name=".authentification.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:theme="@style/AppThemeNoActionBar" />
-        <activity android:name=".contact_sms.TelephoneSmsActivity" />
+
         <activity
-            android:name=".authentification.SignupActivity"
+            android:name=".ui.register.RegisterActivity"
             android:theme="@style/AppThemeNoActionBar" />
-        <activity android:name=".application_usage_details.ApplicationUsageDetailsActivity" />
 
-        <receiver
-            android:name=".service.BroadcastOnBoot"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name=".service.BigDataService"
-            android:enabled="true"
-            android:exported="false" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-        <activity android:name=".permission_manager.PermissionActivity" />
-        <activity
-            android:name=".menu.AboutActivity"
-            android:label="@string/about_title" />
-        <activity
-            android:name=".menu.ProfileActivity"
-            android:label="@string/profile_title" />
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>
