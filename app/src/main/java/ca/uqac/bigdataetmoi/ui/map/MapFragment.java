@@ -30,6 +30,9 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -46,6 +49,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import ca.uqac.bigdataetmoi.events.OnLocationUploadedEvent;
 import ca.uqac.bigdataetmoi.ui.MainActivity;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.models.City;
@@ -159,6 +163,18 @@ public class MapFragment extends Fragment {
                 refreshViewPager();
             }
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     public void onResume() {
@@ -353,5 +369,13 @@ public class MapFragment extends Fragment {
             map.getOverlays().add(mOverlay);
         }
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLocationUploaded(OnLocationUploadedEvent event) {
+        User user = event.getUser();
+        updateMapPins(user);
+        updateRecentMoves(user);
+        updateLastUpdateTime();
     }
 }

@@ -23,14 +23,19 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import ca.uqac.bigdataetmoi.ui.MainActivity;
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.events.OnPhotoUploadedEvent;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.repositories.UserRepository;
+import ca.uqac.bigdataetmoi.ui.MainActivity;
 import ca.uqac.bigdataetmoi.workers.PhotoWorker;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +48,7 @@ import static ca.uqac.bigdataetmoi.utils.Constants.STORAGE_PERMISSION_RESULT_COD
 public class GalleryFragment extends Fragment {
 
     GalleryAdapter galleryAdapter = null;
+    RecyclerView galleryRecycler = null;
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -68,7 +74,7 @@ public class GalleryFragment extends Fragment {
 
         if (hasAlreadyAcceptedStoragePermission()) {
             galleryAdapter = new GalleryAdapter(getContext());
-            RecyclerView galleryRecycler = view.findViewById(R.id.gallery_recycler);
+            galleryRecycler = view.findViewById(R.id.gallery_recycler);
             galleryRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             galleryRecycler.setAdapter(galleryAdapter);
             fetchCurrentUserInfo();
@@ -82,6 +88,18 @@ public class GalleryFragment extends Fragment {
                 refreshViewPager();
             }
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     private void startPhotoUploadingBackgroundWork() {
@@ -140,6 +158,9 @@ public class GalleryFragment extends Fragment {
                 Collections.reverse(user.photoList);
                 galleryAdapter.submitList(user.photoList);
                 galleryCardTitle.setText(user.photoList.size() + " éléments récupérés");
+                if (galleryRecycler != null) {
+                    galleryRecycler.smoothScrollToPosition(0);
+                }
             } else {
                 galleryCardTitle.setText("Aucun élément récupéré");
             }
@@ -174,5 +195,11 @@ public class GalleryFragment extends Fragment {
     private boolean hasAlreadyAcceptedStoragePermission() {
         return (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPhotoUploaded(OnPhotoUploadedEvent event) {
+        User user = event.getUser();
+        updateGalleryView(user);
     }
 }

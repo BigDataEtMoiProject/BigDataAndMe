@@ -26,6 +26,12 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import ca.uqac.bigdataetmoi.events.OnMessageListUploadedEvent;
 import ca.uqac.bigdataetmoi.ui.MainActivity;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.models.Message;
@@ -42,7 +48,7 @@ public class MessagesFragment extends Fragment {
 
     public static final int REQUEST_CODE_SMS_PERMISSIONS = 123;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MessageAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Message> messages;
 
@@ -133,6 +139,18 @@ public class MessagesFragment extends Fragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void addMessagePermissionButtonListener() {
         Button MessagePermissionButton = getView().findViewById(R.id.message_continue);
 
@@ -211,5 +229,16 @@ public class MessagesFragment extends Fragment {
 
     private boolean hasGrantedLocationPermission(int[] grantResults) {
         return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageListUploaded(OnMessageListUploadedEvent event) {
+        User user = event.getUser();
+        List<Message> messageList = user.messageList;
+        Collections.reverse(messageList);
+        mAdapter.setmMessages(messageList);
+        if (recyclerView != null) {
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 }

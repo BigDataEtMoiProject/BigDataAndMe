@@ -12,11 +12,14 @@ import android.util.Base64;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import ca.uqac.bigdataetmoi.events.OnPhotoUploadedEvent;
 import ca.uqac.bigdataetmoi.services.HttpClient;
 import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.dto.PhotoDto;
@@ -53,7 +56,10 @@ public class PhotoWorker extends Worker {
                 Call<User> photoCall = new HttpClient<UserService>(appContext).create(UserService.class).sendPhoto(photoDto);
 
                 try {
-                    photoCall.execute();
+                    Response<User> res = photoCall.execute();
+                    if (res.isSuccessful() && res.body() != null) {
+                        EventBus.getDefault().post(new OnPhotoUploadedEvent(res.body()));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

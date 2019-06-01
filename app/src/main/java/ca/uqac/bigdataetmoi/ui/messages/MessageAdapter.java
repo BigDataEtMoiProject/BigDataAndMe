@@ -34,6 +34,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.mContext = mContext;
     }
 
+    public void setmMessages(List<Message> mMessages) {
+        this.mMessages = mMessages;
+        notifyDataSetChanged();
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
