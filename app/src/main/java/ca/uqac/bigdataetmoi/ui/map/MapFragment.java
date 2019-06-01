@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.fragments;
+package ca.uqac.bigdataetmoi.ui.map;
 
 
 import android.Manifest;
@@ -48,12 +48,10 @@ import java.util.concurrent.TimeUnit;
 
 import ca.uqac.bigdataetmoi.ui.MainActivity;
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.adapters.MapLocationAdapter;
 import ca.uqac.bigdataetmoi.models.City;
 import ca.uqac.bigdataetmoi.models.Coordinate;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.repositories.UserRepository;
-import ca.uqac.bigdataetmoi.utils.CityClickListener;
 import ca.uqac.bigdataetmoi.workers.LocationWorker;
 import retrofit2.Call;
 import retrofit2.Callback;

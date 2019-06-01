@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.service;
+package ca.uqac.bigdataetmoi.services;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -27,13 +27,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.uqac.bigdataetmoi.application_usage.UsageFragment;
-import ca.uqac.bigdataetmoi.contact_sms.TelephoneSmsFragment;
-import ca.uqac.bigdataetmoi.fragments.GalleryFragment;
-import ca.uqac.bigdataetmoi.fragments.MapFragment;
-import ca.uqac.bigdataetmoi.fragments.MessagesFragment;
-import ca.uqac.bigdataetmoi.menu.AboutActivity;
-import ca.uqac.bigdataetmoi.permission_manager.PermissionActivity;
+import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.ui.gallery.GalleryFragment;
+import ca.uqac.bigdataetmoi.ui.info.InfoActivity;
+import ca.uqac.bigdataetmoi.ui.login.LoginActivity;
+import ca.uqac.bigdataetmoi.ui.map.MapFragment;
+import ca.uqac.bigdataetmoi.ui.messages.MessagesFragment;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
 
@@ -74,14 +73,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String userEmail = Prefs.getString(this, Constants.SHARED_PREFS, Constants.USER_EMAIL);
 
         if (userEmail != null) {
-            TextView emailTextView  = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
+            TextView emailTextView = navigationView.getHeaderView(0).findViewById(R.id.nav_header_email);
             emailTextView.setText(userEmail);
         }
 
-        requestPermissions(new String[] { Manifest.permission.READ_CONTACTS,
+        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.READ_SMS }, 2);
+                Manifest.permission.READ_SMS}, 2);
     }
 
     @Override
@@ -117,8 +116,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new MapFragment(), "Carte");
-        adapter.addFrag(new UsageFragment(), "Applications");
-        adapter.addFrag(new TelephoneSmsFragment(), "Repertoire");
         adapter.addFrag(new MessagesFragment(), "Messages");
         adapter.addFrag(new GalleryFragment(), "Galerie");
 
@@ -182,10 +179,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode == 2){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == 2) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 System.out.println("####################################################### PERMISSION_GRANTED pour READ_CONTACTS");
-            } else if(! shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
+            } else if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
                 displayOptions();
             } else {
                 System.out.println("####################################################### PERMISSION_DENIED pour READ_CONTACTS");
@@ -210,10 +207,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Snackbar.make(findViewById(R.id.drawer_layout), getString(R.string.permission_message_information), Snackbar.LENGTH_LONG).setAction(getString(R.string.activer), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestPermissions(new String[] { Manifest.permission.READ_CONTACTS,
+                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_SMS }, 2);
+                        Manifest.permission.READ_SMS}, 2);
             }
         }).show();
     }

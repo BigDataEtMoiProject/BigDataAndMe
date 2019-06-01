@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.adapters;
+package ca.uqac.bigdataetmoi.ui.map;
 
 import android.support.annotation.NonNull;
 import android.support.v7.recyclerview.extensions.ListAdapter;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.models.City;
-import ca.uqac.bigdataetmoi.ui.map.CityClickListener;
 
 public class MapLocationAdapter extends ListAdapter<City, MapLocationAdapter.ViewHolder> {
 

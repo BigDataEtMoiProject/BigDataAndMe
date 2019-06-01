@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.fragments;
+package ca.uqac.bigdataetmoi.ui.gallery;
 
 
 import android.Manifest;
@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 
 import ca.uqac.bigdataetmoi.ui.MainActivity;
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.adapters.GalleryAdapter;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.repositories.UserRepository;
 import ca.uqac.bigdataetmoi.workers.PhotoWorker;

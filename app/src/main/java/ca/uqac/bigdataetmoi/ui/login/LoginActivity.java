@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.ui.login;
 
 
 import android.content.Intent;
@@ -10,13 +10,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
-import ca.uqac.bigdataetmoi.service.HttpClient;
-import ca.uqac.bigdataetmoi.service.LoginService;
+import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
 import ca.uqac.bigdataetmoi.models.User;
+import ca.uqac.bigdataetmoi.services.HttpClient;
+import ca.uqac.bigdataetmoi.services.UserService;
+import ca.uqac.bigdataetmoi.ui.MainActivity;
+import ca.uqac.bigdataetmoi.ui.register.RegisterActivity;
 import ca.uqac.bigdataetmoi.utils.AuthenticationValidator;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
@@ -28,7 +29,6 @@ import timber.log.Timber;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText fieldEmail, fieldPassword;
-    private FirebaseAuth auth;
     CircularProgressButton btnLogin;
 
     @Override
@@ -36,26 +36,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        auth = FirebaseAuth.getInstance();
-
         fieldEmail = findViewById(R.id.login_input_email);
         fieldPassword = findViewById(R.id.login_input_password);
         TextView buttonRegister = findViewById(R.id.login_button_register);
         btnLogin = findViewById(R.id.login_button_continue);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login(v);
-            }
-        });
+        btnLogin.setOnClickListener(this::login);
 
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
-                overridePendingTransition(R.anim.slide_from_top, R.anim.stationary);
-            }
+        buttonRegister.setOnClickListener(view -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            overridePendingTransition(R.anim.slide_from_top, R.anim.stationary);
         });
     }
 
@@ -71,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendLoginRequest() {
         UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto(fieldEmail.getText().toString(), fieldPassword.getText().toString());
-        Call<User> loginCall = new HttpClient<LoginService>(LoginActivity.this).create(LoginService.class).login(userAuthenticationDto);
+        Call<User> loginCall = new HttpClient<UserService>(LoginActivity.this).create(UserService.class).login(userAuthenticationDto);
         btnLogin.startAnimation();
 
         loginCall.enqueue(new Callback<User>() {

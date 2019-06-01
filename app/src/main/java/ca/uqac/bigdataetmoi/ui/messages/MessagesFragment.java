@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.fragments;
+package ca.uqac.bigdataetmoi.ui.messages;
 
 import android.Manifest;
 import android.content.Context;
@@ -28,7 +28,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import ca.uqac.bigdataetmoi.ui.MainActivity;
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.adapters.MessageAdapter;
 import ca.uqac.bigdataetmoi.models.Message;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.repositories.UserRepository;

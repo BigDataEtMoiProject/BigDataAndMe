@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.utils;
+package ca.uqac.bigdataetmoi.ui.map;
 
 import android.view.View;
 

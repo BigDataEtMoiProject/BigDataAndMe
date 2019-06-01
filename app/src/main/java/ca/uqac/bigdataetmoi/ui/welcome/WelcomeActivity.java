@@ -1,10 +1,11 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.ui.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.ui.MainActivity;
 import ca.uqac.bigdataetmoi.ui.login.LoginActivity;
 import ca.uqac.bigdataetmoi.utils.Constants;

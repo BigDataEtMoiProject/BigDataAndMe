@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.adapters;
+package ca.uqac.bigdataetmoi.ui.messages;
 
 import android.content.Context;
 import android.content.Intent;

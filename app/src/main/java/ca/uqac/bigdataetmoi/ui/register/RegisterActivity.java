@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.ui.signup;
+package ca.uqac.bigdataetmoi.ui.register;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -8,25 +8,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.services.HttpClient;
-import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
 import ca.uqac.bigdataetmoi.models.User;
+import ca.uqac.bigdataetmoi.services.HttpClient;
+import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.utils.AuthenticationValidator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class SignupActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private EditText fieldEmail, fieldPassword;
     private CircularProgressButton btnRegister;
-    private FirebaseAuth auth;
     private TextView goToLogin;
     private final int EMAIL_ALREADY_USED_CODE = 409;
 
@@ -34,8 +31,6 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
-        auth = FirebaseAuth.getInstance();
 
         fieldEmail = findViewById(R.id.register_input_email);
         fieldPassword = findViewById(R.id.register_input_password);
@@ -57,7 +52,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void sendRegisterRequest() {
         UserAuthenticationDto userRegisterDto = new UserAuthenticationDto(fieldEmail.getText().toString(), fieldPassword.getText().toString());
-        Call<User> registerCall = new HttpClient<UserService>(SignupActivity.this).create(UserService.class).register(userRegisterDto);
+        Call<User> registerCall = new HttpClient<UserService>(RegisterActivity.this).create(UserService.class).register(userRegisterDto);
         btnRegister.startAnimation();
 
         registerCall.enqueue(new Callback<User>() {

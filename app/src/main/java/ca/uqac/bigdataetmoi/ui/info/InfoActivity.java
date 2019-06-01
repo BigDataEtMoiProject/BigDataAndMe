@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi;
+package ca.uqac.bigdataetmoi.ui.info;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

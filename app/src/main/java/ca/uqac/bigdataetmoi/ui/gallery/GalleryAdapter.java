@@ -1,4 +1,4 @@
-package ca.uqac.bigdataetmoi.adapters;
+package ca.uqac.bigdataetmoi.ui.gallery;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
