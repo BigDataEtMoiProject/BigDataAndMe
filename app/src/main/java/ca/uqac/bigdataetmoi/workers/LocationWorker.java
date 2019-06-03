@@ -8,13 +8,18 @@ import android.support.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import ca.uqac.bigdataetmoi.data.services.HttpClient;
-import ca.uqac.bigdataetmoi.data.services.UserService;
+import ca.uqac.bigdataetmoi.events.OnLocationUploadedEvent;
+import ca.uqac.bigdataetmoi.services.HttpClient;
+import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.dto.CoordinateDto;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
+import retrofit2.Response;
 import timber.log.Timber;
 
 public class LocationWorker extends Worker {
@@ -42,7 +47,14 @@ public class LocationWorker extends Worker {
             CoordinateDto coordinateDtos = new CoordinateDto(String.valueOf(longitude), String.valueOf(latitude), currentTime);
             Call<User> coordinatesCall = new HttpClient<UserService>(appContext.getApplicationContext()).create(UserService.class).sendCoordinate(coordinateDtos);
 
-            coordinatesCall.execute();
+            try {
+                Response<User> res = coordinatesCall.execute();
+                if (res.isSuccessful() && res.body() != null) {
+                    EventBus.getDefault().post(new OnLocationUploadedEvent(res.body()));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             return Result.success();
         }

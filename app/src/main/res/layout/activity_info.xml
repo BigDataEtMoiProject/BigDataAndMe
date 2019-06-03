@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InfoActivity">
+    tools:context=".ui.info.InfoActivity">
 
     <ScrollView
         android:layout_width="0dp"
@@ -23,7 +23,6 @@
 
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/welcome_animation"
                 android:layout_width="0dp"
                 android:layout_height="320dp"
                 android:layout_marginStart="32dp"

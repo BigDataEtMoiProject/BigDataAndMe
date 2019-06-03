@@ -10,7 +10,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".authentification.SignupActivity">
+        tools:context=".ui.register.RegisterActivity">
 
         <TextView
             android:id="@+id/register_title"

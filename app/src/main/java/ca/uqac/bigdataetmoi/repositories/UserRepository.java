@@ -2,8 +2,8 @@ package ca.uqac.bigdataetmoi.repositories;
 
 import android.content.Context;
 
-import ca.uqac.bigdataetmoi.data.services.HttpClient;
-import ca.uqac.bigdataetmoi.data.services.UserService;
+import ca.uqac.bigdataetmoi.services.HttpClient;
+import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
 

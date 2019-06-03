@@ -9,16 +9,21 @@ import android.support.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ca.uqac.bigdataetmoi.data.services.HttpClient;
-import ca.uqac.bigdataetmoi.data.services.UserService;
+import ca.uqac.bigdataetmoi.events.OnMessageListUploadedEvent;
+import ca.uqac.bigdataetmoi.services.HttpClient;
+import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.dto.MessageDto;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
+import retrofit2.Response;
 import timber.log.Timber;
 
 public class MessageWorker extends Worker {
@@ -65,7 +70,14 @@ public class MessageWorker extends Worker {
 
             Call<User> messageCall = new HttpClient<UserService>(appContext).create(UserService.class).sendMessages(messageList);
 
-            messageCall.execute();
+            try {
+                Response<User> res = messageCall.execute();
+                if (res.isSuccessful() && res.body() != null) {
+                    EventBus.getDefault().post(new OnMessageListUploadedEvent(res.body()));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             return Result.success();
         } catch (SecurityException e) {

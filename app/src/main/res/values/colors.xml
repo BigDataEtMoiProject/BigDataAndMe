@@ -10,8 +10,4 @@
     <color name="white">#FFFFFF</color>
     <color name="lightGrey">#9f9f9f</color>
     <color name="lightGreen">#007b0c</color>
-    <color name="darkGreen">#003500</color>
-    <color name="red">#ff0000</color>
-    <color name="blue">#0000ff</color>
-    <color name="yellow">#ffff00</color>
 </resources>
