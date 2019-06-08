@@ -41,6 +41,9 @@
     <string name="permission_message_explanation_title">Accédez aux messages</string>
     <string name="permission_message_explanation">En continuant, vous permettez à l\'application d\'accéder à vos messages.</string>
 
+    <string name="permission_wifi_explanation_title">Accédez aux wifi</string>
+    <string name="permission_wifi_explanation">En continuant, vous permettez à l\'application d\'accéder à vos wifi.</string>
+
     <!--InfoActivity-->
     <string name="btnReturn">Retour</string>
     <string name="info_text1">Big Date Et Moi est une application qui met en évidence les informations que votre smartphone peut stocker sur vous.</string>
