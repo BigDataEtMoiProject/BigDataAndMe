@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -12,22 +14,30 @@ import androidx.work.WorkerParameters;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import ca.uqac.bigdataetmoi.events.OnMessageListUploadedEvent;
+import ca.uqac.bigdataetmoi.models.Message;
+import ca.uqac.bigdataetmoi.models.Photo;
+import ca.uqac.bigdataetmoi.repositories.UserRepository;
 import ca.uqac.bigdataetmoi.services.HttpClient;
 import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.dto.MessageDto;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
 public class MessageWorker extends Worker {
 
+    public static final int NUMBER_OF_MESSAGE_TO_SAVE_PER_DAY = 5; // replace by c.getCount() to get all messages per day
     public static final String OUTPUT_KEY = "user";
     private Context appContext;
     private WorkerParameters workerParameters;
@@ -41,6 +51,8 @@ public class MessageWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Date lastMessageDateTime = getLastMessageDateTime();
+
         try {
             List<MessageDto> messages = new ArrayList<>();
             MessageDto messageDto;
@@ -49,16 +61,17 @@ public class MessageWorker extends Worker {
             Cursor c = cr.query(message, null, null, null, null);
 
             if (c.moveToFirst()) {
-                for (int i = 0; i < 5; i++) {
-
-                    messageDto = new MessageDto("", "", "");
-                    messageDto.message = c.getString(c.getColumnIndexOrThrow("body"));
-                    messageDto.phone = c.getString(c.getColumnIndexOrThrow("address"));
+                for (int i = 0; i < NUMBER_OF_MESSAGE_TO_SAVE_PER_DAY; i++) {
                     Date dateFormat = new Date(Long.valueOf(c.getString(c.getColumnIndexOrThrow("date"))));
-                    String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(dateFormat);
-                    messageDto.date = date;
+                    if (lastMessageDateTime.getTime() < dateFormat.getTime() - 1000) {
+                        messageDto = new MessageDto("", "", "");
+                        messageDto.message = c.getString(c.getColumnIndexOrThrow("body"));
+                        messageDto.phone = c.getString(c.getColumnIndexOrThrow("address"));
+                        String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(dateFormat);
+                        messageDto.date = date;
 
-                    messages.add(messageDto);
+                        messages.add(messageDto);
+                    }
                     c.moveToNext();
                 }
             } else {
@@ -66,6 +79,7 @@ public class MessageWorker extends Worker {
             }
             c.close();
 
+            Collections.reverse(messages);
             MessageDto[] messageList = messages.toArray(new MessageDto[messages.size()]);
 
             Call<User> messageCall = new HttpClient<UserService>(appContext).create(UserService.class).sendMessages(messageList);
@@ -87,5 +101,32 @@ public class MessageWorker extends Worker {
             Timber.e(e);
             return Result.failure();
         }
+    }
+
+    private Date getLastMessageDateTime(){
+        ArrayList<String> currentMessageList = new ArrayList<>();
+        Date lastDate = new Date();
+        try {
+            Response<User> response = UserRepository.getUserFromApi(appContext).execute();
+
+            if (response.isSuccessful() && response.body() != null) {
+
+                for (Message message : response.body().messageList) {
+                    if (message.date != null) {
+                        currentMessageList.add(message.date);
+                    }
+                }
+                if (currentMessageList.size()>0) {
+                    try {
+                        lastDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(currentMessageList.get(currentMessageList.size() - 1));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lastDate;
     }
 }

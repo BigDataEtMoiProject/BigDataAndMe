@@ -26,6 +26,7 @@ import ca.uqac.bigdataetmoi.models.Message;
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
+    private static final int TYPE_RECAP = 2;
     private List<Message> mMessages;
     private Context mContext;
 
@@ -51,6 +52,11 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.message_header, parent, false);
             return new VHHeader(v);
+        } else if (viewType == TYPE_RECAP) {
+            //inflate your layout and pass it to view holder
+            LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.message_recap, parent, false);
+            return new VHRecap(v);
         }
         throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
     }
@@ -76,6 +82,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             date_after = date_after.substring(0, 1).toUpperCase() + date_after.substring(1);
             vhHeader.txtDate.setText(date_after);
 
+        } else if (holder instanceof VHRecap) {
+            //cast holder to VHRecap and set data for recap
+            VHRecap vhRecap = (VHRecap) holder;
+            if (getItem(position).message.equals("0")){
+                vhRecap.messageRecapTitle.setText("Aucun élément récupéré");
+            }else {
+                vhRecap.messageRecapTitle.setText(getItem(position).message + " éléments récupérés");
+            }
+            String currentTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date());
+            vhRecap.messageRecapDescription.setText("Dernière mise à jour: " + currentTime);
         }
     }
 
@@ -88,12 +104,18 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
+        if (isPositionRecap(position))
+            return TYPE_RECAP;
         return TYPE_ITEM;
     }
 
     private boolean isPositionHeader(int position) {
         // isHeader if position == 0 or if phone == header
         return mMessages.get(position).phone.equals("header");
+    }
+
+    private boolean isPositionRecap(int position) {
+        return mMessages.get(position).phone.equals("recap");
     }
 
     private Message getItem(int position) {
@@ -120,6 +142,17 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public VHHeader(View itemView) {
             super(itemView);
             txtDate = itemView.findViewById(R.id.txtDate);
+        }
+    }
+
+    class VHRecap extends RecyclerView.ViewHolder {
+        public TextView messageRecapTitle;
+        public TextView messageRecapDescription;
+
+        public VHRecap(View itemView) {
+            super(itemView);
+            messageRecapTitle = itemView.findViewById(R.id.message_recap_title);
+            messageRecapDescription = itemView.findViewById(R.id.message_recap_description);
         }
     }
 
