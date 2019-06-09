@@ -216,8 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.READ_SMS,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_WIFI_STATE
+                        Manifest.permission.ACCESS_COARSE_LOCATION
                 }, 2);
             }
         }).show();

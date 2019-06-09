@@ -21,11 +21,11 @@ import ca.uqac.bigdataetmoi.models.Wifi;
 public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
-    private List<Wifi> mMessages;
+    private List<Wifi> mWifis;
     private Context mContext;
 
-    public WifiAdapter(List<Wifi> messages, Context mContext) {
-        mMessages = messages;
+    public WifiAdapter(List<Wifi> wifis, Context mContext) {
+        mWifis = wifis;
         this.mContext = mContext;
     }
 
@@ -34,12 +34,12 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == TYPE_ITEM) {
             //inflate your layout and pass it to view holder
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.message_card, parent, false);
+                    .inflate(R.layout.wifi_card, parent, false);
             return new VHItem(v);
         } else if (viewType == TYPE_HEADER) {
             //inflate your layout and pass it to view holder
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.message_header, parent, false);
+                    .inflate(R.layout.wifi_header, parent, false);
             return new VHHeader(v);
         }
         throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
@@ -52,9 +52,9 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             VHItem vhItem = (VHItem) holder;
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            vhItem.txtPhoneNumber.setText(getItem(position).ssid);
-            vhItem.txtTime.setText(getItem(position).date.substring(11,16));
-            vhItem.txtMessage.setText(getItem(position).name);
+            vhItem.txtSsid.setText(getItem(position).ssid);
+            vhItem.txtDate.setText(getItem(position).date.substring(11,16));
+            vhItem.txtName.setText(getItem(position).name);
 
         } else if (holder instanceof VHHeader) {
             //cast holder to VHHeader and set data for header.
@@ -71,7 +71,7 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mMessages.size();
+        return mWifis.size();
     }
 
     @Override
@@ -83,24 +83,24 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private boolean isPositionHeader(int position) {
         // isHeader if position == 0 or if phone == header
-        return mMessages.get(position).name.equals("header");
+        return mWifis.get(position).name.equals("header");
     }
 
     private Wifi getItem(int position) {
-        return mMessages.get(position);
+        return mWifis.get(position);
     }
 
     class VHItem extends RecyclerView.ViewHolder {
         // each data item
-        public TextView txtPhoneNumber;
-        public TextView txtTime;
-        public TextView txtMessage;
+        public TextView txtSsid;
+        public TextView txtName;
+        public TextView txtDate;
 
         public VHItem(View itemView) {
             super(itemView);
-            txtPhoneNumber = itemView.findViewById(R.id.txtPhoneNumber);
-            txtTime = itemView.findViewById(R.id.txtTime);
-            txtMessage = itemView.findViewById(R.id.txtMessage);
+            txtSsid = itemView.findViewById(R.id.txtSsid);
+            txtDate = itemView.findViewById(R.id.txtDate);
+            txtName = itemView.findViewById(R.id.txtName);
         }
     }
 

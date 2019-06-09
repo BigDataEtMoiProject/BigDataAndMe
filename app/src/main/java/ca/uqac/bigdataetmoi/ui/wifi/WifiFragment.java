@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,23 +28,19 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.models.Message;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.models.Wifi;
 import ca.uqac.bigdataetmoi.repositories.UserRepository;
 import ca.uqac.bigdataetmoi.ui.MainActivity;
-import ca.uqac.bigdataetmoi.workers.MessageWorker;
+import ca.uqac.bigdataetmoi.workers.WifiWorker;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static ca.uqac.bigdataetmoi.utils.Constants.*;
-
-
 public class WifiFragment extends Fragment {
 
-    public static final int REQUEST_CODE_SMS_PERMISSIONS = 123;
+    public static final int REQUEST_ACCESS_WIFI_STATE = 4242;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -58,19 +55,16 @@ public class WifiFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-//        return inflater.inflate(R.layout.fragment_message_permission, container, false);
-
-
-        if (hasAlreadyAcceptedMessagePermission()) {
-            startMessageBackgroundWork();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (hasAlreadyAcceptedWifiPermission()) {
+            startWifiBackgroundWork();
             // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_messages, container, false);
+            return inflater.inflate(R.layout.fragment_wifi, container, false);
         } else {
-            return inflater.inflate(R.layout.fragment_message_permission, container, false);
+            return inflater.inflate(R.layout.fragment_wifi_permission, container, false);
         }
     }
 
@@ -78,10 +72,10 @@ public class WifiFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        addMessagePermissionButtonListener();
+        addWifiPermissionButtonListener();
 
-        if (hasAlreadyAcceptedMessagePermission()) {
-            recyclerView = (RecyclerView) getView().findViewById(R.id.my_recycler_view);
+        if (hasAlreadyAcceptedWifiPermission()) {
+            recyclerView = (RecyclerView) getView().findViewById(R.id.my_wifi_recycler_view);
 
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
@@ -91,7 +85,8 @@ public class WifiFragment extends Fragment {
             layoutManager = new LinearLayoutManager(getContext());
             recyclerView.setLayoutManager(layoutManager);
         }
-        wifis = new ArrayList<>();
+
+        wifis = new ArrayList<Wifi>();
     }
 
     @Override
@@ -114,9 +109,9 @@ public class WifiFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CODE_SMS_PERMISSIONS) {
-            if (hasGrantedLocationPermission(grantResults)) {
-                // Display messages
+        if (requestCode == REQUEST_ACCESS_WIFI_STATE) {
+            if (hasGrantedWifiPermission(grantResults)) {
+                // Display Wifis
                 if (getActivity() != null) {
                     ((MainActivity) getActivity()).refreshViewPager();
                 }
@@ -136,31 +131,32 @@ public class WifiFragment extends Fragment {
 
     }
 
-    private void addMessagePermissionButtonListener() {
-        Button MessagePermissionButton = getView().findViewById(R.id.message_continue);
+    private void addWifiPermissionButtonListener() {
+        Button WifiPermissionButton = getView().findViewById(R.id.wifi_continue);
 
-        if (MessagePermissionButton != null) {
-            MessagePermissionButton.setOnClickListener(new View.OnClickListener() {
+        if (WifiPermissionButton != null) {
+            WifiPermissionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    askForMessagePermission();
+                    askForWifiPermission();
                 }
             });
         }
     }
 
-    private void askForMessagePermission() {
-        requestPermissions(new String[]{Manifest.permission.READ_SMS},
-                REQUEST_CODE_SMS_PERMISSIONS);
+    private void askForWifiPermission() {
+        Log.d("lyberteam.eu/", "Asking for permissions");
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                REQUEST_ACCESS_WIFI_STATE);
     }
 
-    private void startMessageBackgroundWork() {
+    private void startWifiBackgroundWork() {
         Constraints workConstraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
 
-        PeriodicWorkRequest uploadMessageWorkRequest = new PeriodicWorkRequest
-                .Builder(MessageWorker.class, 1, TimeUnit.DAYS)
+        PeriodicWorkRequest uploadWifiWorkRequest = new PeriodicWorkRequest
+                .Builder(WifiWorker.class, 15, TimeUnit.MINUTES)
                 .setConstraints(workConstraints)
                 .build();
 
@@ -168,7 +164,7 @@ public class WifiFragment extends Fragment {
                 .enqueueUniquePeriodicWork(
                         "WIFI WORK",
                         ExistingPeriodicWorkPolicy.KEEP,
-                        uploadMessageWorkRequest
+                        uploadWifiWorkRequest
                 );
     }
 
@@ -177,7 +173,7 @@ public class WifiFragment extends Fragment {
             User user = response.body();
 
             if (user != null) {
-                updateMessages(user);
+                updateWifi(user);
                 Timber.d("§ handleUserResponse");
             }
         } else {
@@ -185,34 +181,34 @@ public class WifiFragment extends Fragment {
         }
     }
 
-    public void updateMessages(User user) {
+    public void updateWifi(User user) {
         for (int i = 0; i < user.wifiList.size(); i++) {
-            Wifi message = user.wifiList.get(i);
-            wifis.add(message);
+            Wifi wifi = user.wifiList.get(i);
+            wifis.add(wifi);
         }
         Collections.reverse(wifis);
         if (wifis.size() > 0) {
             wifis.add(0, new Wifi("", wifis.get(0).date, ""));
             for (int i = 1; i < wifis.size(); i++) {
-                // if the message date changes, insert a header message in the arraylist
+                // if the wifi date changes, insert a header wifi in the arraylist
                 if (!wifis.get(i).date.substring(0, 9).equals(wifis.get(i - 1).date.substring(0, 9))) {
                     wifis.add(i, new Wifi("", wifis.get(i).date, ""));
                 }
             }
         }
 
-        if (hasAlreadyAcceptedMessagePermission()) {
+        if (hasAlreadyAcceptedWifiPermission()) {
             mAdapter = new WifiAdapter(wifis, getContext());
             recyclerView.setAdapter(mAdapter);
         }
     }
 
-    private boolean hasAlreadyAcceptedMessagePermission() {
-        return (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS)
+    private boolean hasAlreadyAcceptedWifiPermission() {
+        return (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED);
     }
 
-    private boolean hasGrantedLocationPermission(int[] grantResults) {
+    private boolean hasGrantedWifiPermission(int[] grantResults) {
         return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 }
