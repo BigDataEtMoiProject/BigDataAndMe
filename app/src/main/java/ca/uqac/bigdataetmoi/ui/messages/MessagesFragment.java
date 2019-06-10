@@ -205,20 +205,28 @@ public class MessagesFragment extends Fragment {
             Message message = user.messageList.get(i);
             messages.add(message);
         }
-        Collections.reverse(messages);
-        if (messages.size() > 0) {
-            messages.add(0, new Message("header", messages.get(0).date, ""));
-            for (int i = 1; i < messages.size(); i++) {
-                // if the message date changes, insert a header message in the arraylist
-                if (!messages.get(i).date.substring(0, 9).equals(messages.get(i - 1).date.substring(0, 9))) {
-                    messages.add(i, new Message("header", messages.get(i).date, ""));
-                }
-            }
-        }
+        adaptMessageList(messages);
 
         if (hasAlreadyAcceptedMessagePermission()) {
             mAdapter = new MessageAdapter(messages, getContext());
             recyclerView.setAdapter(mAdapter);
+        }
+    }
+
+    public void adaptMessageList(List<Message> messages){
+        if (messages.size() > 0) {
+            Collections.reverse(messages);
+        }
+        // add fake message to viewHolder (card Recap) : phone = recap, date = lastUpdate, message = messageCount
+        messages.add(0, new Message("recap", "", String.valueOf(messages.size())));
+        if (messages.size() > 1) {
+            messages.add(1, new Message("header", messages.get(1).date, ""));
+            for (int i = 2; i < messages.size(); i++) {
+                // if the message date changes, insert a fake message in the arraylist (card Header)
+                if (!messages.get(i).date.substring(0, 9).equals(messages.get(i - 1).date.substring(0, 9))) {
+                    messages.add(i, new Message("header", messages.get(i).date, ""));
+                }
+            }
         }
     }
 
@@ -235,7 +243,7 @@ public class MessagesFragment extends Fragment {
     public void onMessageListUploaded(OnMessageListUploadedEvent event) {
         User user = event.getUser();
         List<Message> messageList = user.messageList;
-        Collections.reverse(messageList);
+        adaptMessageList(messageList);
         mAdapter.setmMessages(messageList);
         if (recyclerView != null) {
             recyclerView.smoothScrollToPosition(0);
