@@ -79,7 +79,7 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (hasAlreadyAcceptedLocationPermission()) {
-            startLocationBackgroundWork();
+            //startLocationBackgroundWork();
 
             return inflater.inflate(R.layout.fragment_map, container, false);
         } else {

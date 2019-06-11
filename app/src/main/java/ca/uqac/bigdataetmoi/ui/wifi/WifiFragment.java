@@ -27,7 +27,12 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.events.OnMessageListUploadedEvent;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.models.Wifi;
 import ca.uqac.bigdataetmoi.repositories.UserRepository;
@@ -42,7 +47,7 @@ public class WifiFragment extends Fragment {
 
     public static final int REQUEST_ACCESS_WIFI_STATE = 4242;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private WifiAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Wifi> wifis;
 
@@ -122,13 +127,11 @@ public class WifiFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
     }
 
     private void addWifiPermissionButtonListener() {
@@ -145,7 +148,6 @@ public class WifiFragment extends Fragment {
     }
 
     private void askForWifiPermission() {
-        Log.d("lyberteam.eu/", "Asking for permissions");
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                 REQUEST_ACCESS_WIFI_STATE);
     }
@@ -186,20 +188,29 @@ public class WifiFragment extends Fragment {
             Wifi wifi = user.wifiList.get(i);
             wifis.add(wifi);
         }
-        Collections.reverse(wifis);
-        if (wifis.size() > 0) {
-            wifis.add(0, new Wifi("", wifis.get(0).date, ""));
-            for (int i = 1; i < wifis.size(); i++) {
-                // if the wifi date changes, insert a header wifi in the arraylist
-                if (!wifis.get(i).date.substring(0, 9).equals(wifis.get(i - 1).date.substring(0, 9))) {
-                    wifis.add(i, new Wifi("", wifis.get(i).date, ""));
-                }
-            }
-        }
+
+        adaptWifiList(wifis);
 
         if (hasAlreadyAcceptedWifiPermission()) {
             mAdapter = new WifiAdapter(wifis, getContext());
             recyclerView.setAdapter(mAdapter);
+        }
+    }
+
+    public void adaptWifiList(List<Wifi> mwifi){
+        if (mwifi.size() > 0) {
+            Collections.reverse(mwifi);
+        }
+        // add fake message to viewHolder (card Recap) : phone = recap, date = lastUpdate, message = messageCount
+        mwifi.add(0, new Wifi("recap", String.valueOf(mwifi.size()), ""));
+        if (mwifi.size() > 1) {
+            mwifi.add(1, new Wifi("header", "", mwifi.get(1).date));
+            for (int i = 2; i < mwifi.size(); i++) {
+                // if the message date changes, insert a fake message in the arraylist (card Header)
+                if (!mwifi.get(i).date.substring(0, 9).equals(mwifi.get(i - 1).date.substring(0, 9))) {
+                    mwifi.add(i, new Wifi("header", "", mwifi.get(i).date));
+                }
+            }
         }
     }
 
@@ -210,5 +221,17 @@ public class WifiFragment extends Fragment {
 
     private boolean hasGrantedWifiPermission(int[] grantResults) {
         return grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageListUploaded(OnMessageListUploadedEvent event) {
+        User user = event.getUser();
+        List<Wifi> wifiList = user.wifiList;
+        adaptWifiList(wifiList);
+
+        mAdapter.setmWifi(wifiList);
+        if (recyclerView != null) {
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 }

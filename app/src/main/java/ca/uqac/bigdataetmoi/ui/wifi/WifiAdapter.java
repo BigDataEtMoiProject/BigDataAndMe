@@ -17,10 +17,12 @@ import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.models.Wifi;
+import timber.log.Timber;
 
 public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
+    private static final int TYPE_RECAP = 2;
     private List<Wifi> mWifis;
     private Context mContext;
 
@@ -41,6 +43,11 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.wifi_header, parent, false);
             return new VHHeader(v);
+        } else if (viewType == TYPE_RECAP) {
+            //inflate your layout and pass it to view holder
+            LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.wifi_recap, parent, false);
+            return new VHRecap(v);
         }
         throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
     }
@@ -61,11 +68,20 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             VHHeader vhHeader = (VHHeader) holder;
 
             String date_before = getItem(position).date.substring(0,10);
-            String date_after = formateDateFromstring("dd/MM/yyyy", "EEE, d MMM yyyy", date_before);
+            String date_after = WifiAdapter.formateDateFromstring("dd/MM/yyyy", "EEE, d MMM yyyy", date_before);
 
             date_after = date_after.substring(0, 1).toUpperCase() + date_after.substring(1);
             vhHeader.txtDate.setText(date_after);
-
+        } else if (holder instanceof VHRecap) {
+            //cast holder to VHRecap and set data for recap
+            VHRecap vhRecap = (VHRecap) holder;
+            if (getItem(position).date.equals("0")){
+                vhRecap.wifiRecapTitle.setText("Aucun élément récupéré");
+            } else {
+                vhRecap.wifiRecapTitle.setText(getItem(position).name + " éléments récupérés");
+            }
+            String currentTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date());
+            vhRecap.wifiRecapDescription.setText("Dernière mise à jour: " + currentTime);
         }
     }
 
@@ -78,12 +94,18 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
+        if (isPositionRecap(position))
+            return TYPE_RECAP;
         return TYPE_ITEM;
     }
 
     private boolean isPositionHeader(int position) {
         // isHeader if position == 0 or if phone == header
-        return mWifis.get(position).name.equals("header");
+        return mWifis.get(position).ssid.equals("header");
+    }
+
+    private boolean isPositionRecap(int position) {
+        return mWifis.get(position).ssid.equals("recap");
     }
 
     private Wifi getItem(int position) {
@@ -104,6 +126,17 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    class VHRecap extends RecyclerView.ViewHolder {
+        public TextView wifiRecapTitle;
+        public TextView wifiRecapDescription;
+
+        public VHRecap(View itemView) {
+            super(itemView);
+            wifiRecapTitle = itemView.findViewById(R.id.wifi_recap_title);
+            wifiRecapDescription = itemView.findViewById(R.id.wifi_recap_description);
+        }
+    }
+
     class VHHeader extends RecyclerView.ViewHolder {
         public TextView txtDate;
 
@@ -111,6 +144,11 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             super(itemView);
             txtDate = itemView.findViewById(R.id.txtDate);
         }
+    }
+
+    public void setmWifi(List<Wifi> mWifis) {
+        this.mWifis = mWifis;
+        notifyDataSetChanged();
     }
 
     public static String formateDateFromstring(String inputFormat, String outputFormat, String inputDate){
@@ -126,5 +164,4 @@ public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         return outputDate;
     }
-
 }

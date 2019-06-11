@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import ca.uqac.bigdataetmoi.events.OnPhotoUploadedEvent;
 import retrofit2.Call;
