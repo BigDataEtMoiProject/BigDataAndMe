@@ -28,7 +28,7 @@ public class LocationWorker extends Worker {
     private Context appContext;
     private WorkerParameters workerParameters;
 
-    LocationWorker(Context appContext, WorkerParameters workerParameters) {
+    public LocationWorker(Context appContext, WorkerParameters workerParameters) {
         super(appContext, workerParameters);
         this.appContext = appContext;
         this.workerParameters = workerParameters;
