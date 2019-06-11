@@ -1,13 +1,15 @@
 package ca.uqac.bigdataetmoi.ui.messages;
+import android.support.v4.app.Fragment;
 
 import android.Manifest;
-import android.content.Context;
+ import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.RequiresApi;
+ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,6 +46,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 
+@RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
 public class MessagesFragment extends Fragment {
 
     public static final int REQUEST_CODE_SMS_PERMISSIONS = 123;
@@ -164,6 +167,7 @@ public class MessagesFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void askForMessagePermission() {
         requestPermissions(new String[]{Manifest.permission.READ_SMS},
                 REQUEST_CODE_SMS_PERMISSIONS);

