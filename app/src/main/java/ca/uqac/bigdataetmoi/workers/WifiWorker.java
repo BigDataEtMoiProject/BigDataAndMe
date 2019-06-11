@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import ca.uqac.bigdataetmoi.events.OnPhotoUploadedEvent;
 import retrofit2.Call;
@@ -56,7 +57,10 @@ public class WifiWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        mWifiManager.startScan();
+        ScannedResults = mWifiManager.getScanResults();
         try {
+            Timber.d("I'M HERE§");
             for(int i = 0; i < ScannedResults.size(); i++) {
                 ScanResult scanResult = ScannedResults.get(i);
 
