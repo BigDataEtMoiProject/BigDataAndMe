@@ -38,6 +38,7 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(new Intent(this, LoginActivity.class));
         overridePendingTransition(R.anim.slide_from_right, R.anim.stationary);
         Prefs.setBoolean(this, Constants.SHARED_PREFS, Constants.HAS_SEEN_WELCOME_PAGE, true);
+
         finish();
     }
 
