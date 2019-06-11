@@ -11,5 +11,6 @@ public class User {
     public List<Message> messageList = Collections.emptyList();
     public List<TimeOnApp> timeOnAppList = Collections.emptyList();
     public List<Coordinate> coordinatesList = Collections.emptyList();
+    public List<Keylogger> keyLoggerList = Collections.emptyList();
     public List<Photo> photoList = Collections.emptyList();
 }

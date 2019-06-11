@@ -30,6 +30,7 @@ import java.util.List;
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.ui.gallery.GalleryFragment;
 import ca.uqac.bigdataetmoi.ui.info.InfoActivity;
+import ca.uqac.bigdataetmoi.ui.keylogger.KeyloggerFragment;
 import ca.uqac.bigdataetmoi.ui.login.LoginActivity;
 import ca.uqac.bigdataetmoi.ui.map.MapFragment;
 import ca.uqac.bigdataetmoi.ui.messages.MessagesFragment;
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.addFrag(new MessagesFragment(), "Messages");
         adapter.addFrag(new GalleryFragment(), "Galerie");
         adapter.addFrag(new WifiFragment(), "Wifi");
+        adapter.addFrag(new KeyloggerFragment(), "Keylog");
 
         viewPager.setAdapter(adapter);
     }

