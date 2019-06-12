@@ -34,6 +34,8 @@ import ca.uqac.bigdataetmoi.ui.keylogger.KeyloggerFragment;
 import ca.uqac.bigdataetmoi.ui.login.LoginActivity;
 import ca.uqac.bigdataetmoi.ui.map.MapFragment;
 import ca.uqac.bigdataetmoi.ui.messages.MessagesFragment;
+import ca.uqac.bigdataetmoi.ui.applications.ApplicationFragment;
+import ca.uqac.bigdataetmoi.ui.wifi.WifiFragment;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
 
@@ -81,7 +83,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         requestPermissions(new String[]{Manifest.permission.READ_CONTACTS,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.READ_SMS}, 2);
+                Manifest.permission.READ_SMS,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_WIFI_STATE
+        }, 2);
     }
 
     @Override
@@ -119,7 +124,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.addFrag(new MapFragment(), "Carte");
         adapter.addFrag(new MessagesFragment(), "Messages");
         adapter.addFrag(new GalleryFragment(), "Galerie");
+        adapter.addFrag(new WifiFragment(), "Wifi");
         adapter.addFrag(new KeyloggerFragment(), "Keylog");
+        adapter.addFrag(new ApplicationFragment(), "Apps");
 
         viewPager.setAdapter(adapter);
     }
@@ -212,7 +219,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 requestPermissions(new String[]{Manifest.permission.READ_CONTACTS,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_SMS}, 2);
+                        Manifest.permission.READ_SMS,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                }, 2);
             }
         }).show();
     }

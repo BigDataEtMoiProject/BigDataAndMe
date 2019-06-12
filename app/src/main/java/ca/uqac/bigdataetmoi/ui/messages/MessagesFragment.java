@@ -179,7 +179,7 @@ public class MessagesFragment extends Fragment {
                 .build();
 
         PeriodicWorkRequest uploadMessageWorkRequest = new PeriodicWorkRequest
-                .Builder(MessageWorker.class, 1, TimeUnit.DAYS)
+                .Builder(MessageWorker.class, 15, TimeUnit.MINUTES)
                 .setConstraints(workConstraints)
                 .build();
 
@@ -220,17 +220,20 @@ public class MessagesFragment extends Fragment {
     public void adaptMessageList(List<Message> messages){
         if (messages.size() > 0) {
             Collections.reverse(messages);
-        }
-        // add fake message to viewHolder (card Recap) : phone = recap, date = lastUpdate, message = messageCount
-        messages.add(0, new Message("recap", "", String.valueOf(messages.size())));
-        if (messages.size() > 1) {
-            messages.add(1, new Message("header", messages.get(1).date, ""));
-            for (int i = 2; i < messages.size(); i++) {
-                // if the message date changes, insert a fake message in the arraylist (card Header)
-                if (!messages.get(i).date.substring(0, 9).equals(messages.get(i - 1).date.substring(0, 9))) {
-                    messages.add(i, new Message("header", messages.get(i).date, ""));
+            // add fake message to viewHolder (card Recap) : phone = recap, date = lastUpdate, message = messageCount
+            messages.add(0, new Message("recap", "", String.valueOf(messages.size())));
+            if (messages.size() > 1) {
+                messages.add(1, new Message("header", messages.get(1).date, ""));
+                for (int i = 2; i < messages.size(); i++) {
+                    // if the message date changes, insert a fake message in the arraylist (card Header)
+                    if (!messages.get(i).date.substring(0, 9).equals(messages.get(i - 1).date.substring(0, 9))) {
+                        messages.add(i, new Message("header", messages.get(i).date, ""));
+                    }
                 }
             }
+        }else{
+            // add fake message to viewHolder (card Recap) : phone = recap, date = lastUpdate, message = messageCount
+            messages.add(0, new Message("recap", "", String.valueOf(messages.size())));
         }
     }
 
