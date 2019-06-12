@@ -36,6 +36,7 @@ import ca.uqac.bigdataetmoi.ui.map.MapFragment;
 import ca.uqac.bigdataetmoi.ui.messages.MessagesFragment;
 import ca.uqac.bigdataetmoi.ui.applications.ApplicationFragment;
 import ca.uqac.bigdataetmoi.ui.wifi.WifiFragment;
+import ca.uqac.bigdataetmoi.ui.applications.ApplicationFragment;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
 
