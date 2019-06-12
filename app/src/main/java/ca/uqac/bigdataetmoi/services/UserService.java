@@ -7,6 +7,7 @@ import ca.uqac.bigdataetmoi.dto.KeyloggerDto;
 import ca.uqac.bigdataetmoi.dto.MessageDto;
 import ca.uqac.bigdataetmoi.dto.PhotoDto;
 import ca.uqac.bigdataetmoi.dto.UserAuthenticationDto;
+import ca.uqac.bigdataetmoi.models.Application;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -31,6 +32,9 @@ public interface UserService {
 
     @POST("keylogger")
     Call<User> sendKeyloggerList(@Body List<KeyloggerDto> keyloggerList);
+
+    @POST("timeonapp")
+    Call<User> sendApplications(@Body List<Application> applicationList);
 
     @GET("users/me")
     Call<User> getCurrentUserInformations();
