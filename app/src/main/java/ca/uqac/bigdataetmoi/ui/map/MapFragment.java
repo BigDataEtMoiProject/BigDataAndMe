@@ -115,10 +115,12 @@ public class MapFragment extends Fragment {
                         return;
                     }
                     Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    double longitude = location.getLongitude();
-                    double latitude = location.getLatitude();
-                    GeoPoint startPoint = new GeoPoint(latitude, longitude);
-                    mapController.setCenter(startPoint);
+                    if (location != null) {
+                        double longitude = location.getLongitude();
+                        double latitude = location.getLatitude();
+                        GeoPoint startPoint = new GeoPoint(latitude, longitude);
+                        mapController.setCenter(startPoint);
+                    }
                 }
             }
         }
