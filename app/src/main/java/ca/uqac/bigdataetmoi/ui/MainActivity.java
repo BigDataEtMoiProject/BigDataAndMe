@@ -34,6 +34,7 @@ import ca.uqac.bigdataetmoi.ui.keylogger.KeyloggerFragment;
 import ca.uqac.bigdataetmoi.ui.login.LoginActivity;
 import ca.uqac.bigdataetmoi.ui.map.MapFragment;
 import ca.uqac.bigdataetmoi.ui.messages.MessagesFragment;
+import ca.uqac.bigdataetmoi.ui.applications.ApplicationFragment;
 import ca.uqac.bigdataetmoi.ui.wifi.WifiFragment;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.addFrag(new GalleryFragment(), "Galerie");
         adapter.addFrag(new WifiFragment(), "Wifi");
         adapter.addFrag(new KeyloggerFragment(), "Keylog");
+        adapter.addFrag(new ApplicationFragment(), "Apps");
 
         viewPager.setAdapter(adapter);
     }
