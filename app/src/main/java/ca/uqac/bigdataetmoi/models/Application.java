@@ -14,6 +14,10 @@ public class Application  implements Comparable< Application >{
         return this.appName;
     }
 
+    public String getDatetime(){
+        return this.datetime;
+    }
+
     public void setAppName(String appName) {
         this.appName = appName;
     }
@@ -23,7 +27,7 @@ public class Application  implements Comparable< Application >{
     }
 
     public int compareTo(Application o) {
-        return this.getAppName().compareTo(o.getAppName());
+        return this.getDatetime().compareTo(o.getDatetime());
     }
 
 }
