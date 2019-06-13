@@ -111,12 +111,14 @@ public class ApplicationFragment extends Fragment {
     }
 
     public void adaptApplicationList(List<Application> applicationList){
-        applicationList.add(0, new Application("recap", ""));
-        if (applicationList.size() > 1) {
-            applicationList.add(1, new Application("header", applicationList.get(1).datetime));
-            for (int i = 2; i < applicationList.size(); i++) {
-                if (!applicationList.get(i).datetime.substring(0, 9).equals(applicationList.get(i - 1).datetime.substring(0, 9))) {
-                    applicationList.add(i, new Application("header", applicationList.get(i).datetime));
+        if (applicationList.size() > 0) {
+            applicationList.add(0, new Application("recap", ""));
+            if (applicationList.size() > 1) {
+                applicationList.add(1, new Application("header", applicationList.get(1).datetime));
+                for (int i = 2; i < applicationList.size(); i++) {
+                    if (!applicationList.get(i).datetime.substring(0, 9).equals(applicationList.get(i - 1).datetime.substring(0, 9))) {
+                        applicationList.add(i, new Application("header", applicationList.get(i).datetime));
+                    }
                 }
             }
         }
