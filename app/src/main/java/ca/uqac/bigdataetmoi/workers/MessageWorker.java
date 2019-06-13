@@ -105,7 +105,7 @@ public class MessageWorker extends Worker {
 
     private Date getLastMessageDateTime(){
         ArrayList<String> currentMessageList = new ArrayList<>();
-        Date lastDate = new Date();
+        Date lastDate = new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24)); // to start save sms from yesterday
         try {
             Response<User> response = UserRepository.getUserFromApi(appContext).execute();
 
