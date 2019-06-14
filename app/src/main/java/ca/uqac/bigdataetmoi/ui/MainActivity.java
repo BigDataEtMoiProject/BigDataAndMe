@@ -1,6 +1,7 @@
 package ca.uqac.bigdataetmoi.ui;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,17 +18,24 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.uqac.bigdataetmoi.R;
+import ca.uqac.bigdataetmoi.models.User;
+import ca.uqac.bigdataetmoi.services.HttpClient;
+import ca.uqac.bigdataetmoi.services.UserService;
 import ca.uqac.bigdataetmoi.ui.gallery.GalleryFragment;
 import ca.uqac.bigdataetmoi.ui.info.InfoActivity;
 import ca.uqac.bigdataetmoi.ui.keylogger.KeyloggerFragment;
@@ -38,6 +46,10 @@ import ca.uqac.bigdataetmoi.ui.applications.ApplicationFragment;
 import ca.uqac.bigdataetmoi.ui.wifi.WifiFragment;
 import ca.uqac.bigdataetmoi.utils.Constants;
 import ca.uqac.bigdataetmoi.utils.Prefs;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -53,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -91,19 +101,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_info) {
             Intent intent = new Intent(this, InfoActivity.class);
             startActivity(intent);
@@ -137,17 +142,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_deconnection) {
-            Prefs.setBoolean(this, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
-            Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_EMAIL, "");
-            Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_PASSWORD, "");
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
-            finish();
+            logout();
+        } else {
+            showDeleteDialog();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
+    }
+
+    private void logout() {
+        WorkManager.getInstance().cancelAllWork();
+        Prefs.setBoolean(this, Constants.SHARED_PREFS, Constants.IS_LOGGED, false);
+        Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_EMAIL, "");
+        Prefs.setString(getApplicationContext(), Constants.SHARED_PREFS, Constants.USER_PASSWORD, "");
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        overridePendingTransition(R.anim.slide_from_left, R.anim.stationary);
+        finish();
+    }
+
+    private void showDeleteDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Suppression du compte")
+                .setMessage("Êtes-vous sûr de vouloir supprimer votre compte ?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendDeleteUserRequest();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
+    }
+
+    private void sendDeleteUserRequest() {
+        Call<Void> deleteCall = new HttpClient<UserService>(this).create(UserService.class).deleteCurrentUser();
+        deleteCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "Compte supprimé", Toast.LENGTH_SHORT).show();
+                    logout();
+                } else {
+                    Toast.makeText(MainActivity.this, "Erreur lors de la tentative de suppression", Toast.LENGTH_SHORT).show();
+                    Timber.e(response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Erreur lors de la tentative de suppression", Toast.LENGTH_SHORT).show();
+                Timber.e(t);
+            }
+        });
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -190,11 +238,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (requestCode == 2) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                System.out.println("####################################################### PERMISSION_GRANTED pour READ_CONTACTS");
             } else if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
                 displayOptions();
             } else {
-                System.out.println("####################################################### PERMISSION_DENIED pour READ_CONTACTS");
                 explain();
             }
         }

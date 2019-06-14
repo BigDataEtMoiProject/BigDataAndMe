@@ -12,6 +12,7 @@ import ca.uqac.bigdataetmoi.models.Application;
 import ca.uqac.bigdataetmoi.models.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -42,4 +43,8 @@ public interface UserService {
 
     @GET("users/me")
     Call<User> getCurrentUserInformations();
+
+    @DELETE("users")
+    Call<Void> deleteCurrentUser();
 }
+

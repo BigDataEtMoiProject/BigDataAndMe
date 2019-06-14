@@ -59,6 +59,8 @@ public class PhotoWorker extends Worker {
                     Response<User> res = photoCall.execute();
                     if (res.isSuccessful() && res.body() != null) {
                         EventBus.getDefault().post(new OnPhotoUploadedEvent(res.body()));
+                    } else if (res.code() == 401) {
+                        return Result.failure();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

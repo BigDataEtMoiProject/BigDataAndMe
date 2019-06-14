@@ -137,7 +137,7 @@ public class ApplicationFragment extends Fragment {
         WorkManager.getInstance()
                 .enqueueUniquePeriodicWork(
                         "APPLICATION WORK",
-                        ExistingPeriodicWorkPolicy.KEEP,
+                        ExistingPeriodicWorkPolicy.REPLACE,
                         uploadLocationWorkRequest
                 );
     }
