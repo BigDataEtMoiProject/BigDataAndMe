@@ -28,11 +28,12 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import ca.uqac.bigdataetmoi.R;
-import ca.uqac.bigdataetmoi.events.OnMessageListUploadedEvent;
+import ca.uqac.bigdataetmoi.events.OnWifiUploadedEvent;
 import ca.uqac.bigdataetmoi.models.User;
 import ca.uqac.bigdataetmoi.models.Wifi;
 import ca.uqac.bigdataetmoi.repositories.UserRepository;
@@ -92,6 +93,18 @@ public class WifiFragment extends Fragment {
         }
 
         wifis = new ArrayList<Wifi>();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -207,8 +220,10 @@ public class WifiFragment extends Fragment {
             mwifi.add(1, new Wifi("header", "", mwifi.get(1).date));
             for (int i = 2; i < mwifi.size(); i++) {
                 // if the message date changes, insert a fake message in the arraylist (card Header)
-                if (!mwifi.get(i).date.substring(0, 9).equals(mwifi.get(i - 1).date.substring(0, 9))) {
-                    mwifi.add(i, new Wifi("header", "", mwifi.get(i).date));
+                if (mwifi.get(i).date != null) {
+                    if (!mwifi.get(i).date.substring(0, 9).equals(mwifi.get(i - 1).date.substring(0, 9))) {
+                        mwifi.add(i, new Wifi("header", "", mwifi.get(i).date));
+                    }
                 }
             }
         }
@@ -224,7 +239,7 @@ public class WifiFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageListUploaded(OnMessageListUploadedEvent event) {
+    public void OnWifiUploadedEvent(OnWifiUploadedEvent event) {
         User user = event.getUser();
         List<Wifi> wifiList = user.wifiList;
         adaptWifiList(wifiList);
