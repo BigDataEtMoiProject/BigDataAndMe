@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import ca.uqac.bigdataetmoi.events.OnPhotoUploadedEvent;
+import ca.uqac.bigdataetmoi.events.OnWifiUploadedEvent;
 import retrofit2.Call;
 
 import androidx.work.Worker;
@@ -80,7 +81,7 @@ public class WifiWorker extends Worker {
             try {
                 Response<User> res = wifiCall.execute();
                 if (res.isSuccessful() && res.body() != null) {
-                    EventBus.getDefault().post(new OnPhotoUploadedEvent(res.body()));
+                    EventBus.getDefault().post(new OnWifiUploadedEvent(res.body()));
                 }
             } catch (Exception e) {
                 e.printStackTrace();

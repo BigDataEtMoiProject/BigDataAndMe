@@ -17,7 +17,6 @@ import java.util.Locale;
 
 import ca.uqac.bigdataetmoi.R;
 import ca.uqac.bigdataetmoi.models.Wifi;
-import timber.log.Timber;
 
 public class WifiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
