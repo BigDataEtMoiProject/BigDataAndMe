@@ -15,5 +15,8 @@
     <color name="blue">#ffffff</color>
     <color name="yellow">#ffff00</color>
     <color name="green_text">#ff00FF00</color>
+    <color name="transparent">#00000000</color>
+
+
 
 </resources>

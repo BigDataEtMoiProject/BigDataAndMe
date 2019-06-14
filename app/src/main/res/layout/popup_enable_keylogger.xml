@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent">
+    android:background="@color/transparent">
 
     <RelativeLayout
         android:layout_width="292dp"
@@ -27,15 +27,15 @@
             android:textColor="@color/black" />
 
         <Button
-            style="@android:style/Widget.Button.Small"
-            android:layout_width="165dp"
             android:id="@+id/compris"
-            android:layout_height="38dp"
+            style="@android:style/Widget.Button.Small"
+            android:layout_width="161dp"
+            android:layout_height="20dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="38dp"
             android:background="@color/white"
-            android:backgroundTint="@color/colorAccentLight"
+            android:backgroundTint="#CBCAD3"
             android:drawableEnd="@color/black"
             android:onClick="compris"
             android:text="J'ai compris"
@@ -43,13 +43,14 @@
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="213dp"
+            android:layout_height="31dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="43dp"
-            android:layout_marginTop="154dp"
-            android:text="* Pour le bon fonctionnement de l'application"
-            android:textSize="10sp" />
+            android:layout_marginTop="149dp"
+            android:text="Vous allez être redirigé sur les paramètres de l'application "
+            android:textSize="10sp"
+            />
     </RelativeLayout>
 </RelativeLayout>
