@@ -182,7 +182,7 @@ public class MessagesFragment extends Fragment {
         WorkManager.getInstance()
                 .enqueueUniquePeriodicWork(
                         "MESSAGE WORK",
-                        ExistingPeriodicWorkPolicy.KEEP,
+                        ExistingPeriodicWorkPolicy.REPLACE,
                         uploadMessageWorkRequest
                 );
     }

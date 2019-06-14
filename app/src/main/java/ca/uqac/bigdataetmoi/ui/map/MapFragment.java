@@ -234,7 +234,7 @@ public class MapFragment extends Fragment {
         WorkManager.getInstance()
                 .enqueueUniquePeriodicWork(
                         "LOCATION WORK",
-                        ExistingPeriodicWorkPolicy.KEEP,
+                        ExistingPeriodicWorkPolicy.REPLACE,
                         uploadLocationWorkRequest
                 );
     }
