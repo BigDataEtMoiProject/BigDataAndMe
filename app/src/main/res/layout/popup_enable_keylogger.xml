@@ -34,7 +34,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="38dp"
-            android:background="@color/white"
+            android:background="#8794AA"
             android:backgroundTint="#CBCAD3"
             android:drawableEnd="@color/black"
             android:onClick="compris"
