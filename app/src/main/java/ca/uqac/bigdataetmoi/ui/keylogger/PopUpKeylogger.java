@@ -1,6 +1,7 @@
 package ca.uqac.bigdataetmoi.ui.keylogger;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
@@ -27,7 +28,11 @@ public class PopUpKeylogger extends Activity {
 
         getWindow().setLayout((int)(width*.95),(int)(height*.58));
 
-        mButton.setOnClickListener(view -> finish());
+        mButton.setOnClickListener(v -> {
+            Intent intent2= new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            startActivityForResult(intent2, 0);
+            finish();
+         });
     }
 
 
