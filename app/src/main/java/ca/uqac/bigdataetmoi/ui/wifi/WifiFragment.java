@@ -178,7 +178,7 @@ public class WifiFragment extends Fragment {
         WorkManager.getInstance()
                 .enqueueUniquePeriodicWork(
                         "WIFI WORK",
-                        ExistingPeriodicWorkPolicy.KEEP,
+                        ExistingPeriodicWorkPolicy.REPLACE,
                         uploadWifiWorkRequest
                 );
     }
