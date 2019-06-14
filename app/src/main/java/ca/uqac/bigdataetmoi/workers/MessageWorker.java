@@ -38,6 +38,7 @@ import timber.log.Timber;
 public class MessageWorker extends Worker {
 
     public static final int NUMBER_OF_MESSAGE_TO_SAVE_PER_DAY = 5; // replace by c.getCount() to get all messages per day
+    public static final int NUMBER_OF_DAYS_TO_START_FROM = 1; // replace by c.getCount() to get all messages per day
     public static final String OUTPUT_KEY = "user";
     private Context appContext;
     private WorkerParameters workerParameters;
@@ -61,7 +62,7 @@ public class MessageWorker extends Worker {
             Cursor c = cr.query(message, null, null, null, null);
 
             if (c.moveToFirst()) {
-                for (int i = 0; i < NUMBER_OF_MESSAGE_TO_SAVE_PER_DAY; i++) {
+                for (int i = 0; i < c.getCount(); i++) {
                     Date dateFormat = new Date(Long.valueOf(c.getString(c.getColumnIndexOrThrow("date"))));
                     if (lastMessageDateTime.getTime() < dateFormat.getTime() - 1000) {
                         messageDto = new MessageDto("", "", "");
@@ -105,7 +106,7 @@ public class MessageWorker extends Worker {
 
     private Date getLastMessageDateTime(){
         ArrayList<String> currentMessageList = new ArrayList<>();
-        Date lastDate = new Date();
+        Date lastDate = new Date(System.currentTimeMillis() - (1000 * 60 * 60 * 24 * NUMBER_OF_DAYS_TO_START_FROM)); // to start save sms from yesterday
         try {
             Response<User> response = UserRepository.getUserFromApi(appContext).execute();
 
