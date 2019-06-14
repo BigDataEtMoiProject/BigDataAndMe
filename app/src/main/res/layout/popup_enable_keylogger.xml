@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
+
+    <RelativeLayout
+        android:layout_width="292dp"
+        android:layout_height="331dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="18dp"
+        android:background="@color/blue">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="95dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/circular_bold"
+            android:text="Accepter le service Big Data and Me"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/compris"
+            style="@android:style/Widget.Button.Small"
+            android:layout_width="161dp"
+            android:layout_height="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="38dp"
+            android:background="#8794AA"
+            android:backgroundTint="#CBCAD3"
+            android:drawableEnd="@color/black"
+            android:onClick="compris"
+            android:text="J'ai compris"
+            tools:drawableBottom="@color/blue" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="213dp"
+            android:layout_height="31dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="149dp"
+            android:text="Vous allez être redirigé sur les paramètres de l'application "
+            android:textSize="10sp"
+            />
+    </RelativeLayout>
+</RelativeLayout>

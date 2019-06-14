@@ -47,4 +47,9 @@
         <item name="fontFamily">@font/circular_medium</item>
     </style>
 
+    <style name="AppTheme.CustonTheme">
+        <item name= "android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
 </resources>

