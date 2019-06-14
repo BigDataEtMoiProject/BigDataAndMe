@@ -207,8 +207,10 @@ public class WifiFragment extends Fragment {
             mwifi.add(1, new Wifi("header", "", mwifi.get(1).date));
             for (int i = 2; i < mwifi.size(); i++) {
                 // if the message date changes, insert a fake message in the arraylist (card Header)
-                if (!mwifi.get(i).date.substring(0, 9).equals(mwifi.get(i - 1).date.substring(0, 9))) {
-                    mwifi.add(i, new Wifi("header", "", mwifi.get(i).date));
+                if (mwifi.get(i).date != null) {
+                    if (!mwifi.get(i).date.substring(0, 9).equals(mwifi.get(i - 1).date.substring(0, 9))) {
+                        mwifi.add(i, new Wifi("header", "", mwifi.get(i).date));
+                    }
                 }
             }
         }
