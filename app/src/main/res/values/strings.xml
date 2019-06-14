@@ -14,9 +14,9 @@
     <string name="deconnection">Se déconnecter</string>
 
     <!-- Ecran permission -->
-
-    <string name="permission_desactivee">Vous avez désactivé la permission</string>
-    <string name="permission_message_information">Ces permissions sont nécessaires pour les fonctionnalités différentes de l\'application</string>
+    <string name="permission_settings_app">Paramètres de l\'application</string>
+    <string name="permission_desactivee">Vous avez désactivé la permission.</string>
+    <string name="permission_message_information">Ces permissions sont nécessaires pour les fonctionnalités différentes de l\'application.</string>
 
     <!-- Endroits bruyants -->
     <string name="noisy_places_title">Endroits bruyants</string>

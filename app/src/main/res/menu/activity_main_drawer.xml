@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
 
+        <item android:id="@+id/drawer_settings_app"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/permission_settings_app" />
+
         <item
             android:id="@+id/drawer_delete_user"
             android:icon="@drawable/ic_delete_forever_black"
