@@ -141,7 +141,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_deconnection) {
+        if(id == R.id.drawer_settings_app){
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+        } else if (id == R.id.nav_deconnection) {
             logout();
         } else {
             showDeleteDialog();
